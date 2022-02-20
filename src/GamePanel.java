@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
@@ -56,7 +55,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         physicsTime = System.currentTimeMillis();
 
         int fps = (int) (1.0 / refreshRate * 1000.0);
-        System.out.println(fps);
         graphicsTimer = new Timer(fps, this);
         graphicsTimer.start();
 
@@ -73,7 +71,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         if (initialized) {
 
             for (Box box : boxes) {
-                box.draw(g);
+                box.draw(g, this);
             }
         }
 
