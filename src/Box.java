@@ -2,11 +2,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -28,6 +31,7 @@ public class Box {
 
     Toolkit toolkit;
     Image image;
+    BufferedImage bImage;
 
     public Box(World world, float x, float y, float w, float h) {
         this.x = x;
@@ -52,6 +56,17 @@ public class Box {
 
         toolkit = Toolkit.getDefaultToolkit();
         image = toolkit.getImage("res/box.png");
+
+        // bImage = new BufferedImage((int) w, (int) h, BufferedImage.TYPE_INT_RGB);
+        // Graphics g = bImage.getGraphics();
+        // g.drawImage(image, 0, 0, bImage);
+
+        try {
+            File img = new File("res/box.png");
+            bImage = ImageIO.read(img);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -78,20 +93,21 @@ public class Box {
         // g.drawRect((int) v.x, (int) v.y, (int) w, (int) h);
         // g.drawPolygon(xCoords, yCoords, 4);
 
-        // double locationX = image.getWidth(frame) / 2;
-        // double locationY = image.getHeight(frame) / 2;
-        // AffineTransform tx = AffineTransform.getRotateInstance(angle, locationX, locationY);
-        // AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+        double locationX = bImage.getWidth(frame) / 2;
+        double locationY = bImage.getHeight(frame) / 2;
+        AffineTransform tx = AffineTransform.getRotateInstance(angle, locationX,
+                locationY);
+        AffineTransformOp op = new AffineTransformOp(tx,
+                AffineTransformOp.TYPE_BILINEAR);
 
-        // g.drawImage(op.filter((BufferedImage) image, null), (int) x, (int) y, frame);
-
+        g.drawImage(op.filter((BufferedImage) bImage, null), (int) x, (int) y, frame);
 
         // img is a BufferedImage instance
         // g.drawImage(texture, tr, frame);
 
         // g.drawImage(op.filter(texture, null), (int) x, (int) y, frame);
 
-        g.drawImage(image, (int) x, (int) y, frame);
+        // g.drawImage(bImage, (int) x, (int) y, frame);
 
     }
 
