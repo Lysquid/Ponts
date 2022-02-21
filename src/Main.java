@@ -32,7 +32,7 @@ public class Main extends JFrame {
             DisplayMode dm = gs[0].getDisplayMode();
             return dm.getRefreshRate();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return 60;
         }
 
