@@ -17,7 +17,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     World world;
     Timer graphicsTimer;
     Timer physicsTimer;
-    final int PHYSICS_TICK = 8;
+    final int PHYSICS_TICK = 8 * 2;
     long physicsTime;
 
     ArrayList<Box> boxes;
