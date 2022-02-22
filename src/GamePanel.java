@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
+import javax.swing.SwingUtilities;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
@@ -21,10 +22,12 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     long physicsTime;
 
     ArrayList<Box> boxes;
+    ArrayList<Bridge> bridges;
 
     final int WIDTH = 40;
 
     boolean isMousePressed;
+    int mouseButton;
     int mouseX;
     int mouseY;
     boolean initialized = false;
@@ -33,6 +36,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     final int SPAWN_DELAY = 100;
 
     public GamePanel() {
+        boxes = new ArrayList<Box>();
+        bridges = new ArrayList<Bridge>();
 
     }
 
@@ -45,7 +50,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         world.setContinuousPhysics(true);
 
         Boundary ground = new Boundary(world, getWidth(), getHeight());
-        boxes = new ArrayList<Box>();
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -68,11 +72,12 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        if (initialized) {
+        for (Box box : boxes) {
+            box.draw(g, this);
+        }
 
-            for (Box box : boxes) {
-                box.draw(g, this);
-            }
+        for (Bridge bridge : bridges) {
+            bridge.draw(g, this);
         }
 
     }
@@ -82,11 +87,23 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         if (e.getSource() == physicsTimer) {
 
             if (isMousePressed) {
+
                 long time = System.currentTimeMillis();
+
+                // System.out.println(time - prevTime);
+
                 if (time - prevTime > SPAWN_DELAY) {
-                    Box newBox = new Box(world, mouseX, mouseY, WIDTH, WIDTH);
-                    boxes.add(newBox);
+                    switch (mouseButton) {
+                        case 1:
+                            Box newBox = new Box(world, mouseX, mouseY, WIDTH, WIDTH);
+                            boxes.add(newBox);
+                            break;
+                        case 3:
+                            bridges.add(new Bridge(world, mouseX, mouseY));
+                            break;
+                    }
                     prevTime = time;
+
                 }
 
             }
@@ -94,6 +111,11 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
             long newPhysicsTime = System.currentTimeMillis();
             float dt = (newPhysicsTime - physicsTime) / 1000f;
             physicsTime = newPhysicsTime;
+
+            for (Bridge bridge : bridges) {
+                bridge.checkBreak(world, dt);
+            }
+
 
             world.step(dt, 10, 8);
         }
@@ -123,6 +145,11 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         isMousePressed = true;
         mouseX = e.getX();
         mouseY = e.getY();
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            mouseButton = 1;
+        } else if (SwingUtilities.isRightMouseButton(e)) {
+            mouseButton = 3;
+        }
     }
 
     @Override
@@ -134,12 +161,23 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     public void mouseDragged(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            mouseButton = 1;
+        } else if (SwingUtilities.isRightMouseButton(e)) {
+            mouseButton = 3;
+        }
+
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            mouseButton = 1;
+        } else if (SwingUtilities.isRightMouseButton(e)) {
+            mouseButton = 3;
+        }
 
     }
 }

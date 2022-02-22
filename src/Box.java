@@ -76,14 +76,31 @@ public class Box {
         y = v.y;
         angle = body.getAngle();
 
-        int w2 = bImage.getWidth();
-        int h2 = bImage.getHeight();
-        int x2 = (int) x;
-        int y2 = (int) y;
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.rotate(angle, x2, y2);
-        g2d.drawImage(bImage, null, x2 - w2 / 2, y2 - h2 / 2);
-        g2d.rotate(-angle, x2, y2);
+        if (w == h) {
+
+            int w2 = bImage.getWidth();
+            int h2 = bImage.getHeight();
+            int x2 = (int) x;
+            int y2 = (int) y;
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.rotate(angle, x2, y2);
+            g2d.drawImage(bImage, null, x2 - w2 / 2, y2 - h2 / 2);
+            g2d.rotate(-angle, x2, y2);
+
+        } else {
+            int[] xCoords = new int[4];
+            int[] yCoords = new int[4];
+            int[][] mult = { { 1, 1 }, { 1, -1 }, { -1, -1 }, { -1, 1 } };
+            for (int i = 0; i < 4; i++) {
+                float x2 = (x + w / 2 * mult[i][0]);
+                float y2 = (y + h / 2 * mult[i][1]);
+                xCoords[i] = (int) ((x2 - x) * Math.cos(angle) - (y2 - y) * Math.sin(angle) +
+                        x);
+                yCoords[i] = (int) ((x2 - x) * Math.sin(angle) + (y2 - y) * Math.cos(angle) +
+                        y);
+            }
+            g.drawPolygon(xCoords, yCoords, 4);
+        }
 
     }
 
