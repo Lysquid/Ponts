@@ -6,8 +6,6 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
-import org.jbox2d.dynamics.joints.WeldJoint;
-import org.jbox2d.dynamics.joints.WeldJointDef;
 
 public class Bridge {
 
@@ -41,11 +39,15 @@ public class Bridge {
     }
 
     public void checkBreak(World world, float dt) {
-        Vec2 force = new Vec2();
-        joint.getReactionForce(1 / dt, force);
-        float forceLength = force.length();
-        if (forceLength > 1500000) {
-            world.destroyJoint(joint);
+        if (joint != null) {
+            Vec2 force = new Vec2();
+            joint.getReactionForce(1 / dt, force);
+            float forceLength = force.length();
+            if (forceLength > 1500000) {
+                world.destroyJoint(joint);
+                joint = null;
+            }
+
         }
 
     }

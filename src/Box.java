@@ -17,9 +17,6 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-
 public class Box {
 
     Body body;

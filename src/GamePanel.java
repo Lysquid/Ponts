@@ -7,9 +7,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
-import javax.swing.SwingUtilities;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
@@ -49,7 +49,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         world.setWarmStarting(true);
         world.setContinuousPhysics(true);
 
-        Boundary ground = new Boundary(world, getWidth(), getHeight());
+        new Boundary(world, getWidth(), getHeight());
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -115,7 +115,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
             for (Bridge bridge : bridges) {
                 bridge.checkBreak(world, dt);
             }
-
 
             world.step(dt, 10, 8);
         }
