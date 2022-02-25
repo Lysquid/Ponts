@@ -9,6 +9,7 @@ public class Main extends JFrame {
     final int HEIGHT = 600;
     int refreshRate;
 
+    
     public Main() {
         setTitle("Project");
         setSize(WIDTH, HEIGHT);
@@ -24,7 +25,7 @@ public class Main extends JFrame {
         panel.init(refreshRate);
 
     }
-
+    
     public int getRefreshRate() {
         try {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -37,8 +38,9 @@ public class Main extends JFrame {
         }
 
     }
-
+    
     public static void main(String[] args) {
+        System.out.println("hello remy");
         new Main();
     }
 
