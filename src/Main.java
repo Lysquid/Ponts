@@ -8,6 +8,7 @@ public class Main extends JFrame {
     final int WIDTH = 600;
     final int HEIGHT = 600;
     int refreshRate;
+    private static Main main;
 
     
     public Main() {
@@ -39,9 +40,8 @@ public class Main extends JFrame {
 
     }
     
-    public static void main(String[] args) {
-        System.out.println("hello remy");
-        new Main();
+    public static void main(String[] args) {        
+        main = new Main();
     }
 
 }
