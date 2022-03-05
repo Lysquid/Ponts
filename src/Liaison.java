@@ -38,7 +38,7 @@ public class Liaison extends ObjetPhysique {
         int Ycentre = box2d.worldToPixelY(y);
         int r = box2d.worldToPixel(this.rayon);
 
-        g.drawOval(Xcentre, Ycentre, r, r);
+        g.drawOval(Xcentre, Ycentre, r*2, r*2);
 
     }
 

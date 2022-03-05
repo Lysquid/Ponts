@@ -22,7 +22,7 @@ public class Pont {
 
         barre1 = new Barre(world, x - BAR_W / 2 + BAR_H / 2, y, BAR_W, BAR_H);
         barre2 = new Barre(world, x + BAR_W / 2 - BAR_H / 2, y, BAR_W, BAR_H);
-        liaison = new Liaison(world, x, y, BAR_H);
+        liaison = new Liaison(world, x-BAR_H, y+BAR_H, BAR_H/2);
 
         RevoluteJointDef rjd1 = new RevoluteJointDef();
 
@@ -66,6 +66,6 @@ public class Pont {
 
         }
 
-    }
+    } 
 
 }
