@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     long physicsTime;
 
     ArrayList<Barre> boxes;
-    ArrayList<Bridge> bridges;
+    ArrayList<Pont> bridges;
 
     boolean isMousePressed;
     int mouseButton;
@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     public GamePanel() {
 
         boxes = new ArrayList<Barre>();
-        bridges = new ArrayList<Bridge>();
+        bridges = new ArrayList<Pont>();
 
     }
 
@@ -79,7 +79,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
             box.draw(g, box2d);
         }
 
-        for (Bridge bridge : bridges) {
+        for (Pont bridge : bridges) {
             bridge.draw(g, box2d);
         }
 
@@ -102,7 +102,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
                             boxes.add(newBox);
                             break;
                         case 3:
-                            bridges.add(new Bridge(world, mouseX, mouseY));
+                            bridges.add(new Pont(world, mouseX, mouseY));
                             break;
                     }
                     prevTime = time;
@@ -115,7 +115,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
             float dt = (newPhysicsTime - physicsTime) / 1000f;
             physicsTime = newPhysicsTime;
 
-            for (Bridge bridge : bridges) {
+            for (Pont bridge : bridges) {
                 bridge.checkBreak(world, dt);
             }
 
