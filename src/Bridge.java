@@ -10,20 +10,20 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 public class Bridge {
 
     RevoluteJoint joint;
-    Box bar1;
-    Box bar2;
+    Barre barre1;
+    Barre barre2;
 
-    final int BAR_W = 100;
-    final int BAR_H = 10;
+    final float BAR_W = 6;
+    final float BAR_H = 1;
 
-    public Bridge(World world, int x, int y) {
+    public Bridge(World world, float x, float y) {
 
-        bar1 = new Box(world, x - BAR_W / 2 + BAR_H / 2, y, BAR_W, BAR_H);
-        bar2 = new Box(world, x + BAR_W / 2 - BAR_H / 2, y, BAR_W, BAR_H);
+        barre1 = new Barre(world, x - BAR_W / 2 + BAR_H / 2, y, BAR_W, BAR_H);
+        barre2 = new Barre(world, x + BAR_W / 2 - BAR_H / 2, y, BAR_W, BAR_H);
 
         RevoluteJointDef rjd = new RevoluteJointDef();
 
-        rjd.initialize(bar1.body, bar2.body, new Vec2(x, y));
+        rjd.initialize(barre1.body, barre2.body, new Vec2(x, y));
 
         rjd.enableMotor = true;
         rjd.maxMotorTorque = 200000000;
@@ -32,9 +32,9 @@ public class Bridge {
 
     }
 
-    public void draw(Graphics g, JPanel frame) {
-        bar1.draw(g, frame);
-        bar2.draw(g, frame);
+    public void draw(Graphics g, Box2D box2d) {
+        barre1.draw(g, box2d);
+        barre2.draw(g, box2d);
 
     }
 

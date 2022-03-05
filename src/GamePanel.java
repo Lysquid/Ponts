@@ -80,7 +80,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         }
 
         for (Bridge bridge : bridges) {
-            bridge.draw(g, this);
+            bridge.draw(g, box2d);
         }
 
     }
@@ -102,7 +102,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
                             boxes.add(newBox);
                             break;
                         case 3:
-                            // bridges.add(new Bridge(world, mouseX, mouseY));
+                            bridges.add(new Bridge(world, mouseX, mouseY));
                             break;
                     }
                     prevTime = time;
