@@ -74,8 +74,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         Toolkit.getDefaultToolkit().sync();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
-        g.setColor(Color.RED);
-        g.fillOval(0, 0, 10, 10);
 
         for (Barre box : boxes) {
             box.draw(g, box2d);
@@ -149,7 +147,6 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         isMousePressed = true;
         mouseX = box2d.pixelToWorldX(e.getX());
         mouseY = box2d.pixelToWorldY(e.getY());
-        // System.out.println(e.getY() + "  " + mouseY);
         if (SwingUtilities.isLeftMouseButton(e)) {
             mouseButton = 1;
         } else if (SwingUtilities.isRightMouseButton(e)) {

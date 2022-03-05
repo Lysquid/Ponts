@@ -26,7 +26,7 @@ public class Box2D {
     }
 
     public float pixelToWorldY(int yP) {
-        return pixelToWorld(largeurP - yP);
+        return pixelToWorld(hauteurP - yP);
     }
 
     public Vec2 pixelToWorld(int xP, int yP) {
