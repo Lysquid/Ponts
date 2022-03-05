@@ -14,7 +14,7 @@ import javax.swing.event.MouseInputListener;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
-public class GamePanel extends JPanel implements ActionListener, MouseInputListener {
+public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     Box2D box2d;
     World world;
@@ -35,7 +35,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     long prevTime = 0;
     final int SPAWN_DELAY = 100;
 
-    public GamePanel() {
+    public Jeu() {
 
         boxes = new ArrayList<Barre>();
         bridges = new ArrayList<Pont>();
@@ -98,7 +98,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
                 if (time - prevTime > SPAWN_DELAY) {
                     switch (mouseButton) {
                         case 1:
-                            Barre newBox = new Barre(world, mouseX, mouseY, 5, 3);
+                            Barre newBox = new Barre(world, mouseX, mouseY, 5, 4);
                             boxes.add(newBox);
                             break;
                         case 3:
