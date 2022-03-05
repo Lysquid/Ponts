@@ -15,28 +15,30 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
 public class GamePanel extends JPanel implements ActionListener, MouseInputListener {
+
+    Box2D box2d;
     World world;
     Timer graphicsTimer;
     Timer physicsTimer;
-    final int PHYSICS_TICK = 8 * 2;
+    final int PHYSICS_TICK = 16;
     long physicsTime;
 
-    ArrayList<Box> boxes;
+    ArrayList<Barre> boxes;
     ArrayList<Bridge> bridges;
-
-    final int WIDTH = 40;
 
     boolean isMousePressed;
     int mouseButton;
-    int mouseX;
-    int mouseY;
+    float mouseX;
+    float mouseY;
     boolean initialized = false;
 
     long prevTime = 0;
     final int SPAWN_DELAY = 100;
 
-    public GamePanel() {
-        boxes = new ArrayList<Box>();
+    public GamePanel(int largeur, int hauteur) {
+
+        box2d = new Box2D(getWidth(), getWidth());
+        boxes = new ArrayList<Barre>();
         bridges = new ArrayList<Bridge>();
 
     }
@@ -44,12 +46,12 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     public void init(int refreshRate) {
 
         // Create World
-        Vec2 gravity = new Vec2(0.0f, 500.0f);
+        Vec2 gravity = new Vec2(0.0f, -9.81f);
         world = new World(gravity);
         world.setWarmStarting(true);
         world.setContinuousPhysics(true);
 
-        new Boundary(world, getWidth(), getHeight());
+        new Bord(world, box2d.largeur, box2d.hauteur);
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -72,8 +74,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        for (Box box : boxes) {
-            box.draw(g, this);
+        for (Barre box : boxes) {
+            box.draw(g, box2d);
         }
 
         for (Bridge bridge : bridges) {
@@ -95,11 +97,11 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
                 if (time - prevTime > SPAWN_DELAY) {
                     switch (mouseButton) {
                         case 1:
-                            Box newBox = new Box(world, mouseX, mouseY, WIDTH, WIDTH);
+                            Barre newBox = new Barre(world, mouseX, mouseY, 5, 3);
                             boxes.add(newBox);
                             break;
                         case 3:
-                            bridges.add(new Bridge(world, mouseX, mouseY));
+                            // bridges.add(new Bridge(world, mouseX, mouseY));
                             break;
                     }
                     prevTime = time;
@@ -142,8 +144,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     @Override
     public void mousePressed(MouseEvent e) {
         isMousePressed = true;
-        mouseX = e.getX();
-        mouseY = e.getY();
+        mouseX = box2d.pixelToWorldX(e.getX());
+        mouseY = box2d.pixelToWorldY(e.getY());
         if (SwingUtilities.isLeftMouseButton(e)) {
             mouseButton = 1;
         } else if (SwingUtilities.isRightMouseButton(e)) {
@@ -158,8 +160,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
+        mouseX = box2d.pixelToWorldX(e.getX());
+        mouseY = box2d.pixelToWorldY(e.getY());
         if (SwingUtilities.isLeftMouseButton(e)) {
             mouseButton = 1;
         } else if (SwingUtilities.isRightMouseButton(e)) {
@@ -170,8 +172,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
+        mouseX = box2d.pixelToWorldX(e.getX());
+        mouseY = box2d.pixelToWorldY(e.getY());
         if (SwingUtilities.isLeftMouseButton(e)) {
             mouseButton = 1;
         } else if (SwingUtilities.isRightMouseButton(e)) {

@@ -4,17 +4,15 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
-public class Boundary {
+public class Bord extends ObjetPhysique {
 
-    Body body;
-
-    float x, y;
     float w, h;
     float angle;
 
-    public Boundary(World world, int frameX, int frameY) {
-        this.x = (float) frameX / 2;
-        this.y = (float) frameY;
+    public Bord(World world, float frameX, float frameY) {
+
+        float x = frameX / 2;
+        float y = 0;
         this.w = (float) frameX;
         this.h = 2f;
 

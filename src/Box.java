@@ -40,15 +40,15 @@ public class Box {
         bd.type = BodyType.DYNAMIC;
         bd.position.set(x, y);
 
-        // Step 1 : Create body
+        // Step 2 : Create body
         body = world.createBody(bd);
 
         // Step 3 : Create Shape
-        PolygonShape ps = new PolygonShape();
-        ps.setAsBox(w / 2, h / 2);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(w / 2, h / 2);
 
         // Step 4 : Create fixture
-        body.createFixture(ps, 1);
+        body.createFixture(shape, 1);
 
         toolkit = Toolkit.getDefaultToolkit();
         image = toolkit.getImage("res/box.png");
