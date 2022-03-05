@@ -35,15 +35,16 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
     long prevTime = 0;
     final int SPAWN_DELAY = 100;
 
-    public GamePanel(int largeur, int hauteur) {
+    public GamePanel() {
 
-        box2d = new Box2D(getWidth(), getWidth());
         boxes = new ArrayList<Barre>();
         bridges = new ArrayList<Bridge>();
 
     }
 
     public void init(int refreshRate) {
+
+        box2d = new Box2D(getWidth(), getHeight());
 
         // Create World
         Vec2 gravity = new Vec2(0.0f, -9.81f);
@@ -73,6 +74,8 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         Toolkit.getDefaultToolkit().sync();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
+        g.setColor(Color.RED);
+        g.fillOval(0, 0, 10, 10);
 
         for (Barre box : boxes) {
             box.draw(g, box2d);
@@ -146,6 +149,7 @@ public class GamePanel extends JPanel implements ActionListener, MouseInputListe
         isMousePressed = true;
         mouseX = box2d.pixelToWorldX(e.getX());
         mouseY = box2d.pixelToWorldY(e.getY());
+        // System.out.println(e.getY() + "  " + mouseY);
         if (SwingUtilities.isLeftMouseButton(e)) {
             mouseButton = 1;
         } else if (SwingUtilities.isRightMouseButton(e)) {

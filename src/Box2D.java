@@ -1,5 +1,3 @@
-import javax.management.monitor.GaugeMonitor;
-
 import org.jbox2d.common.Vec2;
 
 public class Box2D {
@@ -14,7 +12,7 @@ public class Box2D {
 
         largeur = 50f;
         coeff = largeur / largeurP;
-        hauteur = largeurP * coeff;
+        hauteur = hauteurP * coeff;
         // coefficient du nombre de metre par pixel
 
     }

@@ -17,7 +17,7 @@ public class Main extends JFrame {
 
         refreshRate = getRefreshRate();
 
-        GamePanel panel = new GamePanel(WIDTH, HEIGHT);
+        GamePanel panel = new GamePanel();
         add(panel);
 
         setVisible(true);
