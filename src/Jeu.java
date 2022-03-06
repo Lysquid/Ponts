@@ -72,15 +72,15 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public void paint(Graphics g) {
 
         Toolkit.getDefaultToolkit().sync();
-        g.setColor(Color.BLACK);
+        g.setColor(new Color(106, 168, 184));
         g.fillRect(0, 0, getWidth(), getHeight());
 
         for (Barre box : boxes) {
-            box.draw(g, box2d);
+            box.dessiner(g, box2d);
         }
 
         for (Pont bridge : bridges) {
-            bridge.draw(g, box2d);
+            bridge.dessiner(g, box2d);
         }
 
     }
@@ -98,7 +98,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
                 if (time - prevTime > SPAWN_DELAY) {
                     switch (mouseButton) {
                         case 1:
-                            Barre newBox = new Barre(world, mouseX, mouseY, 5, 3);
+                            Barre newBox = new Barre(world, mouseX, mouseY, 4, 3);
                             boxes.add(newBox);
                             break;
                         case 3:
@@ -116,7 +116,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             physicsTime = newPhysicsTime;
 
             for (Pont bridge : bridges) {
-                bridge.checkBreak(world, dt);
+                bridge.testCasse(world, dt);
             }
 
             world.step(dt, 10, 8);

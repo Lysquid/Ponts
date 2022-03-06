@@ -16,7 +16,7 @@ public class Bord extends ObjetPhysique {
 
         float x = frameX / 2;
         float y = 0;
-        this.w = (float) frameX;
+        this.w = (float) frameX * 2;
         this.h = 0.1f;
 
         BodyDef bodyDef = new BodyDef();

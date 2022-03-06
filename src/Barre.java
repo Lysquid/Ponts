@@ -2,22 +2,36 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.joints.RevoluteJoint;
+import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 public class Barre extends ObjetPhysique {
 
     final static int CATEGORY = 0b0010;
-    final static int MASK = Bord.CATEGORY | CATEGORY;
+    final static int MASK = Bord.CATEGORY | CATEGORY | Liaison.CATEGORY;
+
+    final float COUPLE_RESISTANCE = 1000000f;
+    final float FORCE_MAX = 500f;
+
+    Liaison[] liaisons;
+    RevoluteJoint[] joints;
 
     float longueur, hauteur;
     float angle;
 
+    Color couleur = Color.DARK_GRAY;
+
     public Barre(World world, float x, float y, float longueur, float hauteur) {
         this.longueur = longueur;
         this.hauteur = hauteur;
+
+        liaisons = new Liaison[2];
+        joints = new RevoluteJoint[2];
 
         // Etape 1 : Définir le "body"
         BodyDef bodyDef = new BodyDef();
@@ -45,9 +59,47 @@ public class Barre extends ObjetPhysique {
 
     }
 
-    public void draw(Graphics g, Box2D box2d) {
+    public void lier(World world, Liaison liaison) {
+        RevoluteJointDef rjd = new RevoluteJointDef();
+        rjd.initialize(body, liaison.body, liaison.getPos());
+        rjd.enableMotor = true;
+        rjd.maxMotorTorque = COUPLE_RESISTANCE;
+        RevoluteJoint joint = (RevoluteJoint) world.createJoint(rjd);
 
-        g.setColor(Color.CYAN);
+        int i = 0;
+        if (!(joints[0] == null)) {
+            i = 1;
+        }
+        joints[i] = joint;
+        liaisons[i] = liaison;
+
+        liaison.barresLiees.add(this);
+    }
+
+    public void testCasse(World world, float dt) {
+        for (int i = 0; i < 2; i++) {
+            RevoluteJoint joint = joints[i];
+            Liaison liaison = liaisons[i];
+            if (joint != null && liaison.barresLiees.size() > 1) {
+                Vec2 force = new Vec2();
+                joint.getReactionForce(1 / dt, force);
+                float norme = force.length();
+                if (norme > FORCE_MAX) {
+                    world.destroyJoint(joint);
+                    joints[i] = null;
+                    liaison.barresLiees.remove(this);
+
+                    Liaison nouvelleLiaison = new Liaison(world, liaison.getX(), liaison.getY());
+                    lier(world, nouvelleLiaison);
+                }
+            }
+
+        }
+    }
+
+    public void dessiner(Graphics g, Box2D box2d) {
+
+        g.setColor(couleur);
 
         float x = getX();
         float y = getY();
@@ -67,6 +119,8 @@ public class Barre extends ObjetPhysique {
             yCoords[i] = box2d.worldToPixelY((float) y3);
         }
 
+        g.fillPolygon(xCoords, yCoords, 4);
+        g.setColor(Color.BLACK);
         g.drawPolygon(xCoords, yCoords, 4);
 
     }
