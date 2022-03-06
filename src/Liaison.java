@@ -4,9 +4,13 @@ import java.awt.Graphics;
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 public class Liaison extends ObjetPhysique {
+
+    final static int CATEGORY = 0b0100;
+    final static int MASK = Bord.CATEGORY | CATEGORY;
 
     float rayon;
 
@@ -14,17 +18,21 @@ public class Liaison extends ObjetPhysique {
 
         this.rayon = rayon;
 
-        // Créer une "body definition"
-        BodyDef bd = new BodyDef();
-        bd.type = BodyType.DYNAMIC;
-        bd.position.set(x, y);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.DYNAMIC;
+        bodyDef.position.set(x, y);
 
-        // Créer le body
-        body = world.createBody(bd);
+        body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(this.rayon);
 
-        body.createFixture(shape, 1);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        fixtureDef.filter.categoryBits = CATEGORY;
+        fixtureDef.filter.maskBits = MASK;
+
+        body.createFixture(fixtureDef);
     }
 
     public void draw(Graphics g, Box2D box2d) {

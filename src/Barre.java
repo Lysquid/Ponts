@@ -4,9 +4,13 @@ import java.awt.Graphics;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 public class Barre extends ObjetPhysique {
+
+    final static int CATEGORY = 0b0010;
+    final static int MASK = Bord.CATEGORY | CATEGORY;
 
     float longueur, hauteur;
     float angle;
@@ -15,20 +19,29 @@ public class Barre extends ObjetPhysique {
         this.longueur = longueur;
         this.hauteur = hauteur;
 
-        // Etape 1 : Créer une "body definition"
-        BodyDef bd = new BodyDef();
-        bd.type = BodyType.DYNAMIC;
-        bd.position.set(x, y);
+        // Etape 1 : Définir le "body"
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.DYNAMIC;
+        bodyDef.position.set(x, y);
 
         // Etape 2 : Créer un "body"
-        body = world.createBody(bd);
+        body = world.createBody(bodyDef);
 
-        // Etape 3 : Créer une "shape"
+        // Etape 3 : Définir la "shape"
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(longueur / 2, hauteur / 2);
 
-        // Etape 4 : Créer une "fixture" qui lie la shape au body
-        body.createFixture(shape, 1);
+        // Etape 4 : Définir la "fixture"
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        // fixtureDef.restitution = 0.5f;
+        // fixtureDef.friction = 0.3f;
+        fixtureDef.filter.categoryBits = CATEGORY;
+        fixtureDef.filter.maskBits = MASK;
+
+        // Etape 5 : Attacher la shape au body avec la fixture
+        body.createFixture(fixtureDef);
 
     }
 
