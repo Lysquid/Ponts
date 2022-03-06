@@ -1,7 +1,8 @@
-import javax.swing.JFrame;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+
+import javax.swing.JFrame;
 
 public class Main extends JFrame {
 
@@ -17,11 +18,11 @@ public class Main extends JFrame {
 
         refreshRate = getRefreshRate();
 
-        GamePanel panel = new GamePanel();
-        add(panel);
+        Jeu jeu = new Jeu();
+        add(jeu);
 
         setVisible(true);
-        panel.init(refreshRate);
+        jeu.init(refreshRate);
 
     }
 
