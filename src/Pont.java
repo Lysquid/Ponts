@@ -18,13 +18,13 @@ public class Pont {
 
     public Pont(World world, float x, float y) {
 
-        barre1 = new Barre(world, x - BAR_W / 2 + BAR_H / 2, y, BAR_W, BAR_H);
-        barre2 = new Barre(world, x + BAR_W / 2 - BAR_H / 2, y, BAR_W, BAR_H);
+        barre1 = new Barre(world, x - BAR_W / 2 - BAR_H / 2, y, BAR_W, BAR_H);
+        barre2 = new Barre(world, x + BAR_W / 2 + BAR_H / 2, y, BAR_W, BAR_H);
         liaison = new Liaison(world, x, y, BAR_H / 2);
 
         RevoluteJointDef rjd1 = new RevoluteJointDef();
 
-        float maxMotorTorque = 1f;
+        float maxMotorTorque = 1000000f;
 
         rjd1.initialize(barre1.body, liaison.body, new Vec2(x, y));
         rjd1.enableMotor = true;
@@ -52,8 +52,8 @@ public class Pont {
         if (joint1 != null) {
             Vec2 force = new Vec2();
             joint1.getReactionForce(1 / dt, force);
-            float forceLength = force.length();
-            if (forceLength > 1500000) {
+            float norme = force.length();
+            if (norme > 200) {
                 world.destroyJoint(joint1);
                 joint1 = null;
             }
