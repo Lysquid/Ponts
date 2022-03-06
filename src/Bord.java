@@ -9,15 +9,16 @@ public class Bord extends ObjetPhysique {
     static int CATEGORY = 0b0001;
     static int MASK = 0b1111;
 
-    float w, h;
+    float x, y;
+    float largeur, hauteur;
     float angle;
 
     public Bord(World world, float frameX, float frameY) {
 
-        float x = frameX / 2;
-        float y = 0;
-        this.w = (float) frameX * 2;
-        this.h = 0.1f;
+        x = frameX / 2;
+        y = 0;
+        largeur = frameX * 10;
+        hauteur = 0.1f;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.STATIC;
@@ -26,7 +27,7 @@ public class Bord extends ObjetPhysique {
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(w / 2, h / 2);
+        shape.setAsBox(largeur / 2, hauteur / 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;

@@ -18,9 +18,9 @@ public class Pont {
         liaison = new Liaison(world, x, y);
 
         ajouterBarre(world, liaison);
-        ajouterBarre(world, barres.getLast().liaisons[1]);
-        ajouterBarre(world, barres.getLast().liaisons[1]);
-        ajouterBarre(world, barres.getLast().liaisons[1]);
+        ajouterBarre(world, barres.getLast().liaisons.get(1));
+        ajouterBarre(world, barres.getLast().liaisons.get(1));
+        ajouterBarre(world, barres.getLast().liaisons.get(1));
 
     }
 
@@ -36,6 +36,7 @@ public class Pont {
     public void ajouterBarre(World world, Liaison liaison) {
 
         Barre barre = new Barre(world, liaison.getX() + BAR_W / 2 + BAR_H / 2, liaison.getY(), BAR_W, BAR_H);
+
         barre.lier(world, liaison);
 
         Liaison liaison2 = new Liaison(world, liaison.getX() + BAR_W + BAR_H, liaison.getY());

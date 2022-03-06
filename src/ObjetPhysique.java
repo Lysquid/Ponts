@@ -5,9 +5,6 @@ public abstract class ObjetPhysique {
 
     Body body;
 
-    public ObjetPhysique() {
-    }
-
     public Vec2 getPos() {
         return body.getTransform().p;
     }

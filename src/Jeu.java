@@ -4,7 +4,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -23,8 +23,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     final int PHYSICS_TICK = 16;
     long physicsTime;
 
-    ArrayList<Barre> boxes;
-    ArrayList<Pont> bridges;
+    LinkedList<Barre> boites;
+    LinkedList<Pont> ponts;
 
     boolean isMousePressed;
     int mouseButton;
@@ -37,8 +37,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     public Jeu() {
 
-        boxes = new ArrayList<Barre>();
-        bridges = new ArrayList<Pont>();
+        boites = new LinkedList<Barre>();
+        ponts = new LinkedList<Pont>();
 
     }
 
@@ -72,14 +72,14 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public void paint(Graphics g) {
 
         Toolkit.getDefaultToolkit().sync();
-        g.setColor(new Color(106, 168, 184));
+        g.setColor(new Color(72, 141, 184));
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        for (Barre box : boxes) {
+        for (Barre box : boites) {
             box.dessiner(g, box2d);
         }
 
-        for (Pont bridge : bridges) {
+        for (Pont bridge : ponts) {
             bridge.dessiner(g, box2d);
         }
 
@@ -99,10 +99,10 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
                     switch (mouseButton) {
                         case 1:
                             Barre newBox = new Barre(world, mouseX, mouseY, 4, 3);
-                            boxes.add(newBox);
+                            boites.add(newBox);
                             break;
                         case 3:
-                            bridges.add(new Pont(world, mouseX, mouseY));
+                            ponts.add(new Pont(world, mouseX, mouseY));
                             break;
                     }
                     prevTime = time;
@@ -115,7 +115,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             float dt = (newPhysicsTime - physicsTime) / 1000f;
             physicsTime = newPhysicsTime;
 
-            for (Pont bridge : bridges) {
+            for (Pont bridge : ponts) {
                 bridge.testCasse(world, dt);
             }
 

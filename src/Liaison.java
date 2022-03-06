@@ -11,10 +11,11 @@ import org.jbox2d.dynamics.World;
 public class Liaison extends ObjetPhysique {
 
     final static int CATEGORY = 0b0100;
-    final static int MASK = Bord.CATEGORY | CATEGORY | Barre.CATEGORY;
+    final static int MASK = Bord.CATEGORY | Liaison.CATEGORY | Barre.CATEGORY;
 
     final float RAYON = 0.5f;
-    final Color couleur = new Color(224, 247, 74);
+    final Color COULEUR_REMPLISSAGE = new Color(227, 240, 105);
+    final Color COULEUR_CONTOUR = Color.BLACK;
 
     public LinkedList<Barre> barresLiees;
 
@@ -42,18 +43,14 @@ public class Liaison extends ObjetPhysique {
 
     public void dessiner(Graphics g, Box2D box2d) {
 
-        g.setColor(couleur);
-
-        float x = getX();
-        float y = getY();
-
-        int Xcentre = box2d.worldToPixelX(x);
-        int Ycentre = box2d.worldToPixelY(y);
+        int x = box2d.worldToPixelX(getX());
+        int y = box2d.worldToPixelY(getY());
         int r = box2d.worldToPixel(this.RAYON);
 
-        g.fillOval(Xcentre - r, Ycentre - r, r * 2, r * 2);
-        g.setColor(Color.BLACK);
-        g.drawOval(Xcentre - r, Ycentre - r, r * 2, r * 2);
+        g.setColor(COULEUR_REMPLISSAGE);
+        g.fillOval(x - r, y - r, r * 2, r * 2);
+        g.setColor(COULEUR_CONTOUR);
+        g.drawOval(x - r, y - r, r * 2, r * 2);
     }
 
 }

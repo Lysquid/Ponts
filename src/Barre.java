@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -13,25 +14,25 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 public class Barre extends ObjetPhysique {
 
     final static int CATEGORY = 0b0010;
-    final static int MASK = Bord.CATEGORY | CATEGORY | Liaison.CATEGORY;
+    final static int MASK = Bord.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
 
     final float COUPLE_RESISTANCE = 1000000f;
     final float FORCE_MAX = 500f;
+    final Color COULEUR_REMPLISSAGE = Color.DARK_GRAY;
+    final Color COULEUR_CONTOUR = Color.BLACK;
 
-    Liaison[] liaisons;
-    RevoluteJoint[] joints;
+    ArrayList<Liaison> liaisons;
+    ArrayList<RevoluteJoint> joints;
 
     float longueur, hauteur;
     float angle;
-
-    Color couleur = Color.DARK_GRAY;
 
     public Barre(World world, float x, float y, float longueur, float hauteur) {
         this.longueur = longueur;
         this.hauteur = hauteur;
 
-        liaisons = new Liaison[2];
-        joints = new RevoluteJoint[2];
+        liaisons = new ArrayList<Liaison>(2);
+        joints = new ArrayList<RevoluteJoint>(2);
 
         // Etape 1 : Définir le "body"
         BodyDef bodyDef = new BodyDef();
@@ -60,34 +61,33 @@ public class Barre extends ObjetPhysique {
     }
 
     public void lier(World world, Liaison liaison) {
-        RevoluteJointDef rjd = new RevoluteJointDef();
-        rjd.initialize(body, liaison.body, liaison.getPos());
-        rjd.enableMotor = true;
-        rjd.maxMotorTorque = COUPLE_RESISTANCE;
-        RevoluteJoint joint = (RevoluteJoint) world.createJoint(rjd);
+        RevoluteJointDef jointDef = new RevoluteJointDef();
+        jointDef.initialize(body, liaison.body, liaison.getPos());
+        jointDef.enableMotor = true;
+        jointDef.maxMotorTorque = COUPLE_RESISTANCE;
+        RevoluteJoint joint = (RevoluteJoint) world.createJoint(jointDef);
 
-        int i = 0;
-        if (!(joints[0] == null)) {
-            i = 1;
-        }
-        joints[i] = joint;
-        liaisons[i] = liaison;
-
+        joints.add(joint);
+        liaisons.add(liaison);
         liaison.barresLiees.add(this);
     }
 
     public void testCasse(World world, float dt) {
-        for (int i = 0; i < 2; i++) {
-            RevoluteJoint joint = joints[i];
-            Liaison liaison = liaisons[i];
-            if (joint != null && liaison.barresLiees.size() > 1) {
+        for (int i = 0; i < liaisons.size(); i++) {
+            RevoluteJoint joint = joints.get(i);
+            Liaison liaison = liaisons.get(i);
+
+            if (liaison.barresLiees.size() > 1) {
+
                 Vec2 force = new Vec2();
                 joint.getReactionForce(1 / dt, force);
                 float norme = force.length();
+
                 if (norme > FORCE_MAX) {
                     world.destroyJoint(joint);
-                    joints[i] = null;
                     liaison.barresLiees.remove(this);
+                    joints.remove(joint);
+                    liaisons.remove(liaison);
 
                     Liaison nouvelleLiaison = new Liaison(world, liaison.getX(), liaison.getY());
                     lier(world, nouvelleLiaison);
@@ -99,29 +99,28 @@ public class Barre extends ObjetPhysique {
 
     public void dessiner(Graphics g, Box2D box2d) {
 
-        g.setColor(couleur);
-
         float x = getX();
         float y = getY();
         float angle = getAngle();
 
-        int[] xCoords = new int[4];
-        int[] yCoords = new int[4];
-        int[][] mult = { { 1, 1 }, { 1, -1 }, { -1, -1 }, { -1, 1 } };
+        int[] xCoins = new int[4];
+        int[] yCoins = new int[4];
+        int[][] positionCoins = { { 1, 1 }, { 1, -1 }, { -1, -1 }, { -1, 1 } };
         for (int i = 0; i < 4; i++) {
-            float x2 = (x + longueur / 2 * mult[i][0]);
-            float y2 = (y + hauteur / 2 * mult[i][1]);
+            float x2 = (x + longueur / 2 * positionCoins[i][0]);
+            float y2 = (y + hauteur / 2 * positionCoins[i][1]);
 
             double x3 = ((x2 - x) * Math.cos(angle) - (y2 - y) * Math.sin(angle) + x);
             double y3 = ((x2 - x) * Math.sin(angle) + (y2 - y) * Math.cos(angle) + y);
 
-            xCoords[i] = box2d.worldToPixelX((float) x3);
-            yCoords[i] = box2d.worldToPixelY((float) y3);
+            xCoins[i] = box2d.worldToPixelX((float) x3);
+            yCoins[i] = box2d.worldToPixelY((float) y3);
         }
 
-        g.fillPolygon(xCoords, yCoords, 4);
-        g.setColor(Color.BLACK);
-        g.drawPolygon(xCoords, yCoords, 4);
+        g.setColor(COULEUR_REMPLISSAGE);
+        g.fillPolygon(xCoins, yCoins, 4);
+        g.setColor(COULEUR_CONTOUR);
+        g.drawPolygon(xCoins, yCoins, 4);
 
     }
 
