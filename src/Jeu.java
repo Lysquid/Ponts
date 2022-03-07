@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,9 +37,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     final int DELAI_APPARITION = 100;
 
     public Jeu() {
-
         boites = new LinkedList<Barre>();
-
     }
 
     public void init(int refreshRate) {
@@ -48,8 +48,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         world = new World(gravity);
 
         new Bord(world, box2d.largeur, box2d.hauteur);
-
-        Vec2 posPont = new Vec2(box2d.largeur / 2, box2d.hauteur * 1 / 10);
+        Vec2 posPont = new Vec2(box2d.largeur / 2, box2d.hauteur * 0.01f);
         pont = new Pont(world, posPont);
 
         addMouseListener(this);
@@ -67,9 +66,16 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
-    public void paint(Graphics g) {
+    public void paint(Graphics g0) {
 
+        // Activer l'anti-alias
+        Graphics2D g = (Graphics2D) g0;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+        // Fonction pour améliorer l'affichage sur Mac/Linux
         Toolkit.getDefaultToolkit().sync();
+
         g.setColor(Color.decode("#55a3d4"));
         g.fillRect(0, 0, getWidth(), getHeight());
 
