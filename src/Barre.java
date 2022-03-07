@@ -17,6 +17,8 @@ public class Barre extends ObjetPhysique {
     final static int CATEGORY = 0b0010;
     final static int MASK = Bord.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
 
+    final float LARGEUR_BARRE = 6;
+    final float HAUTEUR_BARRE = 1;
     final float COUPLE_RESISTANCE = 1000000f;
     final float FORCE_MAX = 1000f;
     final Color COULEUR_REMPLISSAGE = Color.DARK_GRAY;
@@ -28,7 +30,7 @@ public class Barre extends ObjetPhysique {
     float longueur, hauteur;
     float angle;
 
-    public Barre(World world, float x, float y, float angle, float longueur, float hauteur) {
+    public Barre(World world, Vec2 pos, float angle, float longueur, float hauteur) {
         this.longueur = longueur;
         this.hauteur = hauteur;
 
@@ -38,7 +40,7 @@ public class Barre extends ObjetPhysique {
         // Etape 1 : Définir le "body"
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
-        bodyDef.position.set(x, y);
+        bodyDef.position.set(pos);
         bodyDef.angle = angle;
 
         // Etape 2 : Créer un "body"
@@ -94,7 +96,7 @@ public class Barre extends ObjetPhysique {
                     joints.remove(joint);
                     liaisons.remove(liaison);
 
-                    Liaison nouvelleLiaison = new Liaison(world, liaison.getX(), liaison.getY());
+                    Liaison nouvelleLiaison = new Liaison(world, liaison.getPos());
                     lier(world, nouvelleLiaison);
                     nouvellesLiaisons.add(nouvelleLiaison);
                 }

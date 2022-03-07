@@ -18,22 +18,21 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     Box2D box2d;
     World world;
-    Timer graphicsTimer;
-    Timer physicsTimer;
-    final int PHYSICS_TICK = 16;
-    long physicsTime;
+    Timer timerGraphique;
+    Timer timerPhysique;
+    final int TICK_PHYSIQUE = 16;
+    long tempsPhysique;
 
     LinkedList<Barre> boites;
     Pont pont;
 
-    boolean isMousePressed;
-    int mouseButton;
-    float mouseX;
-    float mouseY;
-    boolean initialized = false;
+    boolean sourisAppyuee;
+    int boutonSouris;
+    Vec2 posSouris;
+    boolean initilise = false;
 
-    long prevTime = 0;
-    final int SPAWN_DELAY = 100;
+    long tempsPrecedent = 0;
+    final int DELAI_APPARITION = 100;
 
     public Jeu() {
 
@@ -45,34 +44,33 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         box2d = new Box2D(getWidth(), getHeight());
 
-        // Create World
         Vec2 gravity = new Vec2(0.0f, -9.81f);
         world = new World(gravity);
-        world.setWarmStarting(true);
-        world.setContinuousPhysics(true);
 
         new Bord(world, box2d.largeur, box2d.hauteur);
-        pont = new Pont(world, box2d.largeur / 2, box2d.hauteur * 1 / 10);
+
+        Vec2 posPont = new Vec2(box2d.largeur / 2, box2d.hauteur * 1 / 10);
+        pont = new Pont(world, posPont);
 
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        physicsTimer = new Timer(PHYSICS_TICK, this);
-        physicsTimer.start();
-        physicsTime = System.currentTimeMillis();
+        timerPhysique = new Timer(TICK_PHYSIQUE, this);
+        timerPhysique.start();
+        tempsPhysique = System.currentTimeMillis();
 
         int fps = (int) (1.0 / refreshRate * 1000.0);
-        graphicsTimer = new Timer(fps, this);
-        graphicsTimer.start();
+        timerGraphique = new Timer(fps, this);
+        timerGraphique.start();
 
-        initialized = true;
+        initilise = true;
 
     }
 
     public void paint(Graphics g) {
 
         Toolkit.getDefaultToolkit().sync();
-        g.setColor(new Color(72, 141, 184));
+        g.setColor(Color.decode("#55a3d4"));
         g.fillRect(0, 0, getWidth(), getHeight());
 
         for (Barre box : boites) {
@@ -87,43 +85,52 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == physicsTimer) {
-
-            if (isMousePressed) {
-
-                long time = System.currentTimeMillis();
-
+        if (e.getSource() == timerPhysique) {
+            if (sourisAppyuee) {
+                long temps = System.currentTimeMillis();
                 // System.out.println(time - prevTime);
-
-                if (time - prevTime > SPAWN_DELAY) {
-                    switch (mouseButton) {
-                        case 1:
-                            pont.liaisonCliquee(world, mouseX, mouseY);
-                            break;
-                        case 3:
-                            Barre newBox = new Barre(world, mouseX, mouseY, 0, 4, 3);
+                switch (boutonSouris) {
+                    case 1:
+                        pont.liaisonCliquee(world, posSouris);
+                        sourisAppyuee = false;
+                        break;
+                    case 3:
+                        if (temps - tempsPrecedent > DELAI_APPARITION) {
+                            Barre newBox = new Barre(world, posSouris, 0, 4, 3);
                             boites.add(newBox);
-                            break;
-                    }
-                    prevTime = time;
+                            tempsPrecedent = temps;
+                        }
+                        break;
 
                 }
-
             }
 
-            long newPhysicsTime = System.currentTimeMillis();
-            float dt = (newPhysicsTime - physicsTime) / 1000f;
-            physicsTime = newPhysicsTime;
+            long nouveauTempsPhysique = System.currentTimeMillis();
+            float dt = (nouveauTempsPhysique - tempsPhysique) / 1000f;
+            tempsPhysique = nouveauTempsPhysique;
 
             pont.testCasse(world, dt);
 
             world.step(dt, 10, 8);
         }
 
-        if (e.getSource() == graphicsTimer) {
+        if (e.getSource() == timerGraphique)
+
+        {
             repaint();
         }
 
+    }
+
+    public void majPosSouris(MouseEvent e) {
+        float x = box2d.pixelToWorldX(e.getX());
+        float y = box2d.pixelToWorldY(e.getY());
+        posSouris = new Vec2(x, y);
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            boutonSouris = 1;
+        } else if (SwingUtilities.isRightMouseButton(e)) {
+            boutonSouris = 3;
+        }
     }
 
     @Override
@@ -142,42 +149,23 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        isMousePressed = true;
-        mouseX = box2d.pixelToWorldX(e.getX());
-        mouseY = box2d.pixelToWorldY(e.getY());
-        if (SwingUtilities.isLeftMouseButton(e)) {
-            mouseButton = 1;
-        } else if (SwingUtilities.isRightMouseButton(e)) {
-            mouseButton = 3;
-        }
+        sourisAppyuee = true;
+        majPosSouris(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        isMousePressed = false;
+        sourisAppyuee = false;
+        majPosSouris(e);
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        mouseX = box2d.pixelToWorldX(e.getX());
-        mouseY = box2d.pixelToWorldY(e.getY());
-        if (SwingUtilities.isLeftMouseButton(e)) {
-            mouseButton = 1;
-        } else if (SwingUtilities.isRightMouseButton(e)) {
-            mouseButton = 3;
-        }
-
+        majPosSouris(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        mouseX = box2d.pixelToWorldX(e.getX());
-        mouseY = box2d.pixelToWorldY(e.getY());
-        if (SwingUtilities.isLeftMouseButton(e)) {
-            mouseButton = 1;
-        } else if (SwingUtilities.isRightMouseButton(e)) {
-            mouseButton = 3;
-        }
-
+        majPosSouris(e);
     }
 }

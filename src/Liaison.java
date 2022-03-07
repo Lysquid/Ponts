@@ -15,21 +15,21 @@ public class Liaison extends ObjetPhysique {
     final static int MASK = Bord.CATEGORY | Liaison.CATEGORY | Barre.CATEGORY;
 
     final float RAYON = 0.5f;
-    final Color COULEUR_REMPLISSAGE = new Color(227, 240, 105);
+    final Color COULEUR_REMPLISSAGE = Color.decode("#e3f069");
     final Color COULEUR_CONTOUR = Color.BLACK;
-    final Color COULEUR_CLIQUEE = Color.RED;
+    final Color COULEUR_CLIQUEE = Color.decode("#e86933");
 
     LinkedList<Barre> barresLiees;
     boolean cliquee;
 
-    public Liaison(World world, float x, float y) {
+    public Liaison(World world, Vec2 pos) {
 
         barresLiees = new LinkedList<Barre>();
 
         cliquee = false;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
-        bodyDef.position.set(x, y);
+        bodyDef.position.set(pos);
 
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
@@ -61,16 +61,13 @@ public class Liaison extends ObjetPhysique {
         g.drawOval(x - r, y - r, r * 2, r * 2);
     }
 
-    public boolean estDanslaZone(float x, float y) {
-        Vec2 click = new Vec2(x, y);
+    public float distancePoint(Vec2 pos) {
         Vec2 centre = getPos();
-        return (centre.sub(click).length() <= RAYON);
+        return (centre.sub(pos).length());
     }
 
-    public float donneMoiLaDistance(float x, float y) {
-        Vec2 click = new Vec2(x, y);
-        Vec2 centre = getPos();
-        return (centre.sub(click).length());
+    public boolean estDanslaZone(Vec2 pos) {
+        return (distancePoint(pos) <= RAYON);
     }
 
 }

@@ -33,10 +33,6 @@ public class Box2D {
         return new Vec2(pixelToWorld(xP), pixelToWorldY(yP));
     }
 
-    public Vec2 pixelToWorld(int[] coordP) {
-        return pixelToWorld(coordP[0], coordP[1]);
-    }
-
     public int worldToPixel(float scalaire) {
         return Math.round(scalaire / coeff);
     }
@@ -47,15 +43,6 @@ public class Box2D {
 
     public int worldToPixelY(float y) {
         return hauteurP - worldToPixel(y);
-    }
-
-    public int[] worldToPixel(float x, float y) {
-        int[] coord = { worldToPixelX(x), worldToPixelY(y) };
-        return coord;
-    }
-
-    public int[] worldToPixel(Vec2 coord) {
-        return worldToPixel(coord.x, coord.y);
     }
 
 }

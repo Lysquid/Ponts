@@ -11,20 +11,19 @@ public class Pont {
 
     Liaison liaisonCliquee;
 
-    final float BAR_W = 6;
-    final float BAR_H = 1;
+    final float LARGEUR_BARRE = 6;
+    final float HAUTEUR_BARRE = 1;
 
-    public Pont(World world, float x, float y) {
-
-        liaisonCliquee = null;
+    public Pont(World world, Vec2 pos) {
 
         barres = new LinkedList<Barre>();
         liaisons = new LinkedList<Liaison>();
 
-        Liaison liaison = new Liaison(world, x, y);
+        Liaison liaison = new Liaison(world, pos);
         liaisons.add(liaison);
 
-        ajouterBarre(world, liaison, x + BAR_W, y);
+        Vec2 posBarre = pos.add(new Vec2(LARGEUR_BARRE, 0));
+        ajouterBarre(world, liaison, posBarre);
 
     }
 
@@ -37,23 +36,20 @@ public class Pont {
         }
     }
 
-    public void ajouterBarre(World world, Liaison liaison, float x, float y) {
+    public Liaison ajouterBarre(World world, Liaison liaison, Vec2 posClic) {
 
-        Vec2 positionClique = new Vec2(x, y);
-        Vec2 centre = positionClique.add(liaison.getPos()).mul(0.5f);
-
-        Vec2 difference = positionClique.sub(liaison.getPos());
+        Vec2 centre = posClic.add(liaison.getPos()).mul(0.5f);
+        Vec2 difference = posClic.sub(liaison.getPos());
         float angle = (float) Math.atan(difference.y / difference.x);
-
-        Barre barre = new Barre(world, centre.x, centre.y, angle, difference.length() - BAR_H, BAR_H);
+        Barre barre = new Barre(world, centre, angle, difference.length() - HAUTEUR_BARRE, HAUTEUR_BARRE);
 
         barre.lier(world, liaison);
-
-        Liaison liaison2 = new Liaison(world, positionClique.x, positionClique.y);
-        barre.lier(world, liaison2);
+        Liaison nouvelleLiaison = new Liaison(world, posClic);
+        barre.lier(world, nouvelleLiaison);
 
         barres.add(barre);
-        liaisons.add(liaison2);
+        liaisons.add(nouvelleLiaison);
+        return nouvelleLiaison;
 
     }
 
@@ -65,27 +61,28 @@ public class Pont {
 
     }
 
-    public void liaisonCliquee(World world, float x, float y) {
+    public void liaisonCliquee(World world, Vec2 pos) {
 
-        Liaison liaisonTemp = null;
-        float longueurTemp = Float.POSITIVE_INFINITY;
+        Liaison liaisonPlusProche = null;
+        float distanceMin = Float.POSITIVE_INFINITY;
         for (Liaison liaison : liaisons) {
-            if (liaison.estDanslaZone(x, y)) {
-                if (liaison.donneMoiLaDistance(x, y) <= longueurTemp) {
-                    longueurTemp = liaison.donneMoiLaDistance(x, y);
-                    liaisonTemp = liaison;
+            if (liaison.estDanslaZone(pos)) {
+                float distance = liaison.distancePoint(pos);
+                if (distance < distanceMin) {
+                    distanceMin = distance;
+                    liaisonPlusProche = liaison;
                 }
             }
         }
 
         if (liaisonCliquee == null) {
-            if (liaisonTemp != null) {
-                liaisonCliquee = liaisonTemp;
+            if (liaisonPlusProche != null) {
+                liaisonCliquee = liaisonPlusProche;
                 liaisonCliquee.cliquee = true;
             }
         } else {
+            ajouterBarre(world, liaisonCliquee, pos);
             liaisonCliquee.cliquee = false;
-            ajouterBarre(world, liaisonCliquee, x, y);
             liaisonCliquee = null;
         }
 

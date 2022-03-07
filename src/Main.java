@@ -6,22 +6,22 @@ import javax.swing.JFrame;
 
 public class Main extends JFrame {
 
-    final int WIDTH = 600;
-    final int HEIGHT = 600;
+    final int LARGEUR = 600;
+    final int HAUTEUR = 600;
     int refreshRate;
 
     public Main() {
         setTitle("Project");
-        setSize(WIDTH, HEIGHT);
+        setSize(LARGEUR, HAUTEUR);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        refreshRate = getRefreshRate();
 
         Jeu jeu = new Jeu();
         add(jeu);
 
         setVisible(true);
+
+        refreshRate = getRefreshRate();
         jeu.init(refreshRate);
 
     }
