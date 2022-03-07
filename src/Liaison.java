@@ -19,9 +19,8 @@ public class Liaison extends ObjetPhysique {
     final Color COULEUR_CONTOUR = Color.BLACK;
     final Color COULEUR_CLIQUEE = Color.RED;
 
-    public LinkedList<Barre> barresLiees;
-
-    public boolean cliquee;
+    LinkedList<Barre> barresLiees;
+    boolean cliquee;
 
     public Liaison(World world, float x, float y) {
 

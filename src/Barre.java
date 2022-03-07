@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -73,7 +74,10 @@ public class Barre extends ObjetPhysique {
         liaison.barresLiees.add(this);
     }
 
-    public void testCasse(World world, float dt) {
+    public LinkedList<Liaison> testCasse(World world, float dt) {
+
+        LinkedList<Liaison> nouvellesLiaisons = new LinkedList<Liaison>();
+
         for (int i = 0; i < liaisons.size(); i++) {
             RevoluteJoint joint = joints.get(i);
             Liaison liaison = liaisons.get(i);
@@ -92,10 +96,11 @@ public class Barre extends ObjetPhysique {
 
                     Liaison nouvelleLiaison = new Liaison(world, liaison.getX(), liaison.getY());
                     lier(world, nouvelleLiaison);
+                    nouvellesLiaisons.add(nouvelleLiaison);
                 }
             }
-
         }
+        return nouvellesLiaisons;
     }
 
     public void dessiner(Graphics g, Box2D box2d) {

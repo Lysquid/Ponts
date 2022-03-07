@@ -52,7 +52,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         world.setContinuousPhysics(true);
 
         new Bord(world, box2d.largeur, box2d.hauteur);
-        pont = new Pont(world, box2d.largeur / 2, box2d.hauteur / 2);
+        pont = new Pont(world, box2d.largeur / 2, box2d.hauteur * 1 / 10);
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -98,11 +98,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
                 if (time - prevTime > SPAWN_DELAY) {
                     switch (mouseButton) {
                         case 1:
-                            Barre newBox = new Barre(world, mouseX, mouseY, 0, 4, 3);
-                            boites.add(newBox);
+                            pont.liaisonCliquee(world, mouseX, mouseY);
                             break;
                         case 3:
-                            pont.liaisonCliquee(world, mouseX, mouseY);
+                            Barre newBox = new Barre(world, mouseX, mouseY, 0, 4, 3);
+                            boites.add(newBox);
                             break;
                     }
                     prevTime = time;

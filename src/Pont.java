@@ -7,6 +7,7 @@ import org.jbox2d.dynamics.World;
 public class Pont {
 
     LinkedList<Barre> barres;
+    LinkedList<Liaison> liaisons;
 
     Liaison liaisonCliquee;
 
@@ -18,8 +19,10 @@ public class Pont {
         liaisonCliquee = null;
 
         barres = new LinkedList<Barre>();
+        liaisons = new LinkedList<Liaison>();
 
         Liaison liaison = new Liaison(world, x, y);
+        liaisons.add(liaison);
 
         ajouterBarre(world, liaison, x + BAR_W, y);
 
@@ -28,9 +31,9 @@ public class Pont {
     public void dessiner(Graphics g, Box2D box2d) {
         for (Barre barre : barres) {
             barre.dessiner(g, box2d);
-            for (Liaison liaison : barre.liaisons) {
-                liaison.dessiner(g, box2d);
-            }
+        }
+        for (Liaison liaison : liaisons) {
+            liaison.dessiner(g, box2d);
         }
     }
 
@@ -50,27 +53,15 @@ public class Pont {
         barre.lier(world, liaison2);
 
         barres.add(barre);
+        liaisons.add(liaison2);
 
     }
 
     public void testCasse(World world, float dt) {
         for (Barre barre : barres) {
-            barre.testCasse(world, dt);
-
+            LinkedList<Liaison> liaisonsCrees = barre.testCasse(world, dt);
+            liaisons.addAll(liaisonsCrees);
         }
-
-    }
-
-    public LinkedList<Liaison> getLiaisons() {
-        LinkedList<Liaison> ListeLiaisons = new LinkedList<Liaison>();
-        for (Barre barre : barres) {
-            for (Liaison liaison : barre.liaisons) {
-                if (!ListeLiaisons.contains(liaison)) {
-                    ListeLiaisons.add(liaison);
-                }
-            }
-        }
-        return ListeLiaisons;
 
     }
 
@@ -78,7 +69,7 @@ public class Pont {
 
         Liaison liaisonTemp = null;
         float longueurTemp = Float.POSITIVE_INFINITY;
-        for (Liaison liaison : getLiaisons()) {
+        for (Liaison liaison : liaisons) {
             if (liaison.estDanslaZone(x, y)) {
                 if (liaison.donneMoiLaDistance(x, y) <= longueurTemp) {
                     longueurTemp = liaison.donneMoiLaDistance(x, y);
@@ -88,8 +79,10 @@ public class Pont {
         }
 
         if (liaisonCliquee == null) {
-            liaisonCliquee = liaisonTemp;
-            liaisonCliquee.cliquee = true;
+            if (liaisonTemp != null) {
+                liaisonCliquee = liaisonTemp;
+                liaisonCliquee.cliquee = true;
+            }
         } else {
             liaisonCliquee.cliquee = false;
             ajouterBarre(world, liaisonCliquee, x, y);
