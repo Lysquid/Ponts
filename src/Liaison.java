@@ -17,13 +17,17 @@ public class Liaison extends ObjetPhysique {
     final float RAYON = 0.5f;
     final Color COULEUR_REMPLISSAGE = new Color(227, 240, 105);
     final Color COULEUR_CONTOUR = Color.BLACK;
+    final Color COULEUR_CLIQUEE = Color.RED;
 
     public LinkedList<Barre> barresLiees;
+
+    public boolean cliquee;
 
     public Liaison(World world, float x, float y) {
 
         barresLiees = new LinkedList<Barre>();
 
+        cliquee = false;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
         bodyDef.position.set(x, y);
@@ -48,7 +52,11 @@ public class Liaison extends ObjetPhysique {
         int y = box2d.worldToPixelY(getY());
         int r = box2d.worldToPixel(this.RAYON);
 
-        g.setColor(COULEUR_REMPLISSAGE);
+        if (cliquee) {
+            g.setColor(COULEUR_CLIQUEE);
+        } else {
+            g.setColor(COULEUR_REMPLISSAGE);
+        }
         g.fillOval(x - r, y - r, r * 2, r * 2);
         g.setColor(COULEUR_CONTOUR);
         g.drawOval(x - r, y - r, r * 2, r * 2);
@@ -60,10 +68,10 @@ public class Liaison extends ObjetPhysique {
         return (centre.sub(click).length() <= RAYON);
     }
 
-    public float donneMoiLaDistance(float x, float y){
-        Vec2 click = new Vec2(x,y);
+    public float donneMoiLaDistance(float x, float y) {
+        Vec2 click = new Vec2(x, y);
         Vec2 centre = getPos();
-        return(centre.sub(click).length());
+        return (centre.sub(click).length());
     }
 
 }

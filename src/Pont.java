@@ -8,7 +8,6 @@ public class Pont {
 
     LinkedList<Barre> barres;
 
-    boolean premierClick;
     Liaison liaisonCliquee;
 
     final float BAR_W = 6;
@@ -16,7 +15,6 @@ public class Pont {
 
     public Pont(World world, float x, float y) {
 
-        premierClick = false;
         liaisonCliquee = null;
 
         barres = new LinkedList<Barre>();
@@ -44,7 +42,7 @@ public class Pont {
         Vec2 difference = positionClique.sub(liaison.getPos());
         float angle = (float) Math.atan(difference.y / difference.x);
 
-        Barre barre = new Barre(world, centre.x, centre.y, angle, difference.length(), BAR_H);
+        Barre barre = new Barre(world, centre.x, centre.y, angle, difference.length() - BAR_H, BAR_H);
 
         barre.lier(world, liaison);
 
@@ -91,7 +89,9 @@ public class Pont {
 
         if (liaisonCliquee == null) {
             liaisonCliquee = liaisonTemp;
+            liaisonCliquee.cliquee = true;
         } else {
+            liaisonCliquee.cliquee = false;
             ajouterBarre(world, liaisonCliquee, x, y);
             liaisonCliquee = null;
         }
