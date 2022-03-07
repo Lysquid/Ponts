@@ -24,7 +24,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     long physicsTime;
 
     LinkedList<Barre> boites;
-    LinkedList<Pont> ponts;
+    Pont pont;
 
     boolean isMousePressed;
     int mouseButton;
@@ -38,7 +38,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public Jeu() {
 
         boites = new LinkedList<Barre>();
-        ponts = new LinkedList<Pont>();
 
     }
 
@@ -53,6 +52,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         world.setContinuousPhysics(true);
 
         new Bord(world, box2d.largeur, box2d.hauteur);
+        pont = new Pont(world, box2d.largeur/ 2, box2d.hauteur / 2);
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -64,6 +64,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         int fps = (int) (1.0 / refreshRate * 1000.0);
         graphicsTimer = new Timer(fps, this);
         graphicsTimer.start();
+
 
         initialized = true;
 
@@ -79,9 +80,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             box.dessiner(g, box2d);
         }
 
-        for (Pont bridge : ponts) {
-            bridge.dessiner(g, box2d);
-        }
+        pont.dessiner(g, box2d);
 
     }
 
@@ -102,7 +101,17 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
                             boites.add(newBox);
                             break;
                         case 3:
-                            ponts.add(new Pont(world, mouseX, mouseY));
+                            Liaison ltemp;
+                            float longueurTemp = Float.POSITIVE_INFINITY;
+                            for (Liaison liaison : pont.getLiaisons()) {
+                                if (liaison.estDanslaZone(mouseX, mouseY)) {
+                                    if (liaison.donneMoiLaDistance(mouseX, mouseY) <= longueurTemp) {
+                                        longueurTemp = liaison.donneMoiLaDistance(mouseX, mouseY);
+                                        ltemp = liaison;
+                                    }
+                                    pont.ajouterBarre(world, liaison);
+                                }
+                            }
                             break;
                     }
                     prevTime = time;
@@ -115,9 +124,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             float dt = (newPhysicsTime - physicsTime) / 1000f;
             physicsTime = newPhysicsTime;
 
-            for (Pont bridge : ponts) {
-                bridge.testCasse(world, dt);
-            }
+            pont.testCasse(world, dt);
 
             world.step(dt, 10, 8);
         }

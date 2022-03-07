@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 
 import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
@@ -51,6 +52,18 @@ public class Liaison extends ObjetPhysique {
         g.fillOval(x - r, y - r, r * 2, r * 2);
         g.setColor(COULEUR_CONTOUR);
         g.drawOval(x - r, y - r, r * 2, r * 2);
+    }
+
+    public boolean estDanslaZone(float x, float y) {
+        Vec2 click = new Vec2(x, y);
+        Vec2 centre = getPos();
+        return (centre.sub(click).length() <= RAYON);
+    }
+
+    public float donneMoiLaDistance(float x, float y){
+        Vec2 click = new Vec2(x,y);
+        Vec2 centre = getPos();
+        return(centre.sub(click).length());
     }
 
 }

@@ -6,7 +6,6 @@ import org.jbox2d.dynamics.World;
 public class Pont {
 
     LinkedList<Barre> barres;
-    Liaison liaison;
 
     final float BAR_W = 6;
     final float BAR_H = 1;
@@ -15,7 +14,7 @@ public class Pont {
 
         barres = new LinkedList<Barre>();
 
-        liaison = new Liaison(world, x, y);
+        Liaison liaison = new Liaison(world, x, y);
 
         ajouterBarre(world, liaison);
         ajouterBarre(world, barres.getLast().liaisons.get(1));
@@ -51,6 +50,19 @@ public class Pont {
             barre.testCasse(world, dt);
 
         }
+
+    }
+
+    public LinkedList<Liaison> getLiaisons() {
+        LinkedList<Liaison> ListeLiaisons = new LinkedList<Liaison>();
+        for (Barre barre : barres) {
+            for (Liaison liaison : barre.liaisons) {
+                if (!ListeLiaisons.contains(liaison)) {
+                    ListeLiaisons.add(liaison);
+                }
+            }
+        }
+        return ListeLiaisons;
 
     }
 

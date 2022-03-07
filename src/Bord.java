@@ -9,14 +9,13 @@ public class Bord extends ObjetPhysique {
     static int CATEGORY = 0b0001;
     static int MASK = 0b1111;
 
-    float x, y;
     float largeur, hauteur;
     float angle;
 
     public Bord(World world, float frameX, float frameY) {
 
-        x = frameX / 2;
-        y = 0;
+        float x = frameX / 2;
+        float y = 0;
         largeur = frameX * 10;
         hauteur = 0.1f;
 
