@@ -27,7 +27,7 @@ public class Barre extends ObjetPhysique {
     float longueur, hauteur;
     float angle;
 
-    public Barre(World world, float x, float y, float longueur, float hauteur) {
+    public Barre(World world, float x, float y, float angle, float longueur, float hauteur) {
         this.longueur = longueur;
         this.hauteur = hauteur;
 
@@ -38,6 +38,7 @@ public class Barre extends ObjetPhysique {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
         bodyDef.position.set(x, y);
+        bodyDef.angle = angle;
 
         // Etape 2 : Créer un "body"
         body = world.createBody(bodyDef);

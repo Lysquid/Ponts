@@ -52,7 +52,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         world.setContinuousPhysics(true);
 
         new Bord(world, box2d.largeur, box2d.hauteur);
-        pont = new Pont(world, box2d.largeur/ 2, box2d.hauteur / 2);
+        pont = new Pont(world, box2d.largeur / 2, box2d.hauteur / 2);
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -64,7 +64,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         int fps = (int) (1.0 / refreshRate * 1000.0);
         graphicsTimer = new Timer(fps, this);
         graphicsTimer.start();
-
 
         initialized = true;
 
@@ -80,7 +79,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             box.dessiner(g, box2d);
         }
 
-        pont.dessiner(g, box2d);
+        if (pont != null) {
+            pont.dessiner(g, box2d);
+        }
 
     }
 
@@ -97,21 +98,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
                 if (time - prevTime > SPAWN_DELAY) {
                     switch (mouseButton) {
                         case 1:
-                            Barre newBox = new Barre(world, mouseX, mouseY, 4, 3);
+                            Barre newBox = new Barre(world, mouseX, mouseY, 0, 4, 3);
                             boites.add(newBox);
                             break;
                         case 3:
-                            Liaison ltemp;
-                            float longueurTemp = Float.POSITIVE_INFINITY;
-                            for (Liaison liaison : pont.getLiaisons()) {
-                                if (liaison.estDanslaZone(mouseX, mouseY)) {
-                                    if (liaison.donneMoiLaDistance(mouseX, mouseY) <= longueurTemp) {
-                                        longueurTemp = liaison.donneMoiLaDistance(mouseX, mouseY);
-                                        ltemp = liaison;
-                                    }
-                                    pont.ajouterBarre(world, liaison);
-                                }
-                            }
+                            pont.liaisonCliquee(world, mouseX, mouseY);
                             break;
                     }
                     prevTime = time;
