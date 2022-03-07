@@ -11,9 +11,6 @@ public class Pont {
 
     Liaison liaisonCliquee;
 
-    final float LARGEUR_BARRE = 6;
-    final float HAUTEUR_BARRE = 1;
-
     public Pont(World world, Vec2 pos) {
 
         barres = new LinkedList<Barre>();
@@ -22,8 +19,7 @@ public class Pont {
         Liaison liaison = new Liaison(world, pos);
         liaisons.add(liaison);
 
-        Vec2 posBarre = pos.add(new Vec2(LARGEUR_BARRE, 0));
-        ajouterBarre(world, liaison, posBarre);
+        ajouterBarre(world, liaison, pos.add(new Vec2(6, 0)));
 
     }
 
@@ -41,7 +37,7 @@ public class Pont {
         Vec2 centre = posClic.add(liaison.getPos()).mul(0.5f);
         Vec2 difference = posClic.sub(liaison.getPos());
         float angle = (float) Math.atan(difference.y / difference.x);
-        Barre barre = new Barre(world, centre, angle, difference.length() - HAUTEUR_BARRE, HAUTEUR_BARRE);
+        Barre barre = new Barre(world, centre, angle, difference.length());
 
         barre.lier(world, liaison);
         Liaison nouvelleLiaison = new Liaison(world, posClic);

@@ -17,8 +17,9 @@ public class Barre extends ObjetPhysique {
     final static int CATEGORY = 0b0010;
     final static int MASK = Bord.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
 
-    final float LARGEUR_BARRE = 6;
-    final float HAUTEUR_BARRE = 1;
+    final static float LONGUEUR_BARRE = 6;
+    final static float HAUTEUR_BARRE = 1;
+
     final float COUPLE_RESISTANCE = 1000000f;
     final float FORCE_MAX = 1000f;
     final Color COULEUR_REMPLISSAGE = Color.DARK_GRAY;
@@ -31,8 +32,9 @@ public class Barre extends ObjetPhysique {
     float angle;
 
     public Barre(World world, Vec2 pos, float angle, float longueur, float hauteur) {
+
         this.longueur = longueur;
-        this.hauteur = hauteur;
+        this.hauteur = HAUTEUR_BARRE;
 
         liaisons = new ArrayList<Liaison>(2);
         joints = new ArrayList<RevoluteJoint>(2);
@@ -62,6 +64,10 @@ public class Barre extends ObjetPhysique {
         // Etape 5 : Attacher la shape au body avec la fixture
         body.createFixture(fixtureDef);
 
+    }
+
+    public Barre(World world, Vec2 pos, float angle, float longueur) {
+        this(world, pos, angle, longueur - HAUTEUR_BARRE, HAUTEUR_BARRE);
     }
 
     public void lier(World world, Liaison liaison) {
