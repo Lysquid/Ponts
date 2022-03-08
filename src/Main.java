@@ -10,6 +10,7 @@ public class Main extends JFrame {
     final int HAUTEUR = 600;
     int refreshRate;
 
+
     public Main() {
         setTitle("Project");
         setSize(LARGEUR, HAUTEUR);
