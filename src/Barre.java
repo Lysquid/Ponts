@@ -34,7 +34,7 @@ public class Barre extends ObjetPhysique {
     public Barre(World world, Vec2 pos, float angle, float longueur, float hauteur) {
 
         this.longueur = longueur;
-        this.hauteur = HAUTEUR_BARRE;
+        this.hauteur = hauteur;
 
         liaisons = new ArrayList<Liaison>(2);
         joints = new ArrayList<RevoluteJoint>(2);
