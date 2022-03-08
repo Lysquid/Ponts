@@ -38,7 +38,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     public Jeu() {
         boites = new LinkedList<Barre>();
-        
     }
 
     public void init(int refreshRate) {
