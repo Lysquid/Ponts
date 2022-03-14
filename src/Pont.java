@@ -35,7 +35,7 @@ public class Pont {
         Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
         Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
         float angle = (float) Math.atan(difference.y / difference.x);
-        Barre barre = new Barre(world, centre, angle, difference.length());
+        Barre barre = new BarreBois(world, centre, angle, difference.length());
 
         barre.lier(world, liaison1);
         barre.lier(world, liaison2);
@@ -61,7 +61,7 @@ public class Pont {
 
     public void gererClique(World world, Vec2 posClic, String boutonSouris) {
         switch (boutonSouris) {
-            case "gauche":                
+            case "gauche":
                 testLiaisonCliquee(world, posClic);
                 break;
             case "droite":
@@ -69,8 +69,6 @@ public class Pont {
             default:
                 break;
         }
-
-
 
     }
 
@@ -95,17 +93,18 @@ public class Pont {
         } else {
 
             Vec2 difference = posClic.sub(liaisonCliqueeAvant.getPos());
-            if (difference.length() >= Barre.TAILLE_MIN) {
+            if (difference.length() >= Barre.LONGUEUR_MIN) {
 
                 Liaison liaisonCree = null;
-                if (difference.length() <= Barre.TAILLE_MAX) {
+                if (difference.length() <= Barre.LONGUEUR_MAX) {
                     if (liaisonPlusProche == null) {
                         liaisonCree = ajouterBarre(world, liaisonCliqueeAvant, posClic);
                     } else {
                         ajouterBarre(world, liaisonCliqueeAvant, liaisonPlusProche);
                     }
                 } else {
-                    Vec2 pos = difference.mul(Barre.TAILLE_MAX / difference.length()).add(liaisonCliqueeAvant.getPos());
+                    Vec2 pos = difference.mul(Barre.LONGUEUR_MAX / difference.length())
+                            .add(liaisonCliqueeAvant.getPos());
                     liaisonCree = ajouterBarre(world, liaisonCliqueeAvant, pos);
                 }
                 liaisonCliqueeAvant.cliquee = false;

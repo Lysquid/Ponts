@@ -110,16 +110,16 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
                 pont.gererClique(world, posSouris, boutonSouris);
                 sourisAppyuee = false;
 
-                switch (boutonSouris) {
-                    case "molette":
-                        if (temps - tempsPrecedent > DELAI_APPARITION) {
-                            Barre newBox = new Barre(world, posSouris, 0, 4, 3);
-                            boites.add(newBox);
-                            tempsPrecedent = temps;
-                        }
-                        break;
+                // switch (boutonSouris) {
+                //     case "molette":
+                //         if (temps - tempsPrecedent > DELAI_APPARITION) {
+                //             Barre newBox = new Barre(world, posSouris, 0, 4, 3);
+                //             boites.add(newBox);
+                //             tempsPrecedent = temps;
+                //         }
+                //         break;
 
-                }
+                // }
             }
 
             long nouveauTempsPhysique = System.currentTimeMillis();

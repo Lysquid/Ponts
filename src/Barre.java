@@ -19,27 +19,24 @@ public class Barre extends ObjetPhysique {
     final static int CATEGORY = 0b0010;
     final static int MASK = Bord.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
 
-    final static float LONGUEUR_BARRE = 6;
-    final static float HAUTEUR_BARRE = 1;
+    float COUPLE_RESISTANCE;
+    float FORCE_MAX;
 
-    final float COUPLE_RESISTANCE = 1000000f;
-    final float FORCE_MAX = 3000f;
-    final Color COULEUR_REMPLISSAGE = Color.DARK_GRAY;
-    final Color COULEUR_CONTOUR = Color.BLACK;
-    final static float TAILLE_MAX = 8;
-    final static float TAILLE_MIN = 3;
+    float LARGEUR_BARRE;
+
+    Color COULEUR_REMPLISSAGE;
+    Color COULEUR_CONTOUR = Color.BLACK;
+    
+    static float LONGUEUR_MAX = 8;
+    static float LONGUEUR_MIN = 1;
 
     PolygonShape shape;
     ArrayList<Liaison> liaisonsLiees;
     ArrayList<RevoluteJoint> joints;
 
-    float longueur, hauteur;
-    float angle;
+    float longueur, largeur;
 
-    public Barre(World world, Vec2 pos, float angle, float longueur, float hauteur) {
-
-        this.longueur = longueur;
-        this.hauteur = hauteur;
+    public Barre(World world, Vec2 pos, float angle, float longueur) {
 
         liaisonsLiees = new ArrayList<Liaison>(2);
         joints = new ArrayList<RevoluteJoint>(2);
@@ -53,26 +50,6 @@ public class Barre extends ObjetPhysique {
         // Etape 2 : Créer un "body"
         body = world.createBody(bodyDef);
 
-        // Etape 3 : Définir la "shape"
-        shape = new PolygonShape();
-        shape.setAsBox(longueur / 2, hauteur / 2);
-
-        // Etape 4 : Définir la "fixture"
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        // fixtureDef.restitution = 0.5f;
-        // fixtureDef.friction = 0.3f;
-        fixtureDef.filter.categoryBits = CATEGORY;
-        fixtureDef.filter.maskBits = MASK;
-
-        // Etape 5 : Attacher la shape au body avec la fixture
-        body.createFixture(fixtureDef);
-
-    }
-
-    public Barre(World world, Vec2 pos, float angle, float longueur) {
-        this(world, pos, angle, longueur - HAUTEUR_BARRE, HAUTEUR_BARRE);
     }
 
     public void lier(World world, Liaison liaison) {
@@ -128,7 +105,7 @@ public class Barre extends ObjetPhysique {
         int[][] positionCoins = { { 1, 1 }, { 1, -1 }, { -1, -1 }, { -1, 1 } };
         for (int i = 0; i < 4; i++) {
             float x2 = (x + longueur / 2 * positionCoins[i][0]);
-            float y2 = (y + hauteur / 2 * positionCoins[i][1]);
+            float y2 = (y + largeur / 2 * positionCoins[i][1]);
 
             double x3 = ((x2 - x) * Math.cos(angle) - (y2 - y) * Math.sin(angle) + x);
             double y3 = ((x2 - x) * Math.sin(angle) + (y2 - y) * Math.cos(angle) + y);
