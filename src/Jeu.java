@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -24,6 +25,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     Timer timerPhysique;
     final int TICK_PHYSIQUE = 16;
     long tempsPhysique;
+    JButton boutonLancer;
 
     LinkedList<Barre> boites;
     Pont pont;
@@ -32,12 +34,23 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     int boutonSouris;
     Vec2 posSouris;
     boolean initilise = false;
-
+    
     long tempsPrecedent = 0;
     final int DELAI_APPARITION = 100;
+    boolean simulationPhysique;
 
-    public Jeu() {
+    public Jeu(int LARGEUR, int HAUTEUR) {
         boites = new LinkedList<Barre>();
+
+        setSize(LARGEUR, HAUTEUR);
+        boutonLancer = new JButton();
+        boutonLancer.setBounds(10, 20, 100, 50);
+        boutonLancer.setText("Lancer");
+        boutonLancer.setBackground(Color.WHITE);
+        boutonLancer.addActionListener(this);
+        setLayout(null);
+        add(boutonLancer);
+        simulationPhysique = false;
     }
 
     public void init(int refreshRate) {
@@ -48,9 +61,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         world = new World(gravity);
 
         new Bord(world, box2d.largeur, box2d.hauteur);
-        Vec2 posPont = new Vec2(box2d.largeur / 2, box2d.hauteur * 0.01f); // qu'est-ce qu'on fait? oups javais oublié
-                                                                           // que ca lancait chez toi
-        pont = new Pont(world, posPont);
+        pont = new Pont(world, box2d);
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -67,7 +78,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
-    public void paint(Graphics g0) {
+    public void paintComponent(Graphics g0) {
 
         // Activer l'anti-alias
         Graphics2D g = (Graphics2D) g0;
@@ -118,13 +129,20 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
             pont.testCasse(world, dt);
 
-            world.step(dt, 10, 8);
+            if (simulationPhysique) {
+                world.step(dt, 10, 8);
+
+            }
         }
 
         if (e.getSource() == timerGraphique)
 
         {
             repaint();
+        }
+
+        if (e.getSource() == boutonLancer) {
+            simulationPhysique = !simulationPhysique;
         }
 
     }

@@ -16,7 +16,7 @@ public class Main extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        Jeu jeu = new Jeu();
+        Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
         add(jeu);
 
         setVisible(true);
