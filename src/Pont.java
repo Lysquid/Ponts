@@ -66,7 +66,7 @@ public class Pont {
         Liaison liaisonPlusProche = null;
         float distanceMin = Float.POSITIVE_INFINITY;
         for (Liaison liaison : liaisons) {
-            if (liaison.estDanslaZone(pos)) {
+            if (liaison.testLiaisonCliquee(pos)) {
                 float distance = liaison.distancePoint(pos);
                 if (distance < distanceMin) {
                     distanceMin = distance;
@@ -88,6 +88,19 @@ public class Pont {
             }
             liaisonCliqueeAvant.cliquee = false;
             liaisonCliqueeAvant = null;
+        }
+
+        Barre barreASupprimer = null;
+        for (Barre barre : barres) {
+            if (barre.testBarreCliquee(pos)) {
+                LinkedList<Liaison> liaisonASupprimer = barre.supprimer(world);
+                liaisons.removeAll(liaisonASupprimer);
+                barreASupprimer = barre;
+                
+            }
+        }
+        if (barreASupprimer != null) {
+            barres.remove(barreASupprimer);
         }
 
     }

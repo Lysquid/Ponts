@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Rot;
+import org.jbox2d.common.Transform;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
@@ -25,7 +27,8 @@ public class Barre extends ObjetPhysique {
     final Color COULEUR_REMPLISSAGE = Color.DARK_GRAY;
     final Color COULEUR_CONTOUR = Color.BLACK;
 
-    ArrayList<Liaison> liaisons;
+    PolygonShape shape;
+    ArrayList<Liaison> liaisonsLiees;
     ArrayList<RevoluteJoint> joints;
 
     float longueur, hauteur;
@@ -36,7 +39,7 @@ public class Barre extends ObjetPhysique {
         this.longueur = longueur;
         this.hauteur = hauteur;
 
-        liaisons = new ArrayList<Liaison>(2);
+        liaisonsLiees = new ArrayList<Liaison>(2);
         joints = new ArrayList<RevoluteJoint>(2);
 
         // Etape 1 : Définir le "body"
@@ -49,7 +52,7 @@ public class Barre extends ObjetPhysique {
         body = world.createBody(bodyDef);
 
         // Etape 3 : Définir la "shape"
-        PolygonShape shape = new PolygonShape();
+        shape = new PolygonShape();
         shape.setAsBox(longueur / 2, hauteur / 2);
 
         // Etape 4 : Définir la "fixture"
@@ -78,17 +81,18 @@ public class Barre extends ObjetPhysique {
         RevoluteJoint joint = (RevoluteJoint) world.createJoint(jointDef);
 
         joints.add(joint);
-        liaisons.add(liaison);
+        liaisonsLiees.add(liaison);
         liaison.barresLiees.add(this);
+
     }
 
     public LinkedList<Liaison> testCasse(World world, float dt) {
 
         LinkedList<Liaison> nouvellesLiaisons = new LinkedList<Liaison>();
 
-        for (int i = 0; i < liaisons.size(); i++) {
+        for (int i = 0; i < liaisonsLiees.size(); i++) {
             RevoluteJoint joint = joints.get(i);
-            Liaison liaison = liaisons.get(i);
+            Liaison liaison = liaisonsLiees.get(i);
 
             if (liaison.barresLiees.size() > 1) {
 
@@ -100,7 +104,7 @@ public class Barre extends ObjetPhysique {
                     world.destroyJoint(joint);
                     liaison.barresLiees.remove(this);
                     joints.remove(joint);
-                    liaisons.remove(liaison);
+                    liaisonsLiees.remove(liaison);
 
                     Liaison nouvelleLiaison = new Liaison(world, liaison.getPos());
                     lier(world, nouvelleLiaison);
@@ -136,6 +140,24 @@ public class Barre extends ObjetPhysique {
         g.setColor(COULEUR_CONTOUR);
         g.drawPolygon(xCoins, yCoins, 4);
 
+    }
+
+    public boolean testBarreCliquee(Vec2 posClic) {
+        Transform transform = new Transform(getPos(), new Rot(getAngle()));
+        return shape.testPoint(transform, posClic);
+    }
+
+    public LinkedList<Liaison> supprimer(World world) {
+        LinkedList<Liaison> liaisonsASupprimer = new LinkedList<Liaison>();
+        for (Liaison liaison : liaisonsLiees) {
+            liaison.barresLiees.remove(this);
+            if (liaison.barresLiees.size() < 1) {
+                liaisonsASupprimer.add(liaison);
+                liaison.supprimer(world);
+            }
+        }
+        world.destroyBody(this.body);
+        return liaisonsASupprimer;
     }
 
 }

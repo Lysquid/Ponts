@@ -66,8 +66,12 @@ public class Liaison extends ObjetPhysique {
         return (centre.sub(pos).length());
     }
 
-    public boolean estDanslaZone(Vec2 pos) {
+    public boolean testLiaisonCliquee(Vec2 pos) {
         return (distancePoint(pos) <= RAYON);
+    }
+
+    public void supprimer(World world) {
+        world.destroyBody(body);
     }
 
 }
