@@ -48,7 +48,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         world = new World(gravity);
 
         new Bord(world, box2d.largeur, box2d.hauteur);
-        Vec2 posPont = new Vec2(box2d.largeur / 2, box2d.hauteur * 0.01f); //qu'est-ce qu'on fait? oups javais oublié que ca lancait chez toi
+        Vec2 posPont = new Vec2(box2d.largeur / 2, box2d.hauteur * 0.01f); // qu'est-ce qu'on fait? oups javais oublié
+                                                                           // que ca lancait chez toi
         pont = new Pont(world, posPont);
 
         addMouseListener(this);

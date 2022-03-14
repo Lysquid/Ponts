@@ -8,7 +8,6 @@ public class Pont {
 
     LinkedList<Barre> barres;
     LinkedList<Liaison> liaisons;
-
     Liaison liaisonCliqueeAvant;
 
     public Pont(World world, Vec2 pos) {
@@ -47,8 +46,8 @@ public class Pont {
 
     }
 
-    public Liaison ajouterBarre(World world, Liaison liaison, Vec2 posClic) {
-        LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, posClic);
+    public Liaison ajouterBarre(World world, Liaison liaison, Vec2 pos) {
+        LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, pos);
         liaisons.add(nouvelleLiaison);
         return ajouterBarre(world, liaison, nouvelleLiaison);
     }
@@ -87,13 +86,22 @@ public class Pont {
                 liaisonCliqueeAvant.cliquee = true;
             }
         } else {
-            if (liaisonPlusProche == null) {
-                ajouterBarre(world, liaisonCliqueeAvant, posClic);
-            } else {
-                ajouterBarre(world, liaisonCliqueeAvant, liaisonPlusProche);
+
+            Vec2 difference = posClic.sub(liaisonCliqueeAvant.getPos());
+            if (difference.length() >= Barre.TAILLE_MIN) {
+                if (difference.length() <= Barre.TAILLE_MAX) {
+                    if (liaisonPlusProche == null) {
+                        ajouterBarre(world, liaisonCliqueeAvant, posClic);
+                    } else {
+                        ajouterBarre(world, liaisonCliqueeAvant, liaisonPlusProche);
+                    }
+                } else {
+                    Vec2 pos = difference.mul(Barre.TAILLE_MAX / difference.length()).add(liaisonCliqueeAvant.getPos());
+                    ajouterBarre(world, liaisonCliqueeAvant, pos);
+                }
+                liaisonCliqueeAvant.cliquee = false;
+                liaisonCliqueeAvant = null;
             }
-            liaisonCliqueeAvant.cliquee = false;
-            liaisonCliqueeAvant = null;
         }
     }
 

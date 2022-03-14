@@ -26,6 +26,8 @@ public class Barre extends ObjetPhysique {
     final float FORCE_MAX = 3000f;
     final Color COULEUR_REMPLISSAGE = Color.DARK_GRAY;
     final Color COULEUR_CONTOUR = Color.BLACK;
+    final static float TAILLE_MAX = 8;
+    final static float TAILLE_MIN = 3;
 
     PolygonShape shape;
     ArrayList<Liaison> liaisonsLiees;
