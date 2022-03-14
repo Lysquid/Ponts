@@ -61,13 +61,19 @@ public class Pont {
 
     }
 
-    public void testSiLiaisonCliquee(World world, Vec2 pos) {
+    public void gererClique(World world, Vec2 posClic) {
 
+        testLiaisonCliquee(world, posClic);
+        testBarreCliquee(world, posClic);
+
+    }
+
+    public void testLiaisonCliquee(World world, Vec2 posClic) {
         Liaison liaisonPlusProche = null;
         float distanceMin = Float.POSITIVE_INFINITY;
         for (Liaison liaison : liaisons) {
-            if (liaison.testLiaisonCliquee(pos)) {
-                float distance = liaison.distancePoint(pos);
+            if (liaison.testLiaisonCliquee(posClic)) {
+                float distance = liaison.distancePoint(posClic);
                 if (distance < distanceMin) {
                     distanceMin = distance;
                     liaisonPlusProche = liaison;
@@ -82,27 +88,28 @@ public class Pont {
             }
         } else {
             if (liaisonPlusProche == null) {
-                ajouterBarre(world, liaisonCliqueeAvant, pos);
+                ajouterBarre(world, liaisonCliqueeAvant, posClic);
             } else {
                 ajouterBarre(world, liaisonCliqueeAvant, liaisonPlusProche);
             }
             liaisonCliqueeAvant.cliquee = false;
             liaisonCliqueeAvant = null;
         }
+    }
 
+    public void testBarreCliquee(World world, Vec2 posClic) {
         Barre barreASupprimer = null;
         for (Barre barre : barres) {
-            if (barre.testBarreCliquee(pos)) {
+            if (barre.testBarreCliquee(posClic)) {
                 LinkedList<Liaison> liaisonASupprimer = barre.supprimer(world);
                 liaisons.removeAll(liaisonASupprimer);
                 barreASupprimer = barre;
-                
+
             }
         }
         if (barreASupprimer != null) {
             barres.remove(barreASupprimer);
         }
-
     }
 
 }

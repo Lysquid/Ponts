@@ -97,7 +97,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
                 // System.out.println(time - prevTime);
                 switch (boutonSouris) {
                     case 1:
-                        pont.testSiLiaisonCliquee(world, posSouris);
+                        pont.gererClique(world, posSouris);
                         sourisAppyuee = false;
                         break;
                     case 3:

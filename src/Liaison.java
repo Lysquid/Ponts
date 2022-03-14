@@ -22,13 +22,17 @@ public class Liaison extends ObjetPhysique {
     LinkedList<Barre> barresLiees;
     boolean cliquee;
 
-    public Liaison(World world, Vec2 pos) {
+    public Liaison(World world, Vec2 pos, boolean mobile) {
 
         barresLiees = new LinkedList<Barre>();
 
         cliquee = false;
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.DYNAMIC;
+        if (mobile) {
+            bodyDef.type = BodyType.DYNAMIC;
+        } else {
+            bodyDef.type = BodyType.STATIC;
+        }
         bodyDef.position.set(pos);
 
         body = world.createBody(bodyDef);
