@@ -30,12 +30,17 @@ public class Pont {
         }
     }
 
-    public void ajouterBarre(World world, Liaison liaison1, Liaison liaison2) {
+    public void ajouterBarre(World world, Liaison liaison1, Liaison liaison2, boolean materiau) {
 
         Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
         Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
         float angle = (float) Math.atan(difference.y / difference.x);
-        Barre barre = new BarreBois(world, centre, angle, difference.length());
+        Barre barre = null;
+        if (materiau) {
+            barre = new BarreBois(world, centre, angle, difference.length());
+        } else {
+            barre = new BarreGoudron(world, centre, angle, difference.length());
+        }
 
         barre.lier(world, liaison1);
         barre.lier(world, liaison2);
@@ -44,10 +49,10 @@ public class Pont {
 
     }
 
-    public Liaison ajouterBarre(World world, Liaison liaison, Vec2 pos) {
+    public Liaison ajouterBarre(World world, Liaison liaison, Vec2 pos, boolean materiau) {
         LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, pos);
         liaisons.add(nouvelleLiaison);
-        ajouterBarre(world, liaison, nouvelleLiaison);
+        ajouterBarre(world, liaison, nouvelleLiaison, materiau);
         return nouvelleLiaison;
     }
 
@@ -59,10 +64,10 @@ public class Pont {
 
     }
 
-    public void gererClique(World world, Vec2 posClic, String boutonSouris) {
+    public void gererClique(World world, Vec2 posClic, String boutonSouris, boolean materiau) {
         switch (boutonSouris) {
             case "gauche":
-                testLiaisonCliquee(world, posClic);
+                testLiaisonCliquee(world, posClic, materiau);
                 break;
             case "droite":
                 testBarreCliquee(world, posClic);
@@ -72,7 +77,7 @@ public class Pont {
 
     }
 
-    public void testLiaisonCliquee(World world, Vec2 posClic) {
+    public void testLiaisonCliquee(World world, Vec2 posClic, boolean materiau) {
         Liaison liaisonPlusProche = null;
         float distanceMin = Float.POSITIVE_INFINITY;
         for (Liaison liaison : liaisons) {
@@ -98,14 +103,14 @@ public class Pont {
                 Liaison liaisonCree = null;
                 if (difference.length() <= Barre.LONGUEUR_MAX) {
                     if (liaisonPlusProche == null) {
-                        liaisonCree = ajouterBarre(world, liaisonCliqueeAvant, posClic);
+                        liaisonCree = ajouterBarre(world, liaisonCliqueeAvant, posClic, materiau);
                     } else {
-                        ajouterBarre(world, liaisonCliqueeAvant, liaisonPlusProche);
+                        ajouterBarre(world, liaisonCliqueeAvant, liaisonPlusProche, materiau);
                     }
                 } else {
                     Vec2 pos = difference.mul(Barre.LONGUEUR_MAX / difference.length())
                             .add(liaisonCliqueeAvant.getPos());
-                    liaisonCree = ajouterBarre(world, liaisonCliqueeAvant, pos);
+                    liaisonCree = ajouterBarre(world, liaisonCliqueeAvant, pos, materiau);
                 }
                 liaisonCliqueeAvant.cliquee = false;
                 liaisonCliqueeAvant = null;

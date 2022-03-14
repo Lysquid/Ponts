@@ -14,9 +14,9 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
-public class BarreBois extends Barre {
+public class BarreGoudron extends Barre {
 
-    public BarreBois(World world, Vec2 pos, float angle, float longueur) {
+    public BarreGoudron(World world, Vec2 pos, float angle, float longueur) {
         super(world, pos, angle, longueur);
 
         LARGEUR_BARRE = 1;
@@ -24,7 +24,7 @@ public class BarreBois extends Barre {
         COUPLE_RESISTANCE = 1000000f;
         FORCE_MAX = 3000f;
 
-        COULEUR_REMPLISSAGE = Color.decode("#ba754a");
+        COULEUR_REMPLISSAGE = Color.decode("#333333");
 
         longueur -= LARGEUR_BARRE;
         this.longueur = longueur;
