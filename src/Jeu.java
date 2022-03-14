@@ -31,10 +31,10 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     Pont pont;
 
     boolean sourisAppyuee;
-    int boutonSouris;
+    String boutonSouris;
     Vec2 posSouris;
     boolean initilise = false;
-    
+
     long tempsPrecedent = 0;
     final int DELAI_APPARITION = 100;
     boolean simulationPhysique;
@@ -107,12 +107,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             if (sourisAppyuee) {
                 long temps = System.currentTimeMillis();
                 // System.out.println(time - prevTime);
+                pont.gererClique(world, posSouris, boutonSouris);
+                sourisAppyuee = false;
+
                 switch (boutonSouris) {
-                    case 1:
-                        pont.gererClique(world, posSouris);
-                        sourisAppyuee = false;
-                        break;
-                    case 3:
+                    case "molette":
                         if (temps - tempsPrecedent > DELAI_APPARITION) {
                             Barre newBox = new Barre(world, posSouris, 0, 4, 3);
                             boites.add(newBox);
@@ -152,9 +151,13 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         float y = box2d.pixelToWorldY(e.getY());
         posSouris = new Vec2(x, y);
         if (SwingUtilities.isLeftMouseButton(e)) {
-            boutonSouris = 1;
-        } else if (SwingUtilities.isRightMouseButton(e)) {
-            boutonSouris = 3;
+            boutonSouris = "gauche";
+        }
+        if (SwingUtilities.isRightMouseButton(e)) {
+            boutonSouris = "droite";
+        }
+        if (SwingUtilities.isMiddleMouseButton(e)) {
+            boutonSouris = "molette";
         }
     }
 

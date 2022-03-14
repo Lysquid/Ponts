@@ -59,10 +59,18 @@ public class Pont {
 
     }
 
-    public void gererClique(World world, Vec2 posClic) {
+    public void gererClique(World world, Vec2 posClic, String boutonSouris) {
+        switch (boutonSouris) {
+            case "gauche":                
+                testLiaisonCliquee(world, posClic);
+                break;
+            case "droite":
+                testBarreCliquee(world, posClic);
+            default:
+                break;
+        }
 
-        testLiaisonCliquee(world, posClic);
-        testBarreCliquee(world, posClic);
+
 
     }
 
@@ -122,6 +130,9 @@ public class Pont {
         }
         if (barreASupprimer != null) {
             barres.remove(barreASupprimer);
+        } else {
+            liaisonCliqueeAvant.cliquee = false;
+            liaisonCliqueeAvant = null;
         }
     }
 
