@@ -9,7 +9,7 @@ public class Pont {
     LinkedList<Barre> barres;
     LinkedList<Liaison> liaisons;
 
-    Liaison liaisonCliquee;
+    Liaison liaisonCliqueeAvant;
 
     public Pont(World world, Vec2 pos) {
 
@@ -32,21 +32,25 @@ public class Pont {
         }
     }
 
-    public Liaison ajouterBarre(World world, Liaison liaison, Vec2 posClic) {
+    public Liaison ajouterBarre(World world, Liaison liaison1, Liaison liaison2) {
 
-        Vec2 centre = posClic.add(liaison.getPos()).mul(0.5f);
-        Vec2 difference = posClic.sub(liaison.getPos());
+        Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
+        Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
         float angle = (float) Math.atan(difference.y / difference.x);
         Barre barre = new Barre(world, centre, angle, difference.length());
 
-        barre.lier(world, liaison);
-        Liaison nouvelleLiaison = new Liaison(world, posClic);
-        barre.lier(world, nouvelleLiaison);
+        barre.lier(world, liaison1);
+        barre.lier(world, liaison2);
 
         barres.add(barre);
-        liaisons.add(nouvelleLiaison);
-        return nouvelleLiaison;
+        return liaison2;
 
+    }
+
+    public Liaison ajouterBarre(World world, Liaison liaison, Vec2 posClic) {
+        Liaison nouvelleLiaison = new Liaison(world, posClic);
+        liaisons.add(nouvelleLiaison);
+        return ajouterBarre(world, liaison, nouvelleLiaison);
     }
 
     public void testCasse(World world, float dt) {
@@ -57,7 +61,7 @@ public class Pont {
 
     }
 
-    public void liaisonCliquee(World world, Vec2 pos) {
+    public void testSiLiaisonCliquee(World world, Vec2 pos) {
 
         Liaison liaisonPlusProche = null;
         float distanceMin = Float.POSITIVE_INFINITY;
@@ -71,15 +75,19 @@ public class Pont {
             }
         }
 
-        if (liaisonCliquee == null) {
+        if (liaisonCliqueeAvant == null) {
             if (liaisonPlusProche != null) {
-                liaisonCliquee = liaisonPlusProche;
-                liaisonCliquee.cliquee = true;
+                liaisonCliqueeAvant = liaisonPlusProche;
+                liaisonCliqueeAvant.cliquee = true;
             }
         } else {
-            ajouterBarre(world, liaisonCliquee, pos);
-            liaisonCliquee.cliquee = false;
-            liaisonCliquee = null;
+            if (liaisonPlusProche == null) {
+                ajouterBarre(world, liaisonCliqueeAvant, pos);
+            } else {
+                ajouterBarre(world, liaisonCliqueeAvant, liaisonPlusProche);
+            }
+            liaisonCliqueeAvant.cliquee = false;
+            liaisonCliqueeAvant = null;
         }
 
     }

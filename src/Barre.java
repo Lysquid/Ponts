@@ -21,7 +21,7 @@ public class Barre extends ObjetPhysique {
     final static float HAUTEUR_BARRE = 1;
 
     final float COUPLE_RESISTANCE = 1000000f;
-    final float FORCE_MAX = 1000f;
+    final float FORCE_MAX = 3000f;
     final Color COULEUR_REMPLISSAGE = Color.DARK_GRAY;
     final Color COULEUR_CONTOUR = Color.BLACK;
 
