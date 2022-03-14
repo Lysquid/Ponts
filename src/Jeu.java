@@ -117,7 +117,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         if (e.getSource() == timerPhysique) {
             if (sourisAppyuee) {
-                long temps = System.currentTimeMillis();
+                // long temps = System.currentTimeMillis();
                 // System.out.println(time - prevTime);
                 pont.gererClique(world, posSouris, boutonSouris, materiau);
                 sourisAppyuee = false;
