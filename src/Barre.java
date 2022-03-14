@@ -106,7 +106,7 @@ public class Barre extends ObjetPhysique {
                     joints.remove(joint);
                     liaisonsLiees.remove(liaison);
 
-                    Liaison nouvelleLiaison = new Liaison(world, liaison.getPos());
+                    LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, liaison.getPos());
                     lier(world, nouvelleLiaison);
                     nouvellesLiaisons.add(nouvelleLiaison);
                 }
@@ -147,13 +147,14 @@ public class Barre extends ObjetPhysique {
         return shape.testPoint(transform, posClic);
     }
 
-    public LinkedList<Liaison> supprimer(World world) {
-        LinkedList<Liaison> liaisonsASupprimer = new LinkedList<Liaison>();
+    public LinkedList<LiaisonMobile> supprimer(World world) {
+        LinkedList<LiaisonMobile> liaisonsASupprimer = new LinkedList<LiaisonMobile>();
         for (Liaison liaison : liaisonsLiees) {
             liaison.barresLiees.remove(this);
-            if (liaison.barresLiees.size() < 1) {
-                liaisonsASupprimer.add(liaison);
-                liaison.supprimer(world);
+            if (liaison instanceof LiaisonMobile && liaison.barresLiees.size() < 1) {
+                LiaisonMobile liaisonASupprimer = (LiaisonMobile) liaison;
+                liaisonsASupprimer.add(liaisonASupprimer);
+                liaisonASupprimer.supprimer(world);
             }
         }
         world.destroyBody(this.body);

@@ -16,7 +16,7 @@ public class Pont {
         barres = new LinkedList<Barre>();
         liaisons = new LinkedList<Liaison>();
 
-        Liaison liaison = new Liaison(world, pos);
+        Liaison liaison = new LiaisonFixe(world, pos);
         liaisons.add(liaison);
 
         ajouterBarre(world, liaison, pos.add(new Vec2(6, 0)));
@@ -48,7 +48,7 @@ public class Pont {
     }
 
     public Liaison ajouterBarre(World world, Liaison liaison, Vec2 posClic) {
-        Liaison nouvelleLiaison = new Liaison(world, posClic);
+        LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, posClic);
         liaisons.add(nouvelleLiaison);
         return ajouterBarre(world, liaison, nouvelleLiaison);
     }
@@ -101,7 +101,7 @@ public class Pont {
         Barre barreASupprimer = null;
         for (Barre barre : barres) {
             if (barre.testBarreCliquee(posClic)) {
-                LinkedList<Liaison> liaisonASupprimer = barre.supprimer(world);
+                LinkedList<LiaisonMobile> liaisonASupprimer = barre.supprimer(world);
                 liaisons.removeAll(liaisonASupprimer);
                 barreASupprimer = barre;
 

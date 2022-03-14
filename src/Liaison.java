@@ -15,7 +15,7 @@ public class Liaison extends ObjetPhysique {
     final static int MASK = Bord.CATEGORY | Liaison.CATEGORY | Barre.CATEGORY;
 
     final float RAYON = 0.5f;
-    final Color COULEUR_REMPLISSAGE = Color.decode("#e3f069");
+    Color COULEUR_REMPLISSAGE;
     final Color COULEUR_CONTOUR = Color.BLACK;
     final Color COULEUR_CLIQUEE = Color.decode("#e86933");
 
@@ -55,11 +55,6 @@ public class Liaison extends ObjetPhysique {
         int y = box2d.worldToPixelY(getY());
         int r = box2d.worldToPixel(this.RAYON);
 
-        if (cliquee) {
-            g.setColor(COULEUR_CLIQUEE);
-        } else {
-            g.setColor(COULEUR_REMPLISSAGE);
-        }
         g.fillOval(x - r, y - r, r * 2, r * 2);
         g.setColor(COULEUR_CONTOUR);
         g.drawOval(x - r, y - r, r * 2, r * 2);
@@ -72,10 +67,6 @@ public class Liaison extends ObjetPhysique {
 
     public boolean testLiaisonCliquee(Vec2 pos) {
         return (distancePoint(pos) <= RAYON);
-    }
-
-    public void supprimer(World world) {
-        world.destroyBody(body);
     }
 
 }
