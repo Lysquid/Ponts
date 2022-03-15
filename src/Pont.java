@@ -134,6 +134,10 @@ public class Pont {
         }
         if (barreASupprimer != null) {
             barres.remove(barreASupprimer);
+            if(barreASupprimer.liaisonsLiees.contains(liaisonCliqueeAvant)){
+                liaisonCliqueeAvant.cliquee = false;
+                liaisonCliqueeAvant = null;
+            }
         } else {
             if (liaisonCliqueeAvant != null) {
                 liaisonCliqueeAvant.cliquee = false;
