@@ -26,7 +26,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     final int TICK_PHYSIQUE = 16;
     long tempsPhysique;
     JButton boutonLancer;
-    JButton boutonMateriau;
+    JButton boutonMateriauBois;
+    JButton boutonMateriauGoudron;
 
     LinkedList<Barre> boites;
     Pont pont;
@@ -54,13 +55,21 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         add(boutonLancer);
 
         setSize(LARGEUR, HAUTEUR);
-        boutonMateriau = new JButton();
-        boutonMateriau.setBounds(150, 20, 100, 50);
-        boutonMateriau.setText("Materiau");
-        boutonMateriau.setBackground(Color.WHITE);
-        boutonMateriau.addActionListener(this);
+        boutonMateriauBois = new JButton();
+        boutonMateriauBois.setBounds(150, 20, 100, 50);
+        boutonMateriauBois.setText("Bois");
+        boutonMateriauBois.setBackground(Color.WHITE);
+        boutonMateriauBois.addActionListener(this);
         setLayout(null);
-        add(boutonMateriau);
+        add(boutonMateriauBois);
+
+        boutonMateriauGoudron = new JButton();
+        boutonMateriauGoudron.setBounds(290, 20, 100, 50);
+        boutonMateriauGoudron.setText("Goudron");
+        boutonMateriauGoudron.setBackground(Color.WHITE);
+        boutonMateriauGoudron.addActionListener(this);
+        setLayout(null);
+        add(boutonMateriauGoudron);
 
         simulationPhysique = false;
     }
@@ -156,8 +165,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             simulationPhysique = !simulationPhysique;
         }
 
-        if (e.getSource() == boutonMateriau) {
-            materiau = !materiau;
+        if (e.getSource() == boutonMateriauBois) {
+            materiau = true;
+        }
+        if (e.getSource() == boutonMateriauGoudron){
+            materiau = false;
         }
 
         
