@@ -21,7 +21,7 @@ enum Materiau {
 public class Barre extends ObjetPhysique {
 
     static int CATEGORY = 0b0010;
-    static int MASK = Bord.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
+    static int MASK = Bord.CATEGORY;
 
     float COUPLE_RESISTANCE;
     float FORCE_MAX;
@@ -32,7 +32,7 @@ public class Barre extends ObjetPhysique {
     Color COULEUR_CONTOUR = Color.BLACK;
 
     static float LONGUEUR_MAX = 8;
-    static float LONGUEUR_MIN = 1;
+    static float LONGUEUR_MIN = 3;
 
     PolygonShape shape;
     ArrayList<Liaison> liaisonsLiees;
@@ -100,22 +100,19 @@ public class Barre extends ObjetPhysique {
 
     public void dessiner(Graphics g, Box2D box2d) {
 
-        float x = getX();
-        float y = getY();
-        float angle = getAngle();
-
         int[] xCoins = new int[4];
         int[] yCoins = new int[4];
-        int[][] positionCoins = { { 1, 1 }, { 1, -1 }, { -1, -1 }, { -1, 1 } };
+
         for (int i = 0; i < 4; i++) {
-            float x2 = (x + longueur / 2 * positionCoins[i][0]);
-            float y2 = (y + largeur / 2 * positionCoins[i][1]);
+            Vec2 pos = shape.getVertex(i);
 
-            double x3 = ((x2 - x) * Math.cos(angle) - (y2 - y) * Math.sin(angle) + x);
-            double y3 = ((x2 - x) * Math.sin(angle) + (y2 - y) * Math.cos(angle) + y);
+            float cos = (float) Math.cos(getAngle());
+            float sin = (float) Math.sin(getAngle());
+            float x = pos.x * cos - pos.y * sin + getX();
+            float y = pos.x * sin + pos.y * cos + getY();
 
-            xCoins[i] = box2d.worldToPixelX((float) x3);
-            yCoins[i] = box2d.worldToPixelY((float) y3);
+            xCoins[i] = box2d.worldToPixelX(x);
+            yCoins[i] = box2d.worldToPixelY(y);
         }
 
         g.setColor(COULEUR_REMPLISSAGE);
