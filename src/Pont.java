@@ -36,16 +36,24 @@ public class Pont {
         Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
         float angle = (float) Math.atan(difference.y / difference.x);
         Barre barre = null;
-        if (materiau) {
-            barre = new BarreBois(world, centre, angle, difference.length());
-        } else {
-            barre = new BarreGoudron(world, centre, angle, difference.length());
+        boolean dejaLiees = false;
+        for(Barre bar : barres){
+            if(bar.liaisonsLiees.contains(liaison1) && bar.liaisonsLiees.contains(liaison2)){
+                dejaLiees = true;
+            }
         }
+        if(!dejaLiees){
+            if (materiau) {
+                barre = new BarreBois(world, centre, angle, difference.length());
+            } else {
+                barre = new BarreGoudron(world, centre, angle, difference.length());
+            }
 
-        barre.lier(world, liaison1);
-        barre.lier(world, liaison2);
+            barre.lier(world, liaison1);
+            barre.lier(world, liaison2);
 
-        barres.add(barre);
+            barres.add(barre);
+        }
 
     }
 
