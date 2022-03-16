@@ -12,7 +12,7 @@ public class BarreGoudron extends Barre {
 
         LARGEUR_BARRE = 1;
 
-        COUPLE_RESISTANCE = 1000000f;
+        COUPLE_RESISTANCE = 1000000f * 0;
         FORCE_MAX = 3000f;
 
         COULEUR_REMPLISSAGE = Color.decode("#333333");

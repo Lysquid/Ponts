@@ -13,10 +13,15 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
+enum Materiau {
+    BOIS,
+    GOUDRON
+}
+
 public class Barre extends ObjetPhysique {
 
-    final static int CATEGORY = 0b0010;
-    final static int MASK = Bord.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
+    static int CATEGORY = 0b0010;
+    static int MASK = Bord.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
 
     float COUPLE_RESISTANCE;
     float FORCE_MAX;
@@ -25,7 +30,7 @@ public class Barre extends ObjetPhysique {
 
     Color COULEUR_REMPLISSAGE;
     Color COULEUR_CONTOUR = Color.BLACK;
-    
+
     static float LONGUEUR_MAX = 8;
     static float LONGUEUR_MIN = 1;
 

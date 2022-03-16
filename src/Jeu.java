@@ -40,7 +40,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     long tempsPrecedent = 0;
     final int DELAI_APPARITION = 100;
     boolean simulationPhysique;
-    boolean materiau = true;
+    Materiau materiau = Materiau.BOIS;
 
     public Jeu(int LARGEUR, int HAUTEUR) {
         boites = new LinkedList<Barre>();
@@ -132,13 +132,13 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
                 sourisAppyuee = false;
 
                 // switch (boutonSouris) {
-                //     case "molette":
-                //         if (temps - tempsPrecedent > DELAI_APPARITION) {
-                //             Barre newBox = new Barre(world, posSouris, 0, 4, 3);
-                //             boites.add(newBox);
-                //             tempsPrecedent = temps;
-                //         }
-                //         break;
+                // case "molette":
+                // if (temps - tempsPrecedent > DELAI_APPARITION) {
+                // Barre newBox = new Barre(world, posSouris, 0, 4, 3);
+                // boites.add(newBox);
+                // tempsPrecedent = temps;
+                // }
+                // break;
 
                 // }
             }
@@ -166,13 +166,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
 
         if (e.getSource() == boutonMateriauBois) {
-            materiau = true;
+            materiau = Materiau.BOIS;
         }
-        if (e.getSource() == boutonMateriauGoudron){
-            materiau = false;
+        if (e.getSource() == boutonMateriauGoudron) {
+            materiau = Materiau.GOUDRON;
         }
-
-        
 
     }
 

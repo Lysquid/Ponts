@@ -12,8 +12,8 @@ public class BarreBois extends Barre {
 
         LARGEUR_BARRE = 1;
 
-        COUPLE_RESISTANCE = 1000000f;
-        FORCE_MAX = 3000f;
+        COUPLE_RESISTANCE = 1000000f * 0;
+        FORCE_MAX = 4000f;
 
         COULEUR_REMPLISSAGE = Color.decode("#ba754a");
 

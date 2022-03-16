@@ -12,9 +12,10 @@ import org.jbox2d.dynamics.World;
 public class Liaison extends ObjetPhysique {
 
     final static int CATEGORY = 0b0100;
-    final static int MASK = Bord.CATEGORY | Liaison.CATEGORY | Barre.CATEGORY;
+    final static int MASK = Bord.CATEGORY;
 
     final float RAYON = 0.5f;
+    final float RAYON_CLICK = 1f;
     Color COULEUR_REMPLISSAGE;
     final Color COULEUR_CONTOUR = Color.BLACK;
     final Color COULEUR_CLIQUEE = Color.decode("#e86933");
@@ -66,7 +67,7 @@ public class Liaison extends ObjetPhysique {
     }
 
     public boolean testLiaisonCliquee(Vec2 pos) {
-        return (distancePoint(pos) <= RAYON);
+        return (distancePoint(pos) <= RAYON_CLICK);
     }
 
 }
