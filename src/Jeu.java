@@ -163,6 +163,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         if (e.getSource() == boutonLancer) {
             simulationPhysique = !simulationPhysique;
+            if (simulationPhysique) {
+                boutonLancer.setText("Arreter");
+            } else {
+                boutonLancer.setText("Lancer");
+            }
         }
 
         if (e.getSource() == boutonMateriauBois) {
