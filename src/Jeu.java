@@ -71,7 +71,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         setLayout(null);
         add(boutonMateriauGoudron);
 
-        simulationPhysique = true;
+        simulationPhysique = false;
     }
 
     public void init(int refreshRate) {

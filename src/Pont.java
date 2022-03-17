@@ -88,10 +88,10 @@ public class Pont {
     }
 
     private void lacherBarre(World world) {
-        barreEnCreation.initiliserPhysique(world);
+        barreEnCreation.activerPhysique(world);
 
         for (Liaison liaison : barreEnCreation.liaisonsLiees) {
-            liaison.initialiserPhysique();
+            liaison.activerPhysique();
             barreEnCreation.lier(world, liaison);
         }
 
@@ -198,10 +198,10 @@ public class Pont {
 
     public void testCasse(World world, float dt) {
         for (Barre barre : barres) {
-            // if (barre != barreEnCreation) {
-            // LinkedList<Liaison> liaisonsCrees = barre.testCasse(world, dt);
-            // liaisons.addAll(liaisonsCrees);
-            // }
+            if (barre != barreEnCreation) {
+                LinkedList<Liaison> liaisonsCrees = barre.testCasse(world, dt);
+                liaisons.addAll(liaisonsCrees);
+            }
         }
 
     }

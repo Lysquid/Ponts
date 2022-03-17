@@ -28,7 +28,7 @@ public class LiaisonMobile extends Liaison {
         super.dessiner(g, box2d);
     }
 
-    public void initialiserPhysique() {
+    public void activerPhysique() {
         body.setType(BodyType.DYNAMIC);
         alpha = 255;
     }

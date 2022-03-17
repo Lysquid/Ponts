@@ -24,6 +24,6 @@ public class LiaisonFixe extends Liaison {
         super.dessiner(g, box2d);
     }
 
-    public void initialiserPhysique() {
+    public void activerPhysique() {
     }
 }

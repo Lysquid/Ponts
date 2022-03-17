@@ -91,7 +91,7 @@ public class Barre extends ObjetPhysique {
 
         LinkedList<Liaison> nouvellesLiaisons = new LinkedList<Liaison>();
 
-        for (int i = 0; i < liaisonsLiees.size(); i++) {
+        for (int i = 0; i < joints.size(); i++) {
             RevoluteJoint joint = joints.get(i);
             Liaison liaison = liaisonsLiees.get(i);
 
@@ -108,6 +108,8 @@ public class Barre extends ObjetPhysique {
                     liaisonsLiees.remove(liaison);
 
                     LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, liaison.getPos());
+                    liaisonsLiees.add(nouvelleLiaison);
+                    nouvelleLiaison.activerPhysique();
                     lier(world, nouvelleLiaison);
                     nouvellesLiaisons.add(nouvelleLiaison);
                 }
@@ -182,7 +184,7 @@ public class Barre extends ObjetPhysique {
 
     }
 
-    public void initiliserPhysique(World world) {
+    public void activerPhysique(World world) {
         body.setType(BodyType.DYNAMIC);
         alpha = 255;
     }

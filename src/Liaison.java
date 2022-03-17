@@ -52,7 +52,7 @@ public abstract class Liaison extends ObjetPhysique {
         body.createFixture(fixtureDef);
     }
 
-    public abstract void initialiserPhysique();
+    public abstract void activerPhysique();
 
     public void dessiner(Graphics g, Box2D box2d) {
 
