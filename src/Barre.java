@@ -141,4 +141,17 @@ public class Barre extends ObjetPhysique {
         return liaisonsASupprimer;
     }
 
+    public void ajusterPos() {
+        Liaison liaison1 = liaisonsLiees.get(0);
+        Liaison liaison2 = liaisonsLiees.get(1);
+        Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
+        Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
+        float angle = (float) Math.atan(difference.y / difference.x);
+        longueur = difference.length() - largeur;
+
+        shape.setAsBox(longueur / 2, largeur / 2);
+        setPos(centre, angle);
+
+    }
+
 }

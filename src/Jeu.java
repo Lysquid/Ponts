@@ -71,7 +71,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         setLayout(null);
         add(boutonMateriauGoudron);
 
-        simulationPhysique = false;
+        simulationPhysique = true;
     }
 
     public void init(int refreshRate) {
@@ -125,10 +125,12 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == timerPhysique) {
+            // pont.gererInput(world, posSouris, boutonSouris, materiau);
+            // boutonSouris = null;
+
             if (sourisAppyuee) {
                 // long temps = System.currentTimeMillis();
                 // System.out.println(time - prevTime);
-                pont.gererClique(world, posSouris, boutonSouris, materiau);
                 sourisAppyuee = false;
 
                 // switch (boutonSouris) {
@@ -185,12 +187,12 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         posSouris = new Vec2(x, y);
         if (SwingUtilities.isLeftMouseButton(e)) {
             boutonSouris = "gauche";
-        }
-        if (SwingUtilities.isRightMouseButton(e)) {
+        } else if (SwingUtilities.isRightMouseButton(e)) {
             boutonSouris = "droite";
-        }
-        if (SwingUtilities.isMiddleMouseButton(e)) {
+        } else if (SwingUtilities.isMiddleMouseButton(e)) {
             boutonSouris = "molette";
+        } else {
+            boutonSouris = null;
         }
     }
 
@@ -212,6 +214,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public void mousePressed(MouseEvent e) {
         sourisAppyuee = true;
         majPosSouris(e);
+        pont.gererInput(world, posSouris, boutonSouris, materiau);
     }
 
     @Override
@@ -223,10 +226,12 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         majPosSouris(e);
+        pont.gererInput(world, posSouris, null, materiau);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         majPosSouris(e);
+        pont.gererInput(world, posSouris, null, materiau);
     }
 }

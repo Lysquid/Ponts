@@ -21,4 +21,12 @@ public abstract class ObjetPhysique {
         return body.getAngle();
     }
 
+    public void setPos(Vec2 pos, float angle) {
+        body.setTransform(pos.clone(), angle);
+    }
+
+    public void setPos(Vec2 pos) {
+        setPos(pos, getAngle());
+    }
+
 }
