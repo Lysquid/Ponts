@@ -52,7 +52,7 @@ public class Pont {
                         liaisonCliquee = liaisonEnCreation;
                         lacherBarre(world);
                     }
-                    if (barreEnCreation == null) {
+                    if (barreEnCreation == null && liaisonCliquee != null) {
                         ajouterBarre(world, posSouris, liaisonCliquee, materiau);
                     }
 
@@ -198,8 +198,10 @@ public class Pont {
 
     public void testCasse(World world, float dt) {
         for (Barre barre : barres) {
+            // if (barre != barreEnCreation) {
             // LinkedList<Liaison> liaisonsCrees = barre.testCasse(world, dt);
             // liaisons.addAll(liaisonsCrees);
+            // }
         }
 
     }
