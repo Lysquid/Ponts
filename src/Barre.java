@@ -202,7 +202,6 @@ public class Barre extends ObjetPhysique {
     public void accrocher(World world, Liaison liaisonCliquee) {
         supprimerLiaison(world, 1);
         ajouterLiaison(liaisonCliquee);
-        lier(world, liaisonCliquee);
     }
 
 }

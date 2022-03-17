@@ -72,6 +72,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         add(boutonMateriauGoudron);
 
         simulationPhysique = false;
+        posSouris = new Vec2();
     }
 
     public void init(int refreshRate) {

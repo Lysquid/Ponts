@@ -37,8 +37,14 @@ public class Pont {
 
     public void gererInput(World world, Vec2 posSouris, String boutonSouris, boolean clicSouris, Materiau materiau) {
 
+        Liaison liaisonProche = testLiaisonProche(posSouris);
+
         if (barreEnCreation != null) {
-            majPreview(posSouris);
+            if (liaisonProche == null) {
+                majPreview(posSouris);
+            } else {
+                majPreview(liaisonProche.getPos());
+            }
         }
 
         if (clicSouris) {
@@ -46,17 +52,16 @@ public class Pont {
             switch (boutonSouris) {
 
                 case "gauche":
-                    Liaison liaisonCliquee = testLiaisonCliquee(posSouris);
 
                     if (barreEnCreation != null) {
-                        if (liaisonCliquee != null) {
-                            barreEnCreation.accrocher(world, liaisonCliquee);
+                        if (liaisonProche != null) {
+                            barreEnCreation.accrocher(world, liaisonProche);
                         }
-                        liaisonCliquee = liaisonEnCreation;
+                        liaisonProche = liaisonEnCreation;
                         lacherBarre(world);
                     }
-                    if (barreEnCreation == null && liaisonCliquee != null) {
-                        ajouterBarre(world, posSouris, liaisonCliquee, materiau);
+                    if (barreEnCreation == null && liaisonProche != null) {
+                        ajouterBarre(world, posSouris, liaisonProche, materiau);
                     }
 
                     break;
@@ -108,7 +113,7 @@ public class Pont {
         barreEnCreation.ajusterPos();
     }
 
-    public Liaison testLiaisonCliquee(Vec2 posClic) {
+    public Liaison testLiaisonProche(Vec2 posClic) {
         Liaison liaisonPlusProche = null;
         float distanceMin = Float.POSITIVE_INFINITY;
         for (Liaison liaison : liaisons) {
