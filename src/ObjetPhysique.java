@@ -1,8 +1,7 @@
-import org.jbox2d.common.Color3f;
+import java.awt.Color;
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
-
-import java.awt.Color;
 
 public abstract class ObjetPhysique {
 
