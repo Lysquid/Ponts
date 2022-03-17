@@ -32,8 +32,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     LinkedList<Barre> boites;
     Pont pont;
 
-    boolean sourisAppyuee;
     String boutonSouris;
+    boolean clicSouris = false;
     Vec2 posSouris;
     boolean initilise = false;
 
@@ -125,26 +125,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == timerPhysique) {
-            // pont.gererInput(world, posSouris, boutonSouris, materiau);
-            // boutonSouris = null;
-            pont.gererInput(world, posSouris, null, materiau);
-
-            if (sourisAppyuee) {
-                // long temps = System.currentTimeMillis();
-                // System.out.println(time - prevTime);
-                sourisAppyuee = false;
-
-                // switch (boutonSouris) {
-                // case "molette":
-                // if (temps - tempsPrecedent > DELAI_APPARITION) {
-                // Barre newBox = new Barre(world, posSouris, 0, 4, 3);
-                // boites.add(newBox);
-                // tempsPrecedent = temps;
-                // }
-                // break;
-
-                // }
-            }
+            pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau);
+            clicSouris = false;
 
             long nouveauTempsPhysique = System.currentTimeMillis();
             float dt = (nouveauTempsPhysique - tempsPhysique) / 1000f;
@@ -182,18 +164,19 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
-    public void majPosSouris(MouseEvent e) {
+    public void majInfosSouris(MouseEvent e) {
         float x = box2d.pixelToWorldX(e.getX());
         float y = box2d.pixelToWorldY(e.getY());
         posSouris = new Vec2(x, y);
+
         if (SwingUtilities.isLeftMouseButton(e)) {
             boutonSouris = "gauche";
-        } else if (SwingUtilities.isRightMouseButton(e)) {
+        }
+        if (SwingUtilities.isRightMouseButton(e)) {
             boutonSouris = "droite";
-        } else if (SwingUtilities.isMiddleMouseButton(e)) {
+        }
+        if (SwingUtilities.isMiddleMouseButton(e)) {
             boutonSouris = "molette";
-        } else {
-            boutonSouris = null;
         }
     }
 
@@ -213,26 +196,22 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        sourisAppyuee = true;
-        majPosSouris(e);
-        pont.gererInput(world, posSouris, boutonSouris, materiau);
+        majInfosSouris(e);
+        clicSouris = true;
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        sourisAppyuee = false;
-        majPosSouris(e);
+        majInfosSouris(e);
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        majPosSouris(e);
-        pont.gererInput(world, posSouris, null, materiau);
+        majInfosSouris(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        majPosSouris(e);
-        pont.gererInput(world, posSouris, null, materiau);
+        majInfosSouris(e);
     }
 }

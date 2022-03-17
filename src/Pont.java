@@ -36,13 +36,13 @@ public class Pont {
         }
     }
 
-    public void gererInput(World world, Vec2 posSouris, String boutonSouris, Materiau materiau) {
+    public void gererInput(World world, Vec2 posSouris, String boutonSouris, boolean clicSouris, Materiau materiau) {
 
         if (barreEnCreation != null) {
             majPreview(posSouris);
         }
 
-        if (boutonSouris != null) {
+        if (clicSouris) {
             switch (boutonSouris) {
 
                 case "gauche":
@@ -59,8 +59,8 @@ public class Pont {
                     break;
 
                 // case "droite":
-                // testBarreCliquee(world, posSouris);
-                // break;
+                //     testBarreCliquee(world, posSouris);
+                //     break;
 
                 default:
 

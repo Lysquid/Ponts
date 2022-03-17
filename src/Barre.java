@@ -167,7 +167,6 @@ public class Barre extends ObjetPhysique {
         longueur = difference.length();
 
         shape.setAsBox(longueur / 2, largeur / 2);
-
         setPos(centre, angle);
 
         if (fixture != null) {
@@ -179,7 +178,6 @@ public class Barre extends ObjetPhysique {
     }
 
     public void initiliserPhysique(World world) {
-
         body.setType(BodyType.DYNAMIC);
     }
 
