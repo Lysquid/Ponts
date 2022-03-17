@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import org.jbox2d.dynamics.FixtureDef;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Rot;
@@ -40,19 +41,26 @@ public class Barre extends ObjetPhysique {
 
     float longueur, largeur;
 
-    public Barre(World world, Vec2 pos, float angle, float longueur) {
+    public Barre(World world) {
 
         liaisonsLiees = new ArrayList<Liaison>(2);
         joints = new ArrayList<RevoluteJoint>(2);
 
         // Etape 1 : Définir le "body"
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.DYNAMIC;
-        bodyDef.position.set(pos);
-        bodyDef.angle = angle;
+        bodyDef.type = BodyType.KINEMATIC;
 
         // Etape 2 : Créer un "body"
         body = world.createBody(bodyDef);
+
+        // Etape 3 : Définir la "shape"
+        shape = new PolygonShape();
+
+    }
+
+    public void ajouterLiaison(Liaison liaison) {
+        liaisonsLiees.add(liaison);
+        liaison.barresLiees.add(this);
 
     }
 
@@ -64,8 +72,6 @@ public class Barre extends ObjetPhysique {
         RevoluteJoint joint = (RevoluteJoint) world.createJoint(jointDef);
 
         joints.add(joint);
-        liaisonsLiees.add(liaison);
-        liaison.barresLiees.add(this);
 
     }
 
@@ -147,11 +153,34 @@ public class Barre extends ObjetPhysique {
         Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
         Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
         float angle = (float) Math.atan(difference.y / difference.x);
-        longueur = difference.length() - largeur;
+        longueur = difference.length();
 
         shape.setAsBox(longueur / 2, largeur / 2);
         setPos(centre, angle);
 
+    }
+
+    public void lacher(World world) {
+
+        // Etape 1 : Définir le "body"
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.DYNAMIC;
+        bodyDef.position.set(getPos());
+        bodyDef.angle = getAngle();
+
+        // Etape 2 : Créer un "body"
+        body = world.createBody(bodyDef);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        // fixtureDef.restitution = 0.5f;
+        // fixtureDef.friction = 0.3f;
+        fixtureDef.filter.categoryBits = CATEGORY;
+        fixtureDef.filter.maskBits = MASK;
+
+        // Etape 5 : Attacher la shape au body avec la fixture
+        body.createFixture(fixtureDef);
     }
 
 }

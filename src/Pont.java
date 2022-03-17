@@ -24,74 +24,25 @@ public class Pont {
     }
 
     public void dessiner(Graphics g, Box2D box2d) {
+        LinkedList<Barre> barresDesinees = new LinkedList<Barre>();
         for (Liaison liaison : liaisons) {
-            liaison.dessiner(g, box2d);
             for (Barre barre : liaison.barresLiees) {
-                barre.dessiner(g, box2d);
+                if (!barresDesinees.contains(barre)) {
+                    barre.dessiner(g, box2d);
+                    barresDesinees.add(barre);
+                }
             }
+            liaison.dessiner(g, box2d);
         }
-    }
-
-    public Barre creerBarre(World world, Liaison liaison1, Liaison liaison2, Materiau materiau) {
-
-        Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
-        Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
-        float angle = (float) Math.atan(difference.y / difference.x);
-        Barre barre = null;
-
-        // boolean dejaLiees = false;
-        // for (Barre bar : liaison1.barresLiees) {
-        // if (bar.liaisonsLiees.contains(liaison2)) {
-        // dejaLiees = true;
-        // break;
-        // }
-        // }
-
-        // if (!dejaLiees) {
-        switch (materiau) {
-            case BOIS:
-                barre = new BarreBois(world, centre, angle, difference.length());
-                break;
-            case GOUDRON:
-                barre = new BarreGoudron(world, centre, angle, difference.length());
-                break;
-        }
-
-        // barre.lier(world, liaison1);
-        // barre.lier(world, liaison2);
-        
-
-        barres.add(barre);
-        // }
-
-        return barre;
-
-    }
-
-    // public Liaison creerBarre(World world, Liaison liaison, Vec2 pos, Materiau
-    // materiau) {
-    // LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, pos);
-    // liaisons.add(nouvelleLiaison);
-    // return creerBarre(world, liaison, nouvelleLiaison, materiau);
-    // }
-
-    public void testCasse(World world, float dt) {
-        for (Barre barre : barres) {
-            LinkedList<Liaison> liaisonsCrees = barre.testCasse(world, dt);
-            liaisons.addAll(liaisonsCrees);
-        }
-
     }
 
     public void gererInput(World world, Vec2 posSouris, String boutonSouris, Materiau materiau) {
 
-        if (boutonSouris == null) {
-            if (barreEnCreation != null) {
-                majPreview(posSouris);
-            }
-
-        } else {
-
+        if (barreEnCreation != null) {
+            majPreview(posSouris);
+        }
+    
+        if (boutonSouris != null) {
             switch (boutonSouris) {
 
                 case "gauche":
@@ -120,8 +71,15 @@ public class Pont {
     }
 
     private void lacherBarre(World world) {
-        barreEnCreation.lier(world, barreEnCreation.liaisonsLiees.get(0));
-        barreEnCreation.lier(world, barreEnCreation.liaisonsLiees.get(0));
+        barreEnCreation.lacher(world);
+
+        Liaison liaison1 = barreEnCreation.liaisonsLiees.get(0);
+        Liaison liaison2 = barreEnCreation.liaisonsLiees.get(1);
+        liaison1.initialiserPhysique(world);
+        liaison2.initialiserPhysique(world);
+
+        barreEnCreation.lier(world, liaison1);
+        barreEnCreation.lier(world, liaison2);
 
         liaisonEnCreation = null;
         barreEnCreation = null;
@@ -187,6 +145,58 @@ public class Pont {
         // liaisonCliqueeAvant.cliquee = true;
         // }
         // }
+    }
+
+    public Barre creerBarre(World world, Liaison liaison1, Liaison liaison2, Materiau materiau) {
+
+        // Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
+        // Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
+        // float angle = (float) Math.atan(difference.y / difference.x);
+        Barre barre = null;
+
+        // boolean dejaLiees = false;
+        // for (Barre bar : liaison1.barresLiees) {
+        // if (bar.liaisonsLiees.contains(liaison2)) {
+        // dejaLiees = true;
+        // break;
+        // }
+        // }
+
+        // if (!dejaLiees) {
+        switch (materiau) {
+            case BOIS:
+                barre = new BarreBois(world);
+                break;
+            case GOUDRON:
+                // barre = new BarreGoudron(world);
+                break;
+        }
+
+        // barre.lier(world, liaison1);
+        // barre.lier(world, liaison2);
+        barre.ajouterLiaison(liaison1);
+        barre.ajouterLiaison(liaison2);
+
+        barres.add(barre);
+        // }
+
+        return barre;
+
+    }
+
+    // public Liaison creerBarre(World world, Liaison liaison, Vec2 pos, Materiau
+    // materiau) {
+    // LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, pos);
+    // liaisons.add(nouvelleLiaison);
+    // return creerBarre(world, liaison, nouvelleLiaison, materiau);
+    // }
+
+    public void testCasse(World world, float dt) {
+        for (Barre barre : barres) {
+            // LinkedList<Liaison> liaisonsCrees = barre.testCasse(world, dt);
+            // liaisons.addAll(liaisonsCrees);
+        }
+
     }
 
     public void testBarreCliquee(World world, Vec2 posClic) {

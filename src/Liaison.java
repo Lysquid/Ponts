@@ -22,22 +22,20 @@ public class Liaison extends ObjetPhysique {
 
     LinkedList<Barre> barresLiees;
     boolean cliquee;
+    CircleShape shape;
 
-    public Liaison(World world, Vec2 pos, boolean mobile) {
+    public Liaison(World world, Vec2 pos, BodyType bodyType) {
 
         barresLiees = new LinkedList<Barre>();
 
         cliquee = false;
+
         BodyDef bodyDef = new BodyDef();
-        if (mobile) {
-            bodyDef.type = BodyType.DYNAMIC;
-        } else {
-            bodyDef.type = BodyType.STATIC;
-        }
+        bodyDef.type = bodyType;
         bodyDef.position.set(pos);
 
         body = world.createBody(bodyDef);
-        CircleShape shape = new CircleShape();
+        shape = new CircleShape();
         shape.setRadius(this.RAYON);
 
         FixtureDef fixtureDef = new FixtureDef();
@@ -47,7 +45,12 @@ public class Liaison extends ObjetPhysique {
         fixtureDef.filter.maskBits = MASK;
 
         body.createFixture(fixtureDef);
+    }
 
+    public void initialiserPhysique(World world) {
+        if (this instanceof LiaisonMobile) {
+            body.setType(BodyType.DYNAMIC);
+        }
     }
 
     public void dessiner(Graphics g, Box2D box2d) {

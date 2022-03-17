@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
 public class LiaisonMobile extends Liaison {
@@ -9,7 +10,7 @@ public class LiaisonMobile extends Liaison {
     Color COULEUR_REMPLISSAGE = Color.decode("#e3f069");
 
     public LiaisonMobile(World world, Vec2 pos) {
-        super(world, pos, true);
+        super(world, pos, BodyType.KINEMATIC);
     }
 
     public void supprimer(World world) {

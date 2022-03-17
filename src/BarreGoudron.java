@@ -7,8 +7,8 @@ import org.jbox2d.dynamics.World;
 
 public class BarreGoudron extends Barre {
 
-    public BarreGoudron(World world, Vec2 pos, float angle, float longueur) {
-        super(world, pos, angle, longueur);
+    public BarreGoudron(World world) {
+        super(world);
 
         LARGEUR_BARRE = 1;
 
