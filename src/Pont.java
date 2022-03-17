@@ -41,7 +41,7 @@ public class Pont {
         if (barreEnCreation != null) {
             majPreview(posSouris);
         }
-    
+
         if (boutonSouris != null) {
             switch (boutonSouris) {
 
@@ -71,7 +71,7 @@ public class Pont {
     }
 
     private void lacherBarre(World world) {
-        barreEnCreation.lacher(world);
+        barreEnCreation.initiliserPhysique(world);
 
         Liaison liaison1 = barreEnCreation.liaisonsLiees.get(0);
         Liaison liaison2 = barreEnCreation.liaisonsLiees.get(1);
@@ -149,33 +149,25 @@ public class Pont {
 
     public Barre creerBarre(World world, Liaison liaison1, Liaison liaison2, Materiau materiau) {
 
-        // Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
-        // Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
-        // float angle = (float) Math.atan(difference.y / difference.x);
-        Barre barre = null;
-
+        
         // boolean dejaLiees = false;
         // for (Barre bar : liaison1.barresLiees) {
         // if (bar.liaisonsLiees.contains(liaison2)) {
-        // dejaLiees = true;
-        // break;
-        // }
-        // }
-
+            // dejaLiees = true;
+            // break;
+            // }
+            // }
+            
+        Barre barre = null;
         // if (!dejaLiees) {
         switch (materiau) {
             case BOIS:
-                barre = new BarreBois(world);
+                barre = new BarreBois(world, liaison1, liaison2);
                 break;
             case GOUDRON:
-                // barre = new BarreGoudron(world);
+                barre = new BarreGoudron(world, liaison1, liaison2);
                 break;
         }
-
-        // barre.lier(world, liaison1);
-        // barre.lier(world, liaison2);
-        barre.ajouterLiaison(liaison1);
-        barre.ajouterLiaison(liaison2);
 
         barres.add(barre);
         // }

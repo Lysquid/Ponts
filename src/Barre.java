@@ -10,6 +10,7 @@ import org.jbox2d.common.Transform;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
@@ -24,10 +25,7 @@ public class Barre extends ObjetPhysique {
     static int CATEGORY = 0b0010;
     static int MASK = Bord.CATEGORY;
 
-    float COUPLE_RESISTANCE;
     float FORCE_MAX;
-
-    float LARGEUR_BARRE;
 
     Color COULEUR_REMPLISSAGE;
     Color COULEUR_CONTOUR = Color.BLACK;
@@ -38,13 +36,17 @@ public class Barre extends ObjetPhysique {
     PolygonShape shape;
     ArrayList<Liaison> liaisonsLiees;
     ArrayList<RevoluteJoint> joints;
+    FixtureDef fixtureDef;
+    Fixture fixture;
 
     float longueur, largeur;
 
-    public Barre(World world) {
+    public Barre(World world, Liaison liaison1, Liaison liaison2) {
 
         liaisonsLiees = new ArrayList<Liaison>(2);
         joints = new ArrayList<RevoluteJoint>(2);
+        ajouterLiaison(liaison1);
+        ajouterLiaison(liaison2);
 
         // Etape 1 : Définir le "body"
         BodyDef bodyDef = new BodyDef();
@@ -56,19 +58,27 @@ public class Barre extends ObjetPhysique {
         // Etape 3 : Définir la "shape"
         shape = new PolygonShape();
 
+        // Etape 2 : Créer un "body"
+        body = world.createBody(bodyDef);
+
+        fixtureDef = new FixtureDef();
+        fixtureDef.density = 1f;
+        // fixtureDef.restitution = 0.5f;
+        // fixtureDef.friction = 0.3f;
+        fixtureDef.filter.categoryBits = CATEGORY;
+        fixtureDef.filter.maskBits = MASK;
+
+        ajusterPos();
     }
 
     public void ajouterLiaison(Liaison liaison) {
         liaisonsLiees.add(liaison);
         liaison.barresLiees.add(this);
-
     }
 
     public void lier(World world, Liaison liaison) {
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.initialize(body, liaison.body, liaison.getPos());
-        jointDef.enableMotor = true;
-        jointDef.maxMotorTorque = COUPLE_RESISTANCE;
         RevoluteJoint joint = (RevoluteJoint) world.createJoint(jointDef);
 
         joints.add(joint);
@@ -148,6 +158,7 @@ public class Barre extends ObjetPhysique {
     }
 
     public void ajusterPos() {
+
         Liaison liaison1 = liaisonsLiees.get(0);
         Liaison liaison2 = liaisonsLiees.get(1);
         Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
@@ -156,31 +167,20 @@ public class Barre extends ObjetPhysique {
         longueur = difference.length();
 
         shape.setAsBox(longueur / 2, largeur / 2);
+
         setPos(centre, angle);
+
+        if (fixture != null) {
+            body.destroyFixture(fixture);
+        }
+        fixtureDef.shape = shape;
+        fixture = body.createFixture(fixtureDef);
 
     }
 
-    public void lacher(World world) {
+    public void initiliserPhysique(World world) {
 
-        // Etape 1 : Définir le "body"
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.DYNAMIC;
-        bodyDef.position.set(getPos());
-        bodyDef.angle = getAngle();
-
-        // Etape 2 : Créer un "body"
-        body = world.createBody(bodyDef);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        // fixtureDef.restitution = 0.5f;
-        // fixtureDef.friction = 0.3f;
-        fixtureDef.filter.categoryBits = CATEGORY;
-        fixtureDef.filter.maskBits = MASK;
-
-        // Etape 5 : Attacher la shape au body avec la fixture
-        body.createFixture(fixtureDef);
+        body.setType(BodyType.DYNAMIC);
     }
 
 }
