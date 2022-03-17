@@ -17,14 +17,19 @@ public abstract class Liaison extends ObjetPhysique {
     final float RAYON = 0.5f;
     final float RAYON_CLICK = 1f;
     Color COULEUR_REMPLISSAGE;
-    final Color COULEUR_CONTOUR = Color.BLACK;
-    final Color COULEUR_CLIQUEE = Color.decode("#e86933");
+    Color COULEUR_CONTOUR;
+    Color COULEUR_CLIQUEE;
 
     LinkedList<Barre> barresLiees;
     boolean cliquee;
     CircleShape shape;
 
+    int alpha;
+
     public Liaison(World world, Vec2 pos, BodyType bodyType) {
+
+        COULEUR_CONTOUR = Color.BLACK;
+        COULEUR_CLIQUEE = Color.decode("#e86933");
 
         barresLiees = new LinkedList<Barre>();
 
@@ -54,6 +59,10 @@ public abstract class Liaison extends ObjetPhysique {
         int x = box2d.worldToPixelX(getX());
         int y = box2d.worldToPixelY(getY());
         int r = box2d.worldToPixel(this.RAYON);
+
+        COULEUR_REMPLISSAGE = ObjetPhysique.setColorAlpha(COULEUR_REMPLISSAGE, alpha);
+        COULEUR_CONTOUR = ObjetPhysique.setColorAlpha(COULEUR_CONTOUR, alpha);
+        COULEUR_CLIQUEE = ObjetPhysique.setColorAlpha(COULEUR_CLIQUEE, alpha);
 
         g.fillOval(x - r, y - r, r * 2, r * 2);
         g.setColor(COULEUR_CONTOUR);

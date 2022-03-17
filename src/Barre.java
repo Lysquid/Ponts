@@ -29,6 +29,7 @@ public class Barre extends ObjetPhysique {
 
     Color COULEUR_REMPLISSAGE;
     Color COULEUR_CONTOUR = Color.BLACK;
+    int alpha;
 
     static float LONGUEUR_MAX = 8;
     static float LONGUEUR_MIN = 3;
@@ -43,6 +44,7 @@ public class Barre extends ObjetPhysique {
 
     public Barre(World world, Liaison liaison1, Liaison liaison2) {
 
+        alpha = 100;
         liaisonsLiees = new ArrayList<Liaison>(2);
         joints = new ArrayList<RevoluteJoint>(2);
         ajouterLiaison(liaison1);
@@ -131,6 +133,9 @@ public class Barre extends ObjetPhysique {
             yCoins[i] = box2d.worldToPixelY(y);
         }
 
+        COULEUR_REMPLISSAGE = ObjetPhysique.setColorAlpha(COULEUR_REMPLISSAGE, alpha);
+        COULEUR_CONTOUR = ObjetPhysique.setColorAlpha(COULEUR_CONTOUR, alpha);
+
         g.setColor(COULEUR_REMPLISSAGE);
         g.fillPolygon(xCoins, yCoins, 4);
         g.setColor(COULEUR_CONTOUR);
@@ -179,6 +184,7 @@ public class Barre extends ObjetPhysique {
 
     public void initiliserPhysique(World world) {
         body.setType(BodyType.DYNAMIC);
+        alpha = 255;
     }
 
 }

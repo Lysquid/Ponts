@@ -1,5 +1,8 @@
+import org.jbox2d.common.Color3f;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+
+import java.awt.Color;
 
 public abstract class ObjetPhysique {
 
@@ -27,6 +30,14 @@ public abstract class ObjetPhysique {
 
     public void setPos(Vec2 pos) {
         setPos(pos, getAngle());
+    }
+
+    public static Color setColorAlpha(Color color, int alpha) {
+        if (color.getAlpha() == alpha) {
+            return color;
+        } else {
+            return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+        }
     }
 
 }

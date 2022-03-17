@@ -7,10 +7,12 @@ import org.jbox2d.dynamics.World;
 
 public class LiaisonFixe extends Liaison {
 
-    Color COULEUR_REMPLISSAGE = Color.decode("#d33d3d");
-
     public LiaisonFixe(World world, Vec2 pos) {
         super(world, pos, BodyType.STATIC);
+
+        COULEUR_REMPLISSAGE = Color.decode("#d33d3d");
+
+        alpha = 255;
     }
 
     public void dessiner(Graphics g, Box2D box2d) {
