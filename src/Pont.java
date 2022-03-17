@@ -8,7 +8,6 @@ public class Pont {
 
     LinkedList<Barre> barres;
     LinkedList<Liaison> liaisons;
-    Liaison liaisonCliqueeAvant;
     Barre barreEnCreation;
     Liaison liaisonEnCreation;
 
@@ -60,8 +59,11 @@ public class Pont {
                     break;
 
                 case "droite":
-                    // testBarreCliquee(world, posSouris);
-                    arreterCreation(world);
+                    if (barreEnCreation != null) {
+                        arreterCreation(world);
+                    } else {
+                        supprimerBarresCliquees(world, posSouris);
+                    }
 
                     break;
 
@@ -73,12 +75,16 @@ public class Pont {
 
     }
 
-    private void arreterCreation(World world) {
-        LinkedList<LiaisonMobile> liaisonASupprimer = barreEnCreation.supprimer(world);
-        barres.remove(barreEnCreation);
-        liaisons.removeAll(liaisonASupprimer);
+    public void arreterCreation(World world) {
+        supprimerBarre(world, barreEnCreation);
         barreEnCreation = null;
         liaisonEnCreation = null;
+    }
+
+    private void supprimerBarre(World world, Barre barre) {
+        LinkedList<LiaisonMobile> liaisonASupprimer = barre.supprimer(world);
+        barres.remove(barreEnCreation);
+        liaisons.removeAll(liaisonASupprimer);
     }
 
     private void lacherBarre(World world) {
@@ -198,26 +204,10 @@ public class Pont {
 
     }
 
-    public void testBarreCliquee(World world, Vec2 posClic) {
-        Barre barreASupprimer = null;
+    public void supprimerBarresCliquees(World world, Vec2 posClic) {
         for (Barre barre : barres) {
             if (barre.testBarreCliquee(posClic)) {
-                LinkedList<LiaisonMobile> liaisonASupprimer = barre.supprimer(world);
-                liaisons.removeAll(liaisonASupprimer);
-                barreASupprimer = barre;
-
-            }
-        }
-        if (barreASupprimer != null) {
-            barres.remove(barreASupprimer);
-            if (barreASupprimer.liaisonsLiees.contains(liaisonCliqueeAvant)) {
-                liaisonCliqueeAvant.cliquee = false;
-                liaisonCliqueeAvant = null;
-            }
-        } else {
-            if (liaisonCliqueeAvant != null) {
-                liaisonCliqueeAvant.cliquee = false;
-                liaisonCliqueeAvant = null;
+                supprimerBarre(world, barre);
             }
         }
     }
