@@ -12,7 +12,7 @@ public class LiaisonFixe extends Liaison {
 
         COULEUR_REMPLISSAGE = Color.decode("#d33d3d");
 
-        alpha = 255;
+        apercu = false;
     }
 
     public void dessiner(Graphics g, Box2D box2d) {

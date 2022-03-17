@@ -49,6 +49,9 @@ public class Pont {
                     Liaison liaisonCliquee = testLiaisonCliquee(posSouris);
 
                     if (barreEnCreation != null) {
+                        if (liaisonCliquee != null) {
+                            barreEnCreation.accrocher(world, liaisonCliquee);
+                        }
                         liaisonCliquee = liaisonEnCreation;
                         lacherBarre(world);
                     }
@@ -109,7 +112,7 @@ public class Pont {
         Liaison liaisonPlusProche = null;
         float distanceMin = Float.POSITIVE_INFINITY;
         for (Liaison liaison : liaisons) {
-            if (liaison.testLiaisonCliquee(posClic)) {
+            if (liaison.testLiaisonCliquee(posClic) && liaison != liaisonEnCreation) {
                 float distance = liaison.distancePoint(posClic);
                 if (distance < distanceMin) {
                     distanceMin = distance;
@@ -188,13 +191,6 @@ public class Pont {
         return barre;
 
     }
-
-    // public Liaison creerBarre(World world, Liaison liaison, Vec2 pos, Materiau
-    // materiau) {
-    // LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, pos);
-    // liaisons.add(nouvelleLiaison);
-    // return creerBarre(world, liaison, nouvelleLiaison, materiau);
-    // }
 
     public void testCasse(World world, float dt) {
         for (Barre barre : barres) {

@@ -24,7 +24,7 @@ public abstract class Liaison extends ObjetPhysique {
     boolean cliquee;
     CircleShape shape;
 
-    int alpha;
+    boolean apercu;
 
     public Liaison(World world, Vec2 pos, BodyType bodyType) {
 
@@ -60,6 +60,7 @@ public abstract class Liaison extends ObjetPhysique {
         int y = box2d.worldToPixelY(getY());
         int r = box2d.worldToPixel(this.RAYON);
 
+        int alpha = apercu ? 100 : 255;
         COULEUR_REMPLISSAGE = ObjetPhysique.setColorAlpha(COULEUR_REMPLISSAGE, alpha);
         COULEUR_CONTOUR = ObjetPhysique.setColorAlpha(COULEUR_CONTOUR, alpha);
         COULEUR_CLIQUEE = ObjetPhysique.setColorAlpha(COULEUR_CLIQUEE, alpha);

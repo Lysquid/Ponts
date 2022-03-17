@@ -29,7 +29,7 @@ public class Barre extends ObjetPhysique {
 
     Color COULEUR_REMPLISSAGE;
     Color COULEUR_CONTOUR = Color.BLACK;
-    int alpha;
+    boolean apercu;
 
     static float LONGUEUR_MAX = 8;
     static float LONGUEUR_MIN = 3;
@@ -44,7 +44,7 @@ public class Barre extends ObjetPhysique {
 
     public Barre(World world, Liaison liaison1, Liaison liaison2) {
 
-        alpha = 100;
+        apercu = true;
         liaisonsLiees = new ArrayList<Liaison>(2);
         joints = new ArrayList<RevoluteJoint>(2);
         ajouterLiaison(liaison1);
@@ -102,10 +102,7 @@ public class Barre extends ObjetPhysique {
                 float norme = force.length();
 
                 if (norme > FORCE_MAX) {
-                    world.destroyJoint(joint);
-                    liaison.barresLiees.remove(this);
-                    joints.remove(joint);
-                    liaisonsLiees.remove(liaison);
+                    supprimerLiaison(world, i);
 
                     LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, liaison.getPos());
                     liaisonsLiees.add(nouvelleLiaison);
@@ -116,6 +113,18 @@ public class Barre extends ObjetPhysique {
             }
         }
         return nouvellesLiaisons;
+    }
+
+    public void supprimerLiaison(World world, int index) {
+        if (joints.size() > 0) {
+            RevoluteJoint joint = joints.get(index);
+            world.destroyJoint(joint);
+            joints.remove(index);
+        }
+
+        Liaison liaison = liaisonsLiees.get(index);
+        liaison.barresLiees.remove(this);
+        liaisonsLiees.remove(index);
     }
 
     public void dessiner(Graphics g, Box2D box2d) {
@@ -135,6 +144,7 @@ public class Barre extends ObjetPhysique {
             yCoins[i] = box2d.worldToPixelY(y);
         }
 
+        int alpha = apercu ? 100 : 255;
         COULEUR_REMPLISSAGE = ObjetPhysique.setColorAlpha(COULEUR_REMPLISSAGE, alpha);
         COULEUR_CONTOUR = ObjetPhysique.setColorAlpha(COULEUR_CONTOUR, alpha);
 
@@ -186,7 +196,13 @@ public class Barre extends ObjetPhysique {
 
     public void activerPhysique(World world) {
         body.setType(BodyType.DYNAMIC);
-        alpha = 255;
+        apercu = false;
+    }
+
+    public void accrocher(World world, Liaison liaisonCliquee) {
+        supprimerLiaison(world, 1);
+        ajouterLiaison(liaisonCliquee);
+        lier(world, liaisonCliquee);
     }
 
 }
