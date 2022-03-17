@@ -9,7 +9,7 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
-public class Liaison extends ObjetPhysique {
+public abstract class Liaison extends ObjetPhysique {
 
     final static int CATEGORY = 0b0100;
     final static int MASK = Bord.CATEGORY;
@@ -47,11 +47,7 @@ public class Liaison extends ObjetPhysique {
         body.createFixture(fixtureDef);
     }
 
-    public void initialiserPhysique(World world) {
-        if (this instanceof LiaisonMobile) {
-            body.setType(BodyType.DYNAMIC);
-        }
-    }
+    public abstract void initialiserPhysique();
 
     public void dessiner(Graphics g, Box2D box2d) {
 

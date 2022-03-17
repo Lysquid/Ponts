@@ -43,6 +43,7 @@ public class Pont {
         }
 
         if (clicSouris) {
+
             switch (boutonSouris) {
 
                 case "gauche":
@@ -58,9 +59,11 @@ public class Pont {
 
                     break;
 
-                // case "droite":
-                //     testBarreCliquee(world, posSouris);
-                //     break;
+                case "droite":
+                    // testBarreCliquee(world, posSouris);
+                    arreterCreation(world);
+
+                    break;
 
                 default:
 
@@ -70,16 +73,21 @@ public class Pont {
 
     }
 
+    private void arreterCreation(World world) {
+        LinkedList<LiaisonMobile> liaisonASupprimer = barreEnCreation.supprimer(world);
+        barres.remove(barreEnCreation);
+        liaisons.removeAll(liaisonASupprimer);
+        barreEnCreation = null;
+        liaisonEnCreation = null;
+    }
+
     private void lacherBarre(World world) {
         barreEnCreation.initiliserPhysique(world);
 
-        Liaison liaison1 = barreEnCreation.liaisonsLiees.get(0);
-        Liaison liaison2 = barreEnCreation.liaisonsLiees.get(1);
-        liaison1.initialiserPhysique(world);
-        liaison2.initialiserPhysique(world);
-
-        barreEnCreation.lier(world, liaison1);
-        barreEnCreation.lier(world, liaison2);
+        for (Liaison liaison : barreEnCreation.liaisonsLiees) {
+            liaison.initialiserPhysique();
+            barreEnCreation.lier(world, liaison);
+        }
 
         liaisonEnCreation = null;
         barreEnCreation = null;
@@ -149,15 +157,14 @@ public class Pont {
 
     public Barre creerBarre(World world, Liaison liaison1, Liaison liaison2, Materiau materiau) {
 
-        
         // boolean dejaLiees = false;
         // for (Barre bar : liaison1.barresLiees) {
         // if (bar.liaisonsLiees.contains(liaison2)) {
-            // dejaLiees = true;
-            // break;
-            // }
-            // }
-            
+        // dejaLiees = true;
+        // break;
+        // }
+        // }
+
         Barre barre = null;
         // if (!dejaLiees) {
         switch (materiau) {
