@@ -54,11 +54,9 @@ public class Pont {
                 case "gauche":
 
                     if (barreEnCreation != null) {
-                        if (barreEnCreation.tailleMinimum()) {
+                        if (barreEnCreation.tailleMinimum() && !barreExisteDeja(barreEnCreation, liaisonProche)) {
                             if (liaisonProche != null) {
-                                if (!barreExisteDeja(barreEnCreation, liaisonProche)) {
-                                    barreEnCreation.accrocher(world, liaisonProche);
-                                }
+                                barreEnCreation.accrocher(world, liaisonProche);
                             }
                             liaisonProche = liaisonEnCreation;
                             lacherBarre(world);
@@ -88,6 +86,9 @@ public class Pont {
     }
 
     private boolean barreExisteDeja(Barre barreATester, Liaison liaison2) {
+        if (liaison2 == null) {
+            return false;
+        }
         Liaison liaison1 = barreATester.liaisonsLiees.get(0);
         for (Barre barre : liaison1.barresLiees) {
             if (barre.liaisonsLiees.contains(liaison2)) {
@@ -161,39 +162,6 @@ public class Pont {
 
         barres.add(barreEnCreation);
 
-        // if (liaisonCliqueeAvant == null) {
-        // // Selection d'une liaison d'origine
-        // if (liaisonCliquee != null) { // seulement si on a cliquée sur une liaison
-        // liaisonCliqueeAvant = liaisonCliquee;
-        // liaisonCliqueeAvant.cliquee = true;
-        // }
-        // } else {
-        // // Ajout d'une barre
-
-        // Vec2 difference = posClic.sub(liaisonCliqueeAvant.getPos());
-        // if (difference.length() >= Barre.LONGUEUR_MIN) {
-        // // Si la longueur est bien superieure
-
-        // Liaison derniereLiaison = null;
-        // if (difference.length() <= Barre.LONGUEUR_MAX) {
-        // if (liaisonCliquee == null) {
-        // derniereLiaison = creerBarre(world, liaisonCliqueeAvant, posClic, materiau);
-        // } else {
-        // derniereLiaison = creerBarre(world, liaisonCliqueeAvant, liaisonCliquee,
-        // materiau);
-        // }
-        // } else {
-        // Vec2 pos = difference.mul(Barre.LONGUEUR_MAX / difference.length())
-        // .add(liaisonCliqueeAvant.getPos());
-        // derniereLiaison = creerBarre(world, liaisonCliqueeAvant, pos, materiau);
-        // }
-        // liaisonCliqueeAvant.cliquee = false;
-        // liaisonCliqueeAvant = null;
-
-        // liaisonCliqueeAvant = derniereLiaison;
-        // liaisonCliqueeAvant.cliquee = true;
-        // }
-        // }
     }
 
     public void testCasse(World world, float dt) {
