@@ -204,4 +204,8 @@ public class Barre extends ObjetPhysique {
         ajouterLiaison(liaisonCliquee);
     }
 
+    public boolean tailleMinimum() {
+        return longueur > LONGUEUR_MIN;
+    }
+
 }

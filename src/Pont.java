@@ -40,7 +40,7 @@ public class Pont {
         Liaison liaisonProche = testLiaisonProche(posSouris);
 
         if (barreEnCreation != null) {
-            if (liaisonProche == null) {
+            if (liaisonProche == null || liaisonProche == barreEnCreation.liaisonsLiees.get(0)) {
                 majPreview(posSouris);
             } else {
                 majPreview(liaisonProche.getPos());
@@ -54,14 +54,18 @@ public class Pont {
                 case "gauche":
 
                     if (barreEnCreation != null) {
-                        if (liaisonProche != null) {
-                            barreEnCreation.accrocher(world, liaisonProche);
+                        if (barreEnCreation.tailleMinimum()) {
+                            if (liaisonProche != null) {
+                                if (!barreExisteDeja(barreEnCreation, liaisonProche)) {
+                                    barreEnCreation.accrocher(world, liaisonProche);
+                                }
+                            }
+                            liaisonProche = liaisonEnCreation;
+                            lacherBarre(world);
                         }
-                        liaisonProche = liaisonEnCreation;
-                        lacherBarre(world);
                     }
                     if (barreEnCreation == null && liaisonProche != null) {
-                        ajouterBarre(world, posSouris, liaisonProche, materiau);
+                        creerBarre(world, posSouris, liaisonProche, materiau);
                     }
 
                     break;
@@ -81,6 +85,16 @@ public class Pont {
             }
         }
 
+    }
+
+    private boolean barreExisteDeja(Barre barreATester, Liaison liaison2) {
+        Liaison liaison1 = barreATester.liaisonsLiees.get(0);
+        for (Barre barre : liaison1.barresLiees) {
+            if (barre.liaisonsLiees.contains(liaison2)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void arreterCreation(World world) {
@@ -128,11 +142,24 @@ public class Pont {
         return liaisonPlusProche;
     }
 
-    public void ajouterBarre(World world, Vec2 posClic, Liaison liaisonCliquee, Materiau materiau) {
+    public void creerBarre(World world, Vec2 posClic, Liaison liaisonCliquee, Materiau materiau) {
 
         liaisonEnCreation = new LiaisonMobile(world, posClic);
         liaisons.add(liaisonEnCreation);
-        barreEnCreation = creerBarre(world, liaisonCliquee, liaisonEnCreation, materiau);
+
+        Liaison liaison1 = liaisonCliquee;
+        Liaison liaison2 = liaisonEnCreation;
+
+        switch (materiau) {
+            case BOIS:
+                barreEnCreation = new BarreBois(world, liaison1, liaison2);
+                break;
+            case GOUDRON:
+                barreEnCreation = new BarreGoudron(world, liaison1, liaison2);
+                break;
+        }
+
+        barres.add(barreEnCreation);
 
         // if (liaisonCliqueeAvant == null) {
         // // Selection d'une liaison d'origine
@@ -167,34 +194,6 @@ public class Pont {
         // liaisonCliqueeAvant.cliquee = true;
         // }
         // }
-    }
-
-    public Barre creerBarre(World world, Liaison liaison1, Liaison liaison2, Materiau materiau) {
-
-        // boolean dejaLiees = false;
-        // for (Barre bar : liaison1.barresLiees) {
-        // if (bar.liaisonsLiees.contains(liaison2)) {
-        // dejaLiees = true;
-        // break;
-        // }
-        // }
-
-        Barre barre = null;
-        // if (!dejaLiees) {
-        switch (materiau) {
-            case BOIS:
-                barre = new BarreBois(world, liaison1, liaison2);
-                break;
-            case GOUDRON:
-                barre = new BarreGoudron(world, liaison1, liaison2);
-                break;
-        }
-
-        barres.add(barre);
-        // }
-
-        return barre;
-
     }
 
     public void testCasse(World world, float dt) {
