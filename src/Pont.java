@@ -27,13 +27,25 @@ public class Pont {
         LinkedList<Barre> barresDesinees = new LinkedList<Barre>();
         for (Liaison liaison : liaisons) {
             for (Barre barre : liaison.barresLiees) {
-                if (!barresDesinees.contains(barre)) {
+                if (!barresDesinees.contains(barre) && barre != barreEnCreation) {
                     barre.dessiner(g, box2d);
                     barresDesinees.add(barre);
                 }
             }
-            boolean estSurvolee = (liaison == liaisonProche);
-            liaison.dessiner(g, box2d, estSurvolee);
+            if (liaison != liaisonEnCreation) {
+                liaison.dessiner(g, box2d, false);
+            }
+        }
+        // On dessine les objets en creation a la fin pour qu'il apparaissent par dessus
+        // les autres
+        if (barreEnCreation != null) {
+            barreEnCreation.dessiner(g, box2d);
+            liaisonEnCreation.dessiner(g, box2d, false);
+        }
+        // On redessine la liaison proche pour quelle soit d'une autre couleur
+        // et qu'elle se supperpose sur la liaison en création
+        if (liaisonProche != null) {
+            liaisonProche.dessiner(g, box2d, true);
         }
     }
 
