@@ -39,8 +39,13 @@ public class Pont {
 
         Liaison liaisonProche = testLiaisonProche(posSouris);
 
+        boolean barreValide = false;
+        
         if (barreEnCreation != null) {
-            if (liaisonProche == null || liaisonProche == barreEnCreation.liaisonsLiees.get(0)) {
+            // TODO : meilleur gestion de barreValide si liaison proche est null
+            // 3 conditions pour une barre valide : taille minimum, n'existe pas déjà, elle ne reboucle pas sur une de ses liaisons
+            barreValide = barreEnCreation.tailleMinimum() && !barreExisteDeja(barreEnCreation, liaisonProche) && (!barreEnCreation.liaisonsLiees.contains(liaisonProche));
+            if (liaisonProche == null || !barreValide) {
                 majPreview(posSouris);
             } else {
                 majPreview(liaisonProche.getPos());
@@ -53,15 +58,21 @@ public class Pont {
 
                 case "gauche":
 
+                    // Cas ou on a déjà une barre en creation
                     if (barreEnCreation != null) {
-                        if (barreEnCreation.tailleMinimum() && !barreExisteDeja(barreEnCreation, liaisonProche)) {
+                        // Test si la barre vérifie des conditions
+                        if (barreValide) {
+                            //
                             if (liaisonProche != null) {
                                 barreEnCreation.accrocher(world, liaisonProche);
+                            } else {
+                                liaisonProche = liaisonEnCreation;
                             }
-                            liaisonProche = liaisonEnCreation;
                             lacherBarre(world);
                         }
                     }
+
+                    // Cas ou on doit creer une nouvelle barre
                     if (barreEnCreation == null && liaisonProche != null) {
                         creerBarre(world, posSouris, liaisonProche, materiau);
                     }
