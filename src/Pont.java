@@ -39,12 +39,9 @@ public class Pont {
 
         Liaison liaisonProche = testLiaisonProche(posSouris);
 
-        boolean barreValide = false;
-        
+        boolean barreValide = barreValide(barreEnCreation, liaisonProche);
+
         if (barreEnCreation != null) {
-            // TODO : meilleur gestion de barreValide si liaison proche est null
-            // 3 conditions pour une barre valide : taille minimum, n'existe pas déjà, elle ne reboucle pas sur une de ses liaisons
-            barreValide = barreEnCreation.tailleMinimum() && !barreExisteDeja(barreEnCreation, liaisonProche) && (!barreEnCreation.liaisonsLiees.contains(liaisonProche));
             if (liaisonProche == null || !barreValide) {
                 majPreview(posSouris);
             } else {
@@ -58,18 +55,14 @@ public class Pont {
 
                 case "gauche":
 
-                    // Cas ou on a déjà une barre en creation
-                    if (barreEnCreation != null) {
-                        // Test si la barre vérifie des conditions
-                        if (barreValide) {
-                            //
-                            if (liaisonProche != null) {
-                                barreEnCreation.accrocher(world, liaisonProche);
-                            } else {
-                                liaisonProche = liaisonEnCreation;
-                            }
-                            lacherBarre(world);
+                    // Test si la barre vérifie des conditions
+                    if (barreValide) {
+                        if (liaisonProche != null) {
+                            barreEnCreation.accrocher(world, liaisonProche);
+                        } else {
+                            liaisonProche = liaisonEnCreation;
                         }
+                        lacherBarre(world);
                     }
 
                     // Cas ou on doit creer une nouvelle barre
@@ -94,6 +87,25 @@ public class Pont {
             }
         }
 
+    }
+
+    private boolean barreValide(Barre barre, Liaison liaisonProche) {
+        // barre n'existe pas
+        if (barre == null)
+            return false;
+        // taille minimum
+        if (!barre.tailleMinimum())
+            return false;
+        // si elle est proche d'une liaison existante
+        if (liaisonProche != null) {
+            // la barre reliant les deux liaisons n'existe pas deja
+            if (barreExisteDeja(barre, liaisonProche))
+                return false;
+            // la barre ne boucle pas sur elle même
+            if (barre.liaisonsLiees.contains(liaisonProche))
+                return false;
+        }
+        return true;
     }
 
     private boolean barreExisteDeja(Barre barreATester, Liaison liaison2) {
