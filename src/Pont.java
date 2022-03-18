@@ -10,6 +10,7 @@ public class Pont {
     LinkedList<Liaison> liaisons;
     Barre barreEnCreation;
     Liaison liaisonEnCreation;
+    Liaison liaisonProche;
 
     public Pont(World world, Box2D box2d) {
 
@@ -31,13 +32,14 @@ public class Pont {
                     barresDesinees.add(barre);
                 }
             }
-            liaison.dessiner(g, box2d);
+            boolean estSurvolee = (liaison == liaisonProche);
+            liaison.dessiner(g, box2d, estSurvolee);
         }
     }
 
     public void gererInput(World world, Vec2 posSouris, String boutonSouris, boolean clicSouris, Materiau materiau) {
 
-        Liaison liaisonProche = testLiaisonProche(posSouris);
+        liaisonProche = testLiaisonProche(posSouris);
 
         boolean barreValide = barreValide(barreEnCreation, liaisonProche);
 
@@ -58,8 +60,8 @@ public class Pont {
                     // Test si la barre vérifie des conditions
                     if (barreValide) {
                         if (liaisonProche != null) {
-                            Liaison liaisonASupprimer = barreEnCreation.accrocher(world, liaisonProche);
-                            liaisons.remove(liaisonASupprimer);
+                            barreEnCreation.accrocher(world, liaisonProche);
+                            liaisons.remove(liaisonEnCreation);
                         } else {
                             liaisonProche = liaisonEnCreation;
                         }

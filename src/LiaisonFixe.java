@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Graphics;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
@@ -13,15 +12,6 @@ public class LiaisonFixe extends Liaison {
         COULEUR_REMPLISSAGE = Color.decode("#d33d3d");
 
         apercu = false;
-    }
-
-    public void dessiner(Graphics g, Box2D box2d) {
-        if (cliquee) {
-            g.setColor(COULEUR_CLIQUEE);
-        } else {
-            g.setColor(COULEUR_REMPLISSAGE);
-        }
-        super.dessiner(g, box2d);
     }
 
     public void activerPhysique() {

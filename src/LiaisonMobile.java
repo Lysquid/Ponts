@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Graphics;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
@@ -16,15 +15,6 @@ public class LiaisonMobile extends Liaison {
 
     public void supprimer(World world) {
         world.destroyBody(body);
-    }
-
-    public void dessiner(Graphics g, Box2D box2d) {
-        if (cliquee) {
-            g.setColor(COULEUR_CLIQUEE);
-        } else {
-            g.setColor(COULEUR_REMPLISSAGE);
-        }
-        super.dessiner(g, box2d);
     }
 
     public void activerPhysique() {

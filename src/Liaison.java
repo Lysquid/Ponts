@@ -54,7 +54,7 @@ public abstract class Liaison extends ObjetPhysique {
 
     public abstract void activerPhysique();
 
-    public void dessiner(Graphics g, Box2D box2d) {
+    public void dessiner(Graphics g, Box2D box2d, boolean estSurvolee) {
 
         int x = box2d.worldToPixelX(getX());
         int y = box2d.worldToPixelY(getY());
@@ -65,6 +65,7 @@ public abstract class Liaison extends ObjetPhysique {
         COULEUR_CONTOUR = ObjetPhysique.setColorAlpha(COULEUR_CONTOUR, alpha);
         COULEUR_CLIQUEE = ObjetPhysique.setColorAlpha(COULEUR_CLIQUEE, alpha);
 
+        g.setColor(estSurvolee ? COULEUR_CLIQUEE : COULEUR_REMPLISSAGE);
         g.fillOval(x - r, y - r, r * 2, r * 2);
         g.setColor(COULEUR_CONTOUR);
         g.drawOval(x - r, y - r, r * 2, r * 2);
