@@ -115,7 +115,7 @@ public class Barre extends ObjetPhysique {
         return nouvellesLiaisons;
     }
 
-    public void supprimerLiaison(World world, int index) {
+    public Liaison supprimerLiaison(World world, int index) {
         if (joints.size() > 0) {
             RevoluteJoint joint = joints.get(index);
             world.destroyJoint(joint);
@@ -125,6 +125,7 @@ public class Barre extends ObjetPhysique {
         Liaison liaison = liaisonsLiees.get(index);
         liaison.barresLiees.remove(this);
         liaisonsLiees.remove(index);
+        return liaison;
     }
 
     public void dessiner(Graphics g, Box2D box2d) {
@@ -199,9 +200,10 @@ public class Barre extends ObjetPhysique {
         apercu = false;
     }
 
-    public void accrocher(World world, Liaison liaisonCliquee) {
-        supprimerLiaison(world, 1);
+    public Liaison accrocher(World world, Liaison liaisonCliquee) {
+        Liaison liaison = supprimerLiaison(world, 1);
         ajouterLiaison(liaisonCliquee);
+        return liaison;
     }
 
     public boolean tailleMinimum() {

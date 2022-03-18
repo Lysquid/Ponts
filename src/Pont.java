@@ -58,7 +58,8 @@ public class Pont {
                     // Test si la barre vérifie des conditions
                     if (barreValide) {
                         if (liaisonProche != null) {
-                            barreEnCreation.accrocher(world, liaisonProche);
+                            Liaison liaisonASupprimer = barreEnCreation.accrocher(world, liaisonProche);
+                            liaisons.remove(liaisonASupprimer);
                         } else {
                             liaisonProche = liaisonEnCreation;
                         }
