@@ -1,3 +1,5 @@
+package ponts.physique;
+
 import java.awt.Color;
 
 import org.jbox2d.common.Vec2;
@@ -5,7 +7,7 @@ import org.jbox2d.dynamics.Body;
 
 public abstract class ObjetPhysique {
 
-    Body body;
+    protected Body body;
 
     public Vec2 getPos() {
         return body.getTransform().p;
@@ -37,6 +39,10 @@ public abstract class ObjetPhysique {
         } else {
             return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
         }
+    }
+
+    public Body getBody() {
+        return body;
     }
 
 }

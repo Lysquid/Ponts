@@ -1,3 +1,5 @@
+package ponts.physique.barres;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -15,24 +17,25 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
-enum Materiau {
-    BOIS,
-    GOUDRON
-}
+import ponts.ihm.Box2D;
+import ponts.physique.ObjetPhysique;
+import ponts.physique.environnement.Bord;
+import ponts.physique.liaisons.Liaison;
+import ponts.physique.liaisons.LiaisonMobile;
 
-public class Barre extends ObjetPhysique {
+public abstract class Barre extends ObjetPhysique {
 
-    static final int CATEGORY = 0b0010;
-    static final int MASK = Bord.CATEGORY;
+    public static final int CATEGORY = 0b0010;
+    public static final int MASK = Bord.CATEGORY;
+
+    static final float LONGUEUR_MAX = 8;
+    static final float LONGUEUR_MIN = 3;
 
     float forceMax;
 
     Color couleurRemplissage;
     Color couleurContour = Color.BLACK;
     boolean apercu;
-
-    static final float LONGUEUR_MAX = 8;
-    static final float LONGUEUR_MIN = 3;
 
     PolygonShape shape;
     ArrayList<Liaison> liaisonsLiees;
@@ -43,7 +46,7 @@ public class Barre extends ObjetPhysique {
     float longueur;
     float largeur;
 
-    public Barre(World world, Liaison liaison1, Liaison liaison2) {
+    protected Barre(World world, Liaison liaison1, Liaison liaison2) {
 
         apercu = true;
         liaisonsLiees = new ArrayList<Liaison>(2);
@@ -76,12 +79,12 @@ public class Barre extends ObjetPhysique {
 
     public void ajouterLiaison(Liaison liaison) {
         liaisonsLiees.add(liaison);
-        liaison.barresLiees.add(this);
+        liaison.getBarresLiees().add(this);
     }
 
     public void lier(World world, Liaison liaison) {
         RevoluteJointDef jointDef = new RevoluteJointDef();
-        jointDef.initialize(body, liaison.body, liaison.getPos());
+        jointDef.initialize(body, liaison.getBody(), liaison.getPos());
         RevoluteJoint joint = (RevoluteJoint) world.createJoint(jointDef);
 
         joints.add(joint);
@@ -96,7 +99,7 @@ public class Barre extends ObjetPhysique {
             RevoluteJoint joint = joints.get(i);
             Liaison liaison = liaisonsLiees.get(i);
 
-            if (liaison.barresLiees.size() > 1) {
+            if (liaison.getBarresLiees().size() > 1) {
 
                 Vec2 force = new Vec2();
                 joint.getReactionForce(1 / dt, force);
@@ -124,7 +127,7 @@ public class Barre extends ObjetPhysique {
         }
 
         Liaison liaison = liaisonsLiees.get(index);
-        liaison.barresLiees.remove(this);
+        liaison.getBarresLiees().remove(this);
         liaisonsLiees.remove(index);
     }
 
@@ -164,8 +167,8 @@ public class Barre extends ObjetPhysique {
     public LinkedList<LiaisonMobile> supprimer(World world) {
         LinkedList<LiaisonMobile> liaisonsASupprimer = new LinkedList<>();
         for (Liaison liaison : liaisonsLiees) {
-            liaison.barresLiees.remove(this);
-            if (liaison instanceof LiaisonMobile && liaison.barresLiees.isEmpty()) {
+            liaison.getBarresLiees().remove(this);
+            if (liaison instanceof LiaisonMobile && liaison.getBarresLiees().isEmpty()) {
                 LiaisonMobile liaisonASupprimer = (LiaisonMobile) liaison;
                 liaisonsASupprimer.add(liaisonASupprimer);
                 liaisonASupprimer.supprimer(world);
@@ -207,6 +210,10 @@ public class Barre extends ObjetPhysique {
 
     public boolean tailleMinimum() {
         return longueur > LONGUEUR_MIN;
+    }
+
+    public ArrayList<Liaison> getLiaisonsLiees() {
+        return liaisonsLiees;
     }
 
 }

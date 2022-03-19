@@ -1,3 +1,5 @@
+package ponts.physique.liaisons;
+
 import java.awt.Color;
 
 import org.jbox2d.common.Vec2;

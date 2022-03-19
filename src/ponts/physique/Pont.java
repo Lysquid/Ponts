@@ -1,8 +1,19 @@
+package ponts.physique;
+
 import java.awt.Graphics;
 import java.util.LinkedList;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
+
+import ponts.ihm.Box2D;
+import ponts.physique.barres.Barre;
+import ponts.physique.barres.BarreBois;
+import ponts.physique.barres.BarreGoudron;
+import ponts.physique.barres.Materiau;
+import ponts.physique.liaisons.Liaison;
+import ponts.physique.liaisons.LiaisonFixe;
+import ponts.physique.liaisons.LiaisonMobile;
 
 public class Pont {
 
@@ -17,16 +28,16 @@ public class Pont {
         barres = new LinkedList<Barre>();
         liaisons = new LinkedList<Liaison>();
 
-        liaisons.add(new LiaisonFixe(world, new Vec2(box2d.largeur * 0.5f, box2d.hauteur * 0.05f)));
-        liaisons.add(new LiaisonFixe(world, new Vec2(box2d.largeur * 0.15f, box2d.hauteur * 0.4f)));
-        liaisons.add(new LiaisonFixe(world, new Vec2(box2d.largeur * 0.86f, box2d.hauteur * 0.43f)));
+        liaisons.add(new LiaisonFixe(world, new Vec2(box2d.getLargeur() * 0.5f, box2d.getHauteur() * 0.05f)));
+        liaisons.add(new LiaisonFixe(world, new Vec2(box2d.getLargeur() * 0.15f, box2d.getHauteur() * 0.4f)));
+        liaisons.add(new LiaisonFixe(world, new Vec2(box2d.getLargeur() * 0.86f, box2d.getHauteur() * 0.43f)));
 
     }
 
     public void dessiner(Graphics g, Box2D box2d) {
         LinkedList<Barre> barresDesinees = new LinkedList<Barre>();
         for (Liaison liaison : liaisons) {
-            for (Barre barre : liaison.barresLiees) {
+            for (Barre barre : liaison.getBarresLiees()) {
                 if (!barresDesinees.contains(barre) && barre != barreEnCreation) {
                     barre.dessiner(g, box2d);
                     barresDesinees.add(barre);
@@ -117,7 +128,7 @@ public class Pont {
             if (barreExisteDeja(barre, liaisonProche))
                 return false;
             // la barre ne boucle pas sur elle même
-            if (barre.liaisonsLiees.contains(liaisonProche))
+            if (barre.getLiaisonsLiees().contains(liaisonProche))
                 return false;
         }
         return true;
@@ -127,9 +138,9 @@ public class Pont {
         if (liaison2 == null) {
             return false;
         }
-        Liaison liaison1 = barreATester.liaisonsLiees.get(0);
-        for (Barre barre : liaison1.barresLiees) {
-            if (barre.liaisonsLiees.contains(liaison2)) {
+        Liaison liaison1 = barreATester.getLiaisonsLiees().get(0);
+        for (Barre barre : liaison1.getBarresLiees()) {
+            if (barre.getLiaisonsLiees().contains(liaison2)) {
                 return true;
             }
         }
@@ -151,7 +162,7 @@ public class Pont {
     private void lacherBarre(World world) {
         barreEnCreation.activerPhysique();
 
-        for (Liaison liaison : barreEnCreation.liaisonsLiees) {
+        for (Liaison liaison : barreEnCreation.getLiaisonsLiees()) {
             liaison.activerPhysique();
             barreEnCreation.lier(world, liaison);
         }

@@ -1,13 +1,18 @@
+package ponts;
+
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
+import ponts.ihm.Jeu;
+
 public class Main extends JFrame {
 
     static final int LARGEUR = 600;
     static final int HAUTEUR = 600;
+
     int refreshRate;
 
     public Main() {

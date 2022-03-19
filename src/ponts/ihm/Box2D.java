@@ -1,3 +1,5 @@
+package ponts.ihm;
+
 import org.jbox2d.common.Vec2;
 
 public class Box2D {
@@ -8,7 +10,7 @@ public class Box2D {
     float largeur;
     float hauteur;
 
-    private float coeff;
+    float coeff;
 
     public Box2D(int largeurP, int hauteurP) {
         this.largeurP = largeurP;
@@ -47,6 +49,14 @@ public class Box2D {
 
     public int worldToPixelY(float y) {
         return hauteurP - worldToPixel(y);
+    }
+
+    public float getLargeur() {
+        return largeur;
+    }
+
+    public float getHauteur() {
+        return hauteur;
     }
 
 }

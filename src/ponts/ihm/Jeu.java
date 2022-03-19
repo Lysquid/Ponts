@@ -1,3 +1,5 @@
+package ponts.ihm;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,6 +18,11 @@ import javax.swing.event.MouseInputListener;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
+
+import ponts.physique.Pont;
+import ponts.physique.barres.Barre;
+import ponts.physique.barres.Materiau;
+import ponts.physique.environnement.Bord;
 
 public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 

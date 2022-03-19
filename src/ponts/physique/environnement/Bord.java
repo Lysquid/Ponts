@@ -1,13 +1,17 @@
+package ponts.physique.environnement;
+
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
+import ponts.physique.ObjetPhysique;
+
 public class Bord extends ObjetPhysique {
 
-    static final int CATEGORY = 0b0001;
-    static final int MASK = 0b1111;
+    public static final int CATEGORY = 0b0001;
+    public static final int MASK = 0b1111;
 
     float largeur;
     float hauteur;

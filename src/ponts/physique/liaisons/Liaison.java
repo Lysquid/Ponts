@@ -1,3 +1,5 @@
+package ponts.physique.liaisons;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
@@ -9,10 +11,15 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
+import ponts.ihm.Box2D;
+import ponts.physique.ObjetPhysique;
+import ponts.physique.barres.Barre;
+import ponts.physique.environnement.Bord;
+
 public abstract class Liaison extends ObjetPhysique {
 
-    static final int CATEGORY = 0b0100;
-    static final int MASK = Bord.CATEGORY;
+    public static final int CATEGORY = 0b0100;
+    public static final int MASK = Bord.CATEGORY;
 
     static final float RAYON = 0.5f;
     static final float RAYON_CLICK = 1f;
@@ -79,6 +86,10 @@ public abstract class Liaison extends ObjetPhysique {
 
     public boolean testLiaisonCliquee(Vec2 pos) {
         return (distancePoint(pos) <= RAYON_CLICK);
+    }
+
+    public LinkedList<Barre> getBarresLiees() {
+        return barresLiees;
     }
 
 }
