@@ -23,7 +23,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     World world;
     Timer timerGraphique;
     Timer timerPhysique;
-    final int TICK_PHYSIQUE = 16;
+    static final int TICK_PHYSIQUE = 16;
     long tempsPhysique;
     JButton boutonLancer;
     JButton boutonMateriauBois;
@@ -38,14 +38,14 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     boolean initilise = false;
 
     long tempsPrecedent = 0;
-    final int DELAI_APPARITION = 100;
+    static final int DELAI_APPARITION = 100;
     boolean simulationPhysique;
     Materiau materiau = Materiau.BOIS;
 
-    public Jeu(int LARGEUR, int HAUTEUR) {
+    public Jeu(int largeur, int hauteur) {
         boites = new LinkedList<Barre>();
 
-        setSize(LARGEUR, HAUTEUR);
+        setSize(largeur, hauteur);
         boutonLancer = new JButton();
         boutonLancer.setBounds(10, 20, 100, 50);
         boutonLancer.setText("Lancer");
@@ -54,7 +54,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         setLayout(null);
         add(boutonLancer);
 
-        setSize(LARGEUR, HAUTEUR);
+        setSize(largeur, hauteur);
         boutonMateriauBois = new JButton();
         boutonMateriauBois.setBounds(150, 20, 100, 50);
         boutonMateriauBois.setText("Bois");
@@ -100,6 +100,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
+    @Override
     public void paintComponent(Graphics g0) {
 
         // Activer l'anti-alias

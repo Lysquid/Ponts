@@ -6,10 +6,11 @@ import org.jbox2d.dynamics.World;
 
 public class Bord extends ObjetPhysique {
 
-    static int CATEGORY = 0b0001;
-    static int MASK = 0b1111;
+    static final int CATEGORY = 0b0001;
+    static final int MASK = 0b1111;
 
-    float largeur, hauteur;
+    float largeur;
+    float hauteur;
     float angle;
 
     public Bord(World world, float frameX, float frameY) {

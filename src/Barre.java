@@ -22,17 +22,17 @@ enum Materiau {
 
 public class Barre extends ObjetPhysique {
 
-    static int CATEGORY = 0b0010;
-    static int MASK = Bord.CATEGORY;
+    static final int CATEGORY = 0b0010;
+    static final int MASK = Bord.CATEGORY;
 
-    float FORCE_MAX;
+    float forceMax;
 
-    Color COULEUR_REMPLISSAGE;
-    Color COULEUR_CONTOUR = Color.BLACK;
+    Color couleurRemplissage;
+    Color couleurContour = Color.BLACK;
     boolean apercu;
 
-    static float LONGUEUR_MAX = 8;
-    static float LONGUEUR_MIN = 3;
+    static final float LONGUEUR_MAX = 8;
+    static final float LONGUEUR_MIN = 3;
 
     PolygonShape shape;
     ArrayList<Liaison> liaisonsLiees;
@@ -40,7 +40,8 @@ public class Barre extends ObjetPhysique {
     FixtureDef fixtureDef;
     Fixture fixture;
 
-    float longueur, largeur;
+    float longueur;
+    float largeur;
 
     public Barre(World world, Liaison liaison1, Liaison liaison2) {
 
@@ -89,7 +90,7 @@ public class Barre extends ObjetPhysique {
 
     public LinkedList<Liaison> testCasse(World world, float dt) {
 
-        LinkedList<Liaison> nouvellesLiaisons = new LinkedList<Liaison>();
+        LinkedList<Liaison> nouvellesLiaisons = new LinkedList<>();
 
         for (int i = 0; i < joints.size(); i++) {
             RevoluteJoint joint = joints.get(i);
@@ -101,7 +102,7 @@ public class Barre extends ObjetPhysique {
                 joint.getReactionForce(1 / dt, force);
                 float norme = force.length();
 
-                if (norme > FORCE_MAX) {
+                if (norme > forceMax) {
                     supprimerLiaison(world, i);
 
                     LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, liaison.getPos());
@@ -116,7 +117,7 @@ public class Barre extends ObjetPhysique {
     }
 
     public void supprimerLiaison(World world, int index) {
-        if (joints.size() > 0) {
+        if (!joints.isEmpty()) {
             RevoluteJoint joint = joints.get(index);
             world.destroyJoint(joint);
             joints.remove(index);
@@ -145,12 +146,12 @@ public class Barre extends ObjetPhysique {
         }
 
         int alpha = apercu ? 100 : 255;
-        COULEUR_REMPLISSAGE = ObjetPhysique.setColorAlpha(COULEUR_REMPLISSAGE, alpha);
-        COULEUR_CONTOUR = ObjetPhysique.setColorAlpha(COULEUR_CONTOUR, alpha);
+        couleurRemplissage = ObjetPhysique.setColorAlpha(couleurRemplissage, alpha);
+        couleurContour = ObjetPhysique.setColorAlpha(couleurContour, alpha);
 
-        g.setColor(COULEUR_REMPLISSAGE);
+        g.setColor(couleurRemplissage);
         g.fillPolygon(xCoins, yCoins, 4);
-        g.setColor(COULEUR_CONTOUR);
+        g.setColor(couleurContour);
         g.drawPolygon(xCoins, yCoins, 4);
 
     }
@@ -161,10 +162,10 @@ public class Barre extends ObjetPhysique {
     }
 
     public LinkedList<LiaisonMobile> supprimer(World world) {
-        LinkedList<LiaisonMobile> liaisonsASupprimer = new LinkedList<LiaisonMobile>();
+        LinkedList<LiaisonMobile> liaisonsASupprimer = new LinkedList<>();
         for (Liaison liaison : liaisonsLiees) {
             liaison.barresLiees.remove(this);
-            if (liaison instanceof LiaisonMobile && liaison.barresLiees.size() < 1) {
+            if (liaison instanceof LiaisonMobile && liaison.barresLiees.isEmpty()) {
                 LiaisonMobile liaisonASupprimer = (LiaisonMobile) liaison;
                 liaisonsASupprimer.add(liaisonASupprimer);
                 liaisonASupprimer.supprimer(world);
@@ -194,7 +195,7 @@ public class Barre extends ObjetPhysique {
 
     }
 
-    public void activerPhysique(World world) {
+    public void activerPhysique() {
         body.setType(BodyType.DYNAMIC);
         apercu = false;
     }

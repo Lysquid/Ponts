@@ -9,7 +9,7 @@ public class LiaisonMobile extends Liaison {
     public LiaisonMobile(World world, Vec2 pos) {
         super(world, pos, BodyType.KINEMATIC);
 
-        COULEUR_REMPLISSAGE = Color.decode("#e3f069");
+        couleurRemplissage = Color.decode("#e3f069");
         apercu = true;
     }
 

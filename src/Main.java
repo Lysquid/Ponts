@@ -6,8 +6,8 @@ import javax.swing.JFrame;
 
 public class Main extends JFrame {
 
-    final int LARGEUR = 600;
-    final int HAUTEUR = 600;
+    static final int LARGEUR = 600;
+    static final int HAUTEUR = 600;
     int refreshRate;
 
     public Main() {

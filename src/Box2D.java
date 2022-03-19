@@ -2,8 +2,12 @@ import org.jbox2d.common.Vec2;
 
 public class Box2D {
 
-    int largeurP, hauteurP;
-    float largeur, hauteur;
+    int largeurP;
+    int hauteurP;
+
+    float largeur;
+    float hauteur;
+
     private float coeff;
 
     public Box2D(int largeurP, int hauteurP) {

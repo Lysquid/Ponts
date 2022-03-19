@@ -149,7 +149,7 @@ public class Pont {
     }
 
     private void lacherBarre(World world) {
-        barreEnCreation.activerPhysique(world);
+        barreEnCreation.activerPhysique();
 
         for (Liaison liaison : barreEnCreation.liaisonsLiees) {
             liaison.activerPhysique();

@@ -7,8 +7,8 @@ public class BarreBois extends Barre {
     public BarreBois(World world, Liaison liaison1, Liaison liaison2) {
         super(world, liaison1, liaison2);
 
-        FORCE_MAX = 4000f;
-        COULEUR_REMPLISSAGE = Color.decode("#ba754a");
+        forceMax = 4000f;
+        couleurRemplissage = Color.decode("#ba754a");
         this.largeur = 1;
 
     }

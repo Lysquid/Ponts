@@ -9,7 +9,7 @@ public class LiaisonFixe extends Liaison {
     public LiaisonFixe(World world, Vec2 pos) {
         super(world, pos, BodyType.STATIC);
 
-        COULEUR_REMPLISSAGE = Color.decode("#d33d3d");
+        couleurRemplissage = Color.decode("#d33d3d");
 
         apercu = false;
     }
