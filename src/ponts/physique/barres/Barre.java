@@ -216,4 +216,17 @@ public abstract class Barre extends ObjetPhysique {
         return liaisonsLiees;
     }
 
+    public boolean inferieurLongeurMax(Vec2 pos) {
+        Liaison liaison1 = liaisonsLiees.get(0);
+        float nouvelleLongeur = liaison1.getPos().sub(pos).length();
+        return nouvelleLongeur <= LONGUEUR_MAX;
+    }
+
+    public Vec2 posLiaisonMax(Vec2 pos) {
+        Liaison liaison1 = liaisonsLiees.get(0);
+        Vec2 vecteur = pos.sub(liaison1.getPos());
+        vecteur.normalize();
+        return liaison1.getPos().add(vecteur.mul(LONGUEUR_MAX));
+    }
+
 }

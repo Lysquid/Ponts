@@ -21,7 +21,6 @@ public class Pont {
     LinkedList<Liaison> liaisons;
     Barre barreEnCreation;
     Liaison liaisonEnCreation;
-    Liaison liaisonProche;
 
     public Pont(World world, Box2D box2d) {
 
@@ -34,7 +33,7 @@ public class Pont {
 
     }
 
-    public void dessiner(Graphics g, Box2D box2d) {
+    public void dessiner(Graphics g, Box2D box2d, Vec2 posSouris) {
         LinkedList<Barre> barresDesinees = new LinkedList<Barre>();
         for (Liaison liaison : liaisons) {
             for (Barre barre : liaison.getBarresLiees()) {
@@ -55,6 +54,7 @@ public class Pont {
         }
         // On redessine la liaison proche pour quelle soit d'une autre couleur
         // et qu'elle se supperpose sur la liaison en création
+        Liaison liaisonProche = recupLiaisonProche(posSouris);
         if (liaisonProche != null) {
             liaisonProche.dessiner(g, box2d, true);
         }
@@ -62,16 +62,23 @@ public class Pont {
 
     public void gererInput(World world, Vec2 posSouris, String boutonSouris, boolean clicSouris, Materiau materiau) {
 
-        liaisonProche = testLiaisonProche(posSouris);
-
+        Vec2 posSourisMax = posSourisMax(barreEnCreation, posSouris);
+        Liaison liaisonProche = recupLiaisonProche(posSourisMax);
         boolean barreValide = barreValide(barreEnCreation, liaisonProche);
 
         if (barreEnCreation != null) {
-            if (liaisonProche == null || !barreValide) {
-                majPreview(posSouris);
+
+            if (barreEnCreation.inferieurLongeurMax(posSouris)) {
+                if (liaisonProche == null || !barreValide) {
+                    majPreview(posSouris);
+                } else {
+                    majPreview(liaisonProche.getPos());
+                }
             } else {
-                majPreview(liaisonProche.getPos());
+                majPreview(posSourisMax);
+                liaisonProche = null;
             }
+
         }
 
         if (clicSouris) {
@@ -113,6 +120,16 @@ public class Pont {
             }
         }
 
+    }
+
+    private Vec2 posSourisMax(Barre barre, Vec2 posSouris) {
+        if (barre == null) {
+            return posSouris;
+        } else if (barre.inferieurLongeurMax(posSouris)) {
+            return posSouris;
+        } else {
+            return barreEnCreation.posLiaisonMax(posSouris);
+        }
     }
 
     private boolean barreValide(Barre barre, Liaison liaisonProche) {
@@ -177,7 +194,7 @@ public class Pont {
         barreEnCreation.ajusterPos();
     }
 
-    public Liaison testLiaisonProche(Vec2 posClic) {
+    public Liaison recupLiaisonProche(Vec2 posClic) {
         Liaison liaisonPlusProche = null;
         float distanceMin = Float.POSITIVE_INFINITY;
         for (Liaison liaison : liaisons) {

@@ -126,7 +126,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
 
         if (pont != null) {
-            pont.dessiner(g, box2d);
+            pont.dessiner(g, box2d, posSouris);
         }
 
     }
