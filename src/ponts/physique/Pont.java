@@ -21,6 +21,7 @@ public class Pont {
     LinkedList<Liaison> liaisons;
     Barre barreEnCreation;
     Liaison liaisonEnCreation;
+    Liaison liaisonProche;
 
     public Pont(World world, Box2D box2d) {
 
@@ -54,29 +55,27 @@ public class Pont {
         }
         // On redessine la liaison proche pour quelle soit d'une autre couleur
         // et qu'elle se supperpose sur la liaison en création
-        Liaison liaisonProche = recupLiaisonProche(posSouris);
-        if (liaisonProche != null) {
-            liaisonProche.dessiner(g, box2d, true);
+        Liaison liaisonSurvolee = recupLiaisonProche(posSouris);
+        if (liaisonSurvolee != null) {
+            liaisonSurvolee.dessiner(g, box2d, true);
         }
     }
 
     public void gererInput(World world, Vec2 posSouris, String boutonSouris, boolean clicSouris, Materiau materiau) {
 
         Vec2 posSourisMax = posSourisMax(barreEnCreation, posSouris);
-        Liaison liaisonProche = recupLiaisonProche(posSourisMax);
+        liaisonProche = recupLiaisonProche(posSourisMax);
         boolean barreValide = barreValide(barreEnCreation, liaisonProche);
 
         if (barreEnCreation != null) {
 
-            if (barreEnCreation.inferieurLongeurMax(posSouris)) {
-                if (liaisonProche == null || !barreValide) {
-                    majPreview(posSouris);
-                } else {
-                    majPreview(liaisonProche.getPos());
-                }
-            } else {
+            if (!barreEnCreation.inferieurLongeurMax(posSouris)) {
                 majPreview(posSourisMax);
                 liaisonProche = null;
+            } else if (liaisonProche != null && barreValide) {
+                majPreview(liaisonProche.getPos());
+            } else {
+                majPreview(posSouris);
             }
 
         }
@@ -101,6 +100,8 @@ public class Pont {
                     // Cas ou on doit creer une nouvelle barre
                     if (barreEnCreation == null && liaisonProche != null) {
                         creerBarre(world, posSouris, liaisonProche, materiau);
+                        posSourisMax = posSourisMax(barreEnCreation, posSouris);
+                        majPreview(posSourisMax);
                     }
 
                     break;
