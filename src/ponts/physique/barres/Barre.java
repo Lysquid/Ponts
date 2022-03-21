@@ -64,9 +64,6 @@ public abstract class Barre extends ObjetPhysique {
         // Etape 3 : Définir la "shape"
         shape = new PolygonShape();
 
-        // Etape 2 : Créer un "body"
-        body = world.createBody(bodyDef);
-
         fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;
         // fixtureDef.restitution = 0.5f;
@@ -86,7 +83,7 @@ public abstract class Barre extends ObjetPhysique {
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.initialize(body, liaison.getBody(), liaison.getPos());
         RevoluteJoint joint = (RevoluteJoint) world.createJoint(jointDef);
-
+        
         joints.add(joint);
 
     }
