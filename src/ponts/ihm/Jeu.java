@@ -166,9 +166,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         if (e.getSource() == boutonMateriauBois) {
             materiau = Materiau.BOIS;
+            pont.arreterCreation(world);
         }
         if (e.getSource() == boutonMateriauGoudron) {
             materiau = Materiau.GOUDRON;
+            pont.arreterCreation(world);
         }
 
     }
