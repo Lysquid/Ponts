@@ -14,25 +14,16 @@ public class Bord extends ObjetPhysique {
     public static final int CATEGORY = 0b0001;
     public static final int MASK = 0b1111;
 
-    float largeur;
-    float hauteur;
-    float angle;
-
     public Bord(World world, float frameX, float frameY) {
-
-        float x = frameX / 2;
-        float y = 0;
-        largeur = frameX * 10;
-        hauteur = 0.1f;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.STATIC;
-        bodyDef.position.set(x, y);
+        bodyDef.position.set(frameX / 2, 0);
 
         body = world.createBody(bodyDef);
 
         Vec2 gauche = new Vec2(0, 0);
-        Vec2 droite = new Vec2(largeur, 0);
+        Vec2 droite = new Vec2(frameX * 10, 0);
         EdgeShape shape = new EdgeShape();
         shape.set(gauche, droite);
 

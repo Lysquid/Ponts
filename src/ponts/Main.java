@@ -6,6 +6,7 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
+import ponts.ihm.Editeur;
 import ponts.ihm.Jeu;
 
 public class Main extends JFrame {
@@ -20,14 +21,17 @@ public class Main extends JFrame {
         setSize(LARGEUR, HAUTEUR);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        refreshRate = getRefreshRate();
 
-        Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
-        add(jeu);
+        // Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
+        // add(jeu);
+        Editeur editeur = new Editeur(LARGEUR, HAUTEUR, refreshRate);
+        add(editeur);
 
         setVisible(true);
 
-        refreshRate = getRefreshRate();
-        jeu.init(refreshRate);
+        // jeu.init(refreshRate);
 
     }
 

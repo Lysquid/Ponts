@@ -176,9 +176,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     }
 
     public void majInfosSouris(MouseEvent e) {
-        float x = box2d.pixelToWorldX(e.getX());
-        float y = box2d.pixelToWorldY(e.getY());
-        posSouris = new Vec2(x, y);
+        posSouris = box2d.pixelToWorld(e.getX(), e.getX());
 
         if (SwingUtilities.isLeftMouseButton(e)) {
             boutonSouris = "gauche";
