@@ -50,7 +50,7 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         g.setColor(Color.decode("#55a3d4"));
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        berge.dessiner(g);
+        berge.dessiner(g, box2d);
 
     }
 
