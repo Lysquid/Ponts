@@ -21,17 +21,20 @@ public class Main extends JFrame {
         setSize(LARGEUR, HAUTEUR);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
+
         refreshRate = getRefreshRate();
 
-        // Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
-        // add(jeu);
-        Editeur editeur = new Editeur(LARGEUR, HAUTEUR, refreshRate);
-        add(editeur);
+        if (true) {
+            Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
+            add(jeu);
+            setVisible(true);
+            jeu.init(refreshRate);
+        } else {
+            Editeur editeur = new Editeur(LARGEUR, HAUTEUR, refreshRate);
+            setVisible(true);
+            add(editeur);
+        }
 
-        setVisible(true);
-
-        // jeu.init(refreshRate);
 
     }
 

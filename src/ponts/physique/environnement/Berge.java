@@ -8,8 +8,9 @@ import ponts.ihm.Box2D;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
-public class Berge {
+public class Berge implements Serializable {
 
     public static final int CATEGORY = 0b0001;
     public static final int MASK = 0b1111;

@@ -1,6 +1,7 @@
 package ponts.physique;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import org.jbox2d.common.Vec2;
@@ -15,7 +16,7 @@ import ponts.physique.liaisons.Liaison;
 import ponts.physique.liaisons.LiaisonFixe;
 import ponts.physique.liaisons.LiaisonMobile;
 
-public class Pont {
+public class Pont implements Serializable {
 
     LinkedList<Barre> barres;
     LinkedList<Liaison> liaisons;

@@ -2,6 +2,7 @@ package ponts.physique.liaisons;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import org.jbox2d.collision.shapes.CircleShape;
@@ -12,11 +13,12 @@ import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 import ponts.ihm.Box2D;
+import ponts.physique.CircleShape2;
 import ponts.physique.ObjetPhysique;
 import ponts.physique.barres.Barre;
 import ponts.physique.environnement.Bord;
 
-public abstract class Liaison extends ObjetPhysique {
+public abstract class Liaison extends ObjetPhysique implements Serializable {
 
     public static final int CATEGORY = 0b0100;
     public static final int MASK = Bord.CATEGORY;
@@ -30,7 +32,7 @@ public abstract class Liaison extends ObjetPhysique {
 
     LinkedList<Barre> barresLiees;
     boolean cliquee;
-    CircleShape shape;
+    CircleShape2 shape;
 
     boolean apercu;
 
@@ -48,7 +50,7 @@ public abstract class Liaison extends ObjetPhysique {
         bodyDef.position.set(pos);
 
         body = world.createBody(bodyDef);
-        shape = new CircleShape();
+        shape = new CircleShape2();
         shape.setRadius(RAYON);
 
         FixtureDef fixtureDef = new FixtureDef();

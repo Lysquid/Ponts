@@ -8,6 +8,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
@@ -53,26 +57,22 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boites = new LinkedList<Barre>();
 
         setSize(largeur, hauteur);
-        boutonLancer = new JButton();
+        boutonLancer = new JButton("Lancer");
         boutonLancer.setBounds(10, 20, 100, 50);
-        boutonLancer.setText("Lancer");
         boutonLancer.setBackground(Color.WHITE);
         boutonLancer.addActionListener(this);
         setLayout(null);
         add(boutonLancer);
 
-        setSize(largeur, hauteur);
-        boutonMateriauBois = new JButton();
+        boutonMateriauBois = new JButton("Bois");
         boutonMateriauBois.setBounds(150, 20, 100, 50);
-        boutonMateriauBois.setText("Bois");
         boutonMateriauBois.setBackground(Color.WHITE);
         boutonMateriauBois.addActionListener(this);
         setLayout(null);
         add(boutonMateriauBois);
 
-        boutonMateriauGoudron = new JButton();
+        boutonMateriauGoudron = new JButton("Goudron");
         boutonMateriauGoudron.setBounds(290, 20, 100, 50);
-        boutonMateriauGoudron.setText("Goudron");
         boutonMateriauGoudron.setBackground(Color.WHITE);
         boutonMateriauGoudron.addActionListener(this);
         setLayout(null);
@@ -149,9 +149,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             }
         }
 
-        if (e.getSource() == timerGraphique)
-
-        {
+        if (e.getSource() == timerGraphique) {
             repaint();
         }
 
@@ -175,9 +173,24 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
-    public void majInfosSouris(MouseEvent e) {
-        posSouris = box2d.pixelToWorld(e.getX(), e.getX());
+    public void serializerPartie() {
+        try {
+            FileOutputStream fileOut = new FileOutputStream("pont.txt");
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(pont);
+            objectOut.close();
+            fileOut.close();
+        } catch (FileNotFoundException i) {
+            i.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+        System.out.println("done");
+        
+    }
 
+    public void majInfosSouris(MouseEvent e) {
+        posSouris = box2d.pixelToWorld(e.getX(), e.getY());
         if (SwingUtilities.isLeftMouseButton(e)) {
             boutonSouris = "gauche";
         }
@@ -186,6 +199,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
         if (SwingUtilities.isMiddleMouseButton(e)) {
             boutonSouris = "molette";
+            serializerPartie();
         }
     }
 

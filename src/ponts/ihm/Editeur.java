@@ -62,7 +62,6 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println(e.getX() + " " + e.getY());
         Vec2 posSouris = box2d.pixelToWorld(e.getX(), e.getY());
         berge.ajouterPoint(posSouris);
     }

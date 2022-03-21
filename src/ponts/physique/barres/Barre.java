@@ -2,6 +2,7 @@ package ponts.physique.barres;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -23,7 +24,7 @@ import ponts.physique.environnement.Bord;
 import ponts.physique.liaisons.Liaison;
 import ponts.physique.liaisons.LiaisonMobile;
 
-public abstract class Barre extends ObjetPhysique {
+public abstract class Barre extends ObjetPhysique implements Serializable {
 
     public static final int CATEGORY = 0b0010;
     public static final int MASK = Bord.CATEGORY;
