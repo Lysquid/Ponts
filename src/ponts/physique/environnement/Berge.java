@@ -28,24 +28,24 @@ public class Berge {
             if (prevVec != null) {
 
                 int x1 = box2d.worldToPixelX(prevVec.x);
-                int y1 = box2d.worldToPixelX(prevVec.y);
+                int y1 = box2d.worldToPixelY(prevVec.y);
                 int x2 = box2d.worldToPixelX(vec.x);
-                int y2 = box2d.worldToPixelX(vec.y);
+                int y2 = box2d.worldToPixelY(vec.y);
                 g.drawLine(x1, y1, x2, y2);
             }
+            prevVec = vec;
 
         }
     }
 
     public void ajouterPoint(Vec2 posSouris) {
-        if (listeVec.isEmpty()) {
-            Vec2 bordGauche = new Vec2(0, posSouris.y);
-            listeVec.add(bordGauche);
-        } else {
-            listeVec.removeLast();
-        }
         listeVec.add(posSouris);
-        Vec2 bordDroit = new Vec2(0, posSouris.y);
+    }
+
+    public void ajouterExtremitees(Box2D box2d) {
+        Vec2 bordGauche = new Vec2(0, listeVec.getFirst().y);
+        listeVec.add(bordGauche);
+        Vec2 bordDroit = new Vec2(box2d.getLargeur(), listeVec.getLast().y);
         listeVec.add(bordDroit);
     }
 

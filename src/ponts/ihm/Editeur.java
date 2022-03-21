@@ -40,7 +40,6 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
     @Override
     protected void paintComponent(Graphics g0) {
-        super.paintComponent(g0);
         Graphics2D g = (Graphics2D) g0;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -64,7 +63,7 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     @Override
     public void mouseClicked(MouseEvent e) {
         System.out.println(e.getX() + " " + e.getY());
-        Vec2 posSouris = box2d.pixelToWorld(e.getX(), e.getX());
+        Vec2 posSouris = box2d.pixelToWorld(e.getX(), e.getY());
         berge.ajouterPoint(posSouris);
     }
 
