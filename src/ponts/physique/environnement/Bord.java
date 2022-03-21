@@ -1,6 +1,7 @@
 package ponts.physique.environnement;
 
-import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.collision.shapes.EdgeShape;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
@@ -30,8 +31,10 @@ public class Bord extends ObjetPhysique {
 
         body = world.createBody(bodyDef);
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(largeur / 2, hauteur / 2);
+        Vec2 gauche = new Vec2(0, 0);
+        Vec2 droite = new Vec2(largeur, 0);
+        EdgeShape shape = new EdgeShape();
+        shape.set(gauche, droite);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
