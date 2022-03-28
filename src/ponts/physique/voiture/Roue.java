@@ -7,6 +7,10 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import ponts.ihm.Box2D;
+
+import java.awt.Color;
+import java.awt.Graphics;
 
 import ponts.physique.ObjetPhysique;
 import ponts.physique.barres.Barre;
@@ -28,9 +32,14 @@ public class Roue extends ObjetPhysique{
 
     WheelJoint joint;
     CircleShape shape;
+    Color couleurContour;
+    Color couleurRemplissage;
     
 
     public Roue (World world, Vec2 pos){
+
+        couleurContour = Color.GREEN;
+        
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.STATIC;
@@ -50,13 +59,33 @@ public class Roue extends ObjetPhysique{
 
     public void lierVoiture (World world, Carrosserie carosserie) {
         WheelJointDef jointDef = new WheelJointDef();
-        // jointDef.initialize(body, carosserie.getBody(), carosserie.getPos());
-        WheelJoint joint = (WheelJoint) world.createJoint(jointDef);
+        jointDef.initialize(body, carosserie.getBody(), body.getPosition() ,carosserie.getPos());
+        joint = (WheelJoint) world.createJoint(jointDef);
+        joint.enableMotor(false);
+
+
     }
 
     public void activerPhysique() {
         body.setType(BodyType.DYNAMIC);
+        joint.enableMotor(true);
+        joint.setMotorSpeed(0.5f);
     }
+
+    public void dessiner(Graphics g, Box2D box2d) {
+        
+        int x = box2d.worldToPixelX(getX());
+        int y = box2d.worldToPixelY(getY());
+        int r = box2d.worldToPixel(RAYON);
+
+        g.setColor(couleurContour);
+        
+
+        
+        g.fillOval(x - r, y - r, r * 2, r * 2);
+        g.drawOval(x - r, y - r, r * 2, r * 2);
+    }
+        
 
 
 }

@@ -23,6 +23,7 @@ import ponts.physique.Pont;
 import ponts.physique.barres.Barre;
 import ponts.physique.barres.Materiau;
 import ponts.physique.environnement.Bord;
+import ponts.physique.voiture.Voiture;
 
 public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
@@ -49,9 +50,13 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     boolean simulationPhysique;
     Materiau materiau = Materiau.BOIS;
 
+    Voiture voiture;
+
     public Jeu(int largeur, int hauteur) {
         boites = new LinkedList<Barre>();
 
+        voiture = null;
+        
         setSize(largeur, hauteur);
         boutonLancer = new JButton();
         boutonLancer.setBounds(10, 20, 100, 50);
@@ -92,6 +97,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         new Bord(world, box2d.largeur, box2d.hauteur);
         pont = new Pont(world, box2d);
 
+        voiture = new Voiture(world,new Vec2(box2d.largeur * 0.80f, box2d.hauteur * 0.40f));
+
         addMouseListener(this);
         addMouseMotionListener(this);
 
@@ -128,7 +135,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         if (pont != null) {
             pont.dessiner(g, box2d, posSouris);
         }
-
+        if(voiture != null){
+            voiture.dessiner(g, box2d);
+        }
     }
 
     public void actionPerformed(ActionEvent e) {
