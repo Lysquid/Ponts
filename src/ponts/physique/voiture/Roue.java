@@ -69,7 +69,7 @@ public class Roue extends ObjetPhysique{
     public void activerPhysique() {
         body.setType(BodyType.DYNAMIC);
         joint.enableMotor(true);
-        joint.setMotorSpeed(0.5f);
+        joint.setMotorSpeed(0.1f);
     }
 
     public void dessiner(Graphics g, Box2D box2d) {

@@ -23,6 +23,7 @@ import ponts.physique.Pont;
 import ponts.physique.barres.Barre;
 import ponts.physique.barres.Materiau;
 import ponts.physique.environnement.Bord;
+import ponts.physique.voiture.Roue;
 import ponts.physique.voiture.Voiture;
 
 public class Jeu extends JPanel implements ActionListener, MouseInputListener {
@@ -168,6 +169,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             simulationPhysique = !simulationPhysique;
             if (simulationPhysique) {
                 boutonLancer.setText("Arreter");
+                voiture.roueArriere.activerPhysique();
+                voiture.roueAvant.activerPhysique();
             } else {
                 boutonLancer.setText("Lancer");
             }

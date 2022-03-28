@@ -27,10 +27,12 @@ public class Carrosserie extends ObjetPhysique {
     PolygonShape shape;
     Color couleurContour = Color.GREEN;
     Color couleurRemplissage = Color.GREEN;
+    float longueur = 8;
+    float largeur = 3;
 
     public Carrosserie(World world, Vec2 pos ) {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.DYNAMIC;
+        bodyDef.type = BodyType.STATIC;
         bodyDef.position.set(pos);
 
         body = world.createBody(bodyDef);
@@ -38,6 +40,8 @@ public class Carrosserie extends ObjetPhysique {
 
         fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;
+
+        shape.setAsBox(longueur/2, largeur/2);
 
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;

@@ -10,15 +10,16 @@ import ponts.ihm.Box2D;
 
 public class Voiture {
     
-    Roue roueAvant;
-    Roue roueArriere;
+    public Roue roueAvant;
+    public Roue roueArriere;
     Carrosserie carrosserie;
 
     public Voiture(World world, Vec2 pos ) { //carrosserie + roue en parametre ?
-        carrosserie = new Carrosserie(world, pos.add(new Vec2(-1f,-1f)));
-        roueAvant = new Roue(world, pos.add(new Vec2(-1f,0.0f)));
+        carrosserie = new Carrosserie(world, pos.add(new Vec2(-2.5f,2f)));
+        roueAvant = new Roue(world, pos.add(new Vec2(-5f,0.0f)));
         roueArriere = new Roue(world, pos);
-
+        roueArriere.lierVoiture(world, carrosserie);
+        roueAvant.lierVoiture(world, carrosserie);
     }
 
     public void dessiner(Graphics g, Box2D box2d) {
