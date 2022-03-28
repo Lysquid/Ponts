@@ -16,11 +16,12 @@ import java.awt.Color;
 import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
 import ponts.physique.barres.Barre;
+import ponts.physique.barres.BarreBois;
 import ponts.physique.environnement.Bord;
 
 public class Carrosserie extends ObjetPhysique {
     public static final int CATEGORY = 0b1000;
-    public static final int MASK = Bord.CATEGORY | Barre.CATEGORY;
+    public static final int MASK = Bord.CATEGORY | BarreBois.CATEGORY;
 
     FixtureDef fixtureDef;
     Fixture fixture;
@@ -32,7 +33,7 @@ public class Carrosserie extends ObjetPhysique {
 
     public Carrosserie(World world, Vec2 pos ) {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.STATIC;
+        bodyDef.type = BodyType.DYNAMIC;
         bodyDef.position.set(pos);
 
         body = world.createBody(bodyDef);
@@ -42,6 +43,9 @@ public class Carrosserie extends ObjetPhysique {
         fixtureDef.density = 1f;
 
         shape.setAsBox(longueur/2, largeur/2);
+        setPos(pos);
+        fixtureDef.shape = shape;
+        fixture = body.createFixture(fixtureDef);
 
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;

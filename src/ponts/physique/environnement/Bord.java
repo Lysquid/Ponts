@@ -31,7 +31,7 @@ public class Bord extends ObjetPhysique {
 
         body = world.createBody(bodyDef);
 
-        Vec2 gauche = new Vec2(0, 0);
+        Vec2 gauche = new Vec2(-largeur, 0);
         Vec2 droite = new Vec2(largeur, 0);
         EdgeShape shape = new EdgeShape();
         shape.set(gauche, droite);

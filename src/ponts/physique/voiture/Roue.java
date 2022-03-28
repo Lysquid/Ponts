@@ -14,7 +14,10 @@ import java.awt.Graphics;
 
 import ponts.physique.ObjetPhysique;
 import ponts.physique.barres.Barre;
+import ponts.physique.barres.BarreBois;
 import ponts.physique.environnement.Bord;
+
+import org.jbox2d.dynamics.joints.JointDef;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 import org.jbox2d.dynamics.joints.WheelJoint;
@@ -23,7 +26,7 @@ import org.jbox2d.dynamics.joints.WheelJointDef;
 public class Roue extends ObjetPhysique{
     
     public static final int CATEGORY = 0b1000;
-    public static final int MASK = Bord.CATEGORY | Barre.CATEGORY;
+    public static final int MASK = Bord.CATEGORY | BarreBois.CATEGORY;
 
     static final float RAYON = 0.5f;
 
@@ -51,17 +54,24 @@ public class Roue extends ObjetPhysique{
         fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;
 
+        
+
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;
+
+        shape.setRadius(RAYON);
+        fixtureDef.shape = shape;
+        fixture = body.createFixture(fixtureDef);
 
         
     }
 
     public void lierVoiture (World world, Carrosserie carosserie) {
         WheelJointDef jointDef = new WheelJointDef();
-        jointDef.initialize(body, carosserie.getBody(), body.getPosition() ,carosserie.getPos());
+        jointDef.initialize(body, carosserie.getBody(), body.getPosition() ,new Vec2(1,1));
         joint = (WheelJoint) world.createJoint(jointDef);
-        joint.enableMotor(false);
+        
+        joint.enableMotor(true);
 
 
     }
@@ -69,7 +79,8 @@ public class Roue extends ObjetPhysique{
     public void activerPhysique() {
         body.setType(BodyType.DYNAMIC);
         joint.enableMotor(true);
-        joint.setMotorSpeed(0.1f);
+        joint.setMotorSpeed(0.0001f);
+        joint.setMaxMotorTorque(0.1f);
     }
 
     public void dessiner(Graphics g, Box2D box2d) {

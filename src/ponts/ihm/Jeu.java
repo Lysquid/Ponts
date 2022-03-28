@@ -175,7 +175,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
                 boutonLancer.setText("Lancer");
             }
         }
-
         if (e.getSource() == boutonMateriauBois) {
             materiau = Materiau.BOIS;
             pont.arreterCreation(world);
