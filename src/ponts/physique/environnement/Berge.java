@@ -23,7 +23,7 @@ public class Berge implements Serializable {
     }
 
     public void dessiner(Graphics2D g, Box2D box2d) {
-        g.setColor(Color.GREEN);
+        g.setColor(Color.BLACK);
         Vec2 prevVec = null;
         for (Vec2 vec : listeVec) {
             if (prevVec != null) {

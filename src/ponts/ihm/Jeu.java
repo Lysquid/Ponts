@@ -8,11 +8,12 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -23,8 +24,8 @@ import javax.swing.event.MouseInputListener;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
+import ponts.physique.Partie;
 import ponts.physique.Pont;
-import ponts.physique.barres.Barre;
 import ponts.physique.barres.Materiau;
 import ponts.physique.environnement.Bord;
 
@@ -40,8 +41,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     JButton boutonMateriauBois;
     JButton boutonMateriauGoudron;
 
-    LinkedList<Barre> boites;
     Pont pont;
+    Partie partie;
 
     String boutonSouris;
     boolean clicSouris = false;
@@ -54,7 +55,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     Materiau materiau = Materiau.BOIS;
 
     public Jeu(int largeur, int hauteur) {
-        boites = new LinkedList<Barre>();
 
         setSize(largeur, hauteur);
         boutonLancer = new JButton("Lancer");
@@ -91,6 +91,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         new Bord(world, box2d.largeur, box2d.hauteur);
         pont = new Pont(world, box2d);
+        partie = new Partie(pont);
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -121,12 +122,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         g.setColor(Color.decode("#55a3d4"));
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        for (Barre box : boites) {
-            box.dessiner(g, box2d);
-        }
-
-        if (pont != null) {
-            pont.dessiner(g, box2d, posSouris);
+        if (partie != null) {
+            partie.dessiner(g, box2d, posSouris);
         }
 
     }
@@ -154,11 +151,14 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
 
         if (e.getSource() == boutonLancer) {
-            simulationPhysique = !simulationPhysique;
             if (simulationPhysique) {
                 boutonLancer.setText("Arreter");
+                deserialiserPartie();
+                simulationPhysique = false;
             } else {
                 boutonLancer.setText("Lancer");
+                serializerPartie();
+                simulationPhysique = true;
             }
         }
 
@@ -175,18 +175,32 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     public void serializerPartie() {
         try {
-            FileOutputStream fileOut = new FileOutputStream("pont.txt");
+            FileOutputStream fileOut = new FileOutputStream("partie.txt");
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(pont);
+            objectOut.writeObject(partie);
             objectOut.close();
             fileOut.close();
+            System.out.println("serialized");
         } catch (FileNotFoundException i) {
             i.printStackTrace();
         } catch (IOException i) {
             i.printStackTrace();
         }
-        System.out.println("done");
-        
+    }
+
+    public void deserialiserPartie() {
+        try {
+            FileInputStream fileIn = new FileInputStream("partie.txt");
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            partie = (Partie) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
+            System.out.println("deserialized");
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (ClassNotFoundException i) {
+            i.printStackTrace();
+        }
     }
 
     public void majInfosSouris(MouseEvent e) {

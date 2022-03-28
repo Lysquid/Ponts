@@ -19,6 +19,7 @@ import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import ponts.ihm.Box2D;
+import ponts.physique.Fixture2;
 import ponts.physique.ObjetPhysique;
 import ponts.physique.environnement.Bord;
 import ponts.physique.liaisons.Liaison;
@@ -42,7 +43,7 @@ public abstract class Barre extends ObjetPhysique implements Serializable {
     ArrayList<Liaison> liaisonsLiees;
     ArrayList<RevoluteJoint> joints;
     FixtureDef fixtureDef;
-    Fixture fixture;
+    Fixture2 fixture;
 
     float longueur;
     float largeur;
@@ -192,7 +193,7 @@ public abstract class Barre extends ObjetPhysique implements Serializable {
         setPos(centre, angle);
 
         if (fixture != null) {
-            body.destroyFixture(fixture);
+            body.destroyFixture((Fixture) fixture);
         }
         fixtureDef.shape = shape;
         fixture = body.createFixture(fixtureDef);
