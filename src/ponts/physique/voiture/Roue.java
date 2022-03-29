@@ -33,7 +33,7 @@ public class Roue extends ObjetPhysique{
     FixtureDef fixtureDef;
     Fixture fixture;
 
-    WheelJoint joint;
+    RevoluteJoint joint;
     CircleShape shape;
     Color couleurContour;
     Color couleurRemplissage;
@@ -67,9 +67,9 @@ public class Roue extends ObjetPhysique{
     }
 
     public void lierVoiture (World world, Carrosserie carosserie) {
-        WheelJointDef jointDef = new WheelJointDef();
-        jointDef.initialize(body, carosserie.getBody(), body.getPosition() ,new Vec2(1,1));
-        joint = (WheelJoint) world.createJoint(jointDef);
+        RevoluteJointDef jointDef = new RevoluteJointDef();
+        jointDef.initialize(body, carosserie.getBody(), body.getPosition());
+        joint = (RevoluteJoint) world.createJoint(jointDef);
         
         joint.enableMotor(true);
 
@@ -79,8 +79,8 @@ public class Roue extends ObjetPhysique{
     public void activerPhysique() {
         body.setType(BodyType.DYNAMIC);
         joint.enableMotor(true);
-        joint.setMotorSpeed(0.0001f);
-        joint.setMaxMotorTorque(0.1f);
+        joint.setMotorSpeed(10f);
+        joint.setMaxMotorTorque(10f);
     }
 
     public void dessiner(Graphics g, Box2D box2d) {
