@@ -45,7 +45,7 @@ public class Roue extends ObjetPhysique{
         
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.STATIC;
+        bodyDef.type = BodyType.DYNAMIC;
         bodyDef.position.set(pos);
 
         body = world.createBody(bodyDef);
@@ -54,14 +54,14 @@ public class Roue extends ObjetPhysique{
         fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;
 
-        
+
+        shape.setRadius(RAYON);
+        setPos(pos);
+        fixtureDef.shape = shape;
+        fixture = body.createFixture(fixtureDef);
 
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;
-
-        shape.setRadius(RAYON);
-        fixtureDef.shape = shape;
-        fixture = body.createFixture(fixtureDef);
 
         
     }
