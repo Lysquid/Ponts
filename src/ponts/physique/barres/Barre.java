@@ -39,12 +39,12 @@ public abstract class Barre extends ObjetPhysique implements Serializable {
     Color couleurContour = Color.BLACK;
     boolean apercu;
 
-    PolygonShape shape;
     ArrayList<Liaison> liaisonsLiees;
-    ArrayList<RevoluteJoint> joints;
-    FixtureDef fixtureDef;
-    Fixture2 fixture;
-
+    transient ArrayList<RevoluteJoint> joints;
+    transient PolygonShape shape;
+    transient FixtureDef fixtureDef;
+    transient Fixture fixture;
+ 
     float longueur;
     float largeur;
 

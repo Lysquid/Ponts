@@ -32,7 +32,7 @@ public abstract class Liaison extends ObjetPhysique implements Serializable {
 
     LinkedList<Barre> barresLiees;
     boolean cliquee;
-    CircleShape2 shape;
+    transient CircleShape2 shape;
 
     boolean apercu;
 
