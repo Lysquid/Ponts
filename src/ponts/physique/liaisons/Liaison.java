@@ -15,11 +15,12 @@ import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
 import ponts.physique.barres.Barre;
 import ponts.physique.environnement.Bord;
+import ponts.physique.voiture.Voiture;
 
 public abstract class Liaison extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0100;
-    public static final int MASK = Bord.CATEGORY;
+    public static final int MASK = Bord.CATEGORY | Voiture.CATEGORY;
 
     static final float RAYON = 0.5f;
     static final float RAYON_CLICK = 1f;
@@ -43,9 +44,14 @@ public abstract class Liaison extends ObjetPhysique {
 
         cliquee = false;
 
+        creerObjetPhysique(world, bodyType);
+        setPos(pos);
+
+    }
+
+    public void creerObjetPhysique(World world, BodyType bodyType) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
-        bodyDef.position.set(pos);
 
         body = world.createBody(bodyDef);
         shape = new CircleShape();

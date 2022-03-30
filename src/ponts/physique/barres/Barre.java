@@ -22,11 +22,12 @@ import ponts.physique.ObjetPhysique;
 import ponts.physique.environnement.Bord;
 import ponts.physique.liaisons.Liaison;
 import ponts.physique.liaisons.LiaisonMobile;
+import ponts.physique.voiture.Voiture;
 
 public abstract class Barre extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0010;
-    public static final int MASK = Bord.CATEGORY;
+    public static final int MASK = Bord.CATEGORY | Voiture.CATEGORY;
 
     static final float LONGUEUR_MAX = 8;
     static final float LONGUEUR_MIN = 3;
@@ -54,6 +55,12 @@ public abstract class Barre extends ObjetPhysique {
         ajouterLiaison(liaison1);
         ajouterLiaison(liaison2);
 
+        creerObjetPhysique(world);
+        ajusterPos();
+    }
+
+    public void creerObjetPhysique(World world) {
+
         // Etape 1 : Définir le "body"
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.KINEMATIC;
@@ -61,9 +68,10 @@ public abstract class Barre extends ObjetPhysique {
         // Etape 2 : Créer un "body"
         body = world.createBody(bodyDef);
 
-        // Etape 3 : Définir la "shape"
+        // Etape 3 : Créee la "shape"
         shape = new PolygonShape();
 
+        // Etape 4 : Définir la "fixture"
         fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;
         // fixtureDef.restitution = 0.5f;
@@ -71,7 +79,6 @@ public abstract class Barre extends ObjetPhysique {
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;
 
-        ajusterPos();
     }
 
     public void ajouterLiaison(Liaison liaison) {
@@ -83,7 +90,7 @@ public abstract class Barre extends ObjetPhysique {
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.initialize(body, liaison.getBody(), liaison.getPos());
         RevoluteJoint joint = (RevoluteJoint) world.createJoint(jointDef);
-        
+
         joints.add(joint);
 
     }
