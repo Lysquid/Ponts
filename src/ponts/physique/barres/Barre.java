@@ -233,9 +233,4 @@ public abstract class Barre extends ObjetPhysique implements Serializable {
         return liaison1.getPos().add(vecteur.mul(LONGUEUR_MAX));
     }
 
-    private void writeObject(ObjectOutputStream aOutputStream) throws IOException {
-        aOutputStream.defaultWriteObject();
-        System.out.println("good");
-    }
-
 }
