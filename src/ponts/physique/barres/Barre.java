@@ -2,6 +2,8 @@ package ponts.physique.barres;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -229,6 +231,11 @@ public abstract class Barre extends ObjetPhysique implements Serializable {
         Vec2 vecteur = pos.sub(liaison1.getPos());
         vecteur.normalize();
         return liaison1.getPos().add(vecteur.mul(LONGUEUR_MAX));
+    }
+
+    private void writeObject(ObjectOutputStream aOutputStream) throws IOException {
+        aOutputStream.defaultWriteObject();
+        System.out.println("good");
     }
 
 }
