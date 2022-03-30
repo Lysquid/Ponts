@@ -2,9 +2,6 @@ package ponts.physique.barres;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -21,13 +18,12 @@ import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import ponts.ihm.Box2D;
-import ponts.physique.Fixture2;
 import ponts.physique.ObjetPhysique;
 import ponts.physique.environnement.Bord;
 import ponts.physique.liaisons.Liaison;
 import ponts.physique.liaisons.LiaisonMobile;
 
-public abstract class Barre extends ObjetPhysique implements Serializable {
+public abstract class Barre extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0010;
     public static final int MASK = Bord.CATEGORY;
@@ -46,7 +42,7 @@ public abstract class Barre extends ObjetPhysique implements Serializable {
     transient PolygonShape shape;
     transient FixtureDef fixtureDef;
     transient Fixture fixture;
- 
+
     float longueur;
     float largeur;
 

@@ -201,7 +201,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         } catch (ClassNotFoundException i) {
             i.printStackTrace();
         }
-    }
+    } 
 
     public void majInfosSouris(MouseEvent e) {
         posSouris = box2d.pixelToWorld(e.getX(), e.getY());
