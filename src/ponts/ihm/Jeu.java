@@ -52,21 +52,15 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         setSize(largeur, hauteur);
         boutonLancer = new JButton("Lancer");
-        boutonLancer.setBounds(10, 20, 100, 50);
         boutonLancer.addActionListener(this);
-        setLayout(null);
         add(boutonLancer);
 
         boutonMateriauBois = new JButton("Bois");
-        boutonMateriauBois.setBounds(150, 20, 100, 50);
         boutonMateriauBois.addActionListener(this);
-        setLayout(null);
         add(boutonMateriauBois);
 
         boutonMateriauGoudron = new JButton("Goudron");
-        boutonMateriauGoudron.setBounds(290, 20, 100, 50);
         boutonMateriauGoudron.addActionListener(this);
-        setLayout(null);
         add(boutonMateriauGoudron);
 
         simulationPhysique = false;
