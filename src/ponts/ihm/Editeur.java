@@ -9,19 +9,21 @@ import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 import org.jbox2d.common.Vec2;
 
-import ponts.physique.environnement.Berge;
+import ponts.niveau.Niveau;
 
 public class Editeur extends JPanel implements ActionListener, MouseInputListener {
 
     Box2D box2d;
     Timer timerGraphique;
-    Berge berge;
+    Niveau niveau;
 
     public Editeur(int largeur, int hauteur, int refreshRate) {
         setSize(largeur, hauteur);
@@ -35,7 +37,7 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        berge = new Berge();
+        niveau = new Niveau();
     }
 
     @Override
@@ -49,7 +51,7 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         g.setColor(Color.decode("#55a3d4"));
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        berge.dessiner(g, box2d);
+        niveau.dessiner(g, box2d);
 
     }
 
@@ -60,10 +62,32 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         }
     }
 
+    public String boutonSouris(MouseEvent e) {
+        String boutonSouris = null;
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            boutonSouris = "gauche";
+        }
+        if (SwingUtilities.isRightMouseButton(e)) {
+            boutonSouris = "droite";
+        }
+        if (SwingUtilities.isMiddleMouseButton(e)) {
+            boutonSouris = "molette";
+        }
+        return boutonSouris;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         Vec2 posSouris = box2d.pixelToWorld(e.getX(), e.getY());
-        berge.ajouterPoint(posSouris);
+        String boutonSouris = boutonSouris(e);
+        switch (boutonSouris) {
+            case "gauche":
+                niveau.ajouterPoint(posSouris);
+                break;
+            case "droite":
+                niveau.ajouterLiaison(posSouris);
+                break;
+        }
     }
 
     @Override

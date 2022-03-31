@@ -8,12 +8,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -59,21 +53,18 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         setSize(largeur, hauteur);
         boutonLancer = new JButton("Lancer");
         boutonLancer.setBounds(10, 20, 100, 50);
-        boutonLancer.setBackground(Color.WHITE);
         boutonLancer.addActionListener(this);
         setLayout(null);
         add(boutonLancer);
 
         boutonMateriauBois = new JButton("Bois");
         boutonMateriauBois.setBounds(150, 20, 100, 50);
-        boutonMateriauBois.setBackground(Color.WHITE);
         boutonMateriauBois.addActionListener(this);
         setLayout(null);
         add(boutonMateriauBois);
 
         boutonMateriauGoudron = new JButton("Goudron");
         boutonMateriauGoudron.setBounds(290, 20, 100, 50);
-        boutonMateriauGoudron.setBackground(Color.WHITE);
         boutonMateriauGoudron.addActionListener(this);
         setLayout(null);
         add(boutonMateriauGoudron);
@@ -153,11 +144,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         if (e.getSource() == boutonLancer) {
             if (simulationPhysique) {
                 boutonLancer.setText("Arreter");
-                deserialiserPartie();
                 simulationPhysique = false;
             } else {
                 boutonLancer.setText("Lancer");
-                serializerPartie();
                 simulationPhysique = true;
             }
         }
@@ -173,35 +162,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
-    public void serializerPartie() {
-        try {
-            FileOutputStream fileOut = new FileOutputStream("partie.txt");
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(partie);
-            objectOut.close();
-            fileOut.close();
-            System.out.println("serialized");
-        } catch (FileNotFoundException i) {
-            i.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
-    }
-
-    public void deserialiserPartie() {
-        try {
-            FileInputStream fileIn = new FileInputStream("partie.txt");
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-            partie = (Partie) objectIn.readObject();
-            objectIn.close();
-            fileIn.close();
-            System.out.println("deserialized");
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (ClassNotFoundException i) {
-            i.printStackTrace();
-        }
-    } 
 
     public void majInfosSouris(MouseEvent e) {
         posSouris = box2d.pixelToWorld(e.getX(), e.getY());
@@ -213,7 +173,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
         if (SwingUtilities.isMiddleMouseButton(e)) {
             boutonSouris = "molette";
-            serializerPartie();
         }
     }
 

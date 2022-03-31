@@ -5,6 +5,10 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.ui.FlatBorder;
 
 import ponts.ihm.Editeur;
 import ponts.ihm.Jeu;
@@ -35,7 +39,6 @@ public class Main extends JFrame {
             add(editeur);
         }
 
-
     }
 
     public int getRefreshRate() {
@@ -52,7 +55,18 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
+        setLookAndFeel();
         new Main();
+    }
+
+    public static void setLookAndFeel() {
+        FlatLightLaf.setup();
+
+        int arrondi = 30;
+        UIManager.put("Button.arc", arrondi);
+        UIManager.put("Component.arc", arrondi);
+        UIManager.put("ProgressBar.arc", arrondi);
+        UIManager.put("TextComponent.arc", arrondi);
     }
 
 }

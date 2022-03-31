@@ -1,13 +1,12 @@
 package ponts.physique;
 
 import java.awt.Graphics2D;
-import java.io.Serializable;
 
 import org.jbox2d.common.Vec2;
 
 import ponts.ihm.Box2D;
 
-public class Partie implements Serializable {
+public class Partie {
 
     Pont pont;
 
