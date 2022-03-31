@@ -1,16 +1,19 @@
 package ponts.ihm;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
-import java.awt.Color;
-import java.awt.Graphics;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
@@ -25,9 +28,14 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     Timer timerGraphique;
     Niveau niveau;
 
+    JTextField nomFichier;
+    JButton boutonSauvgarde;
+
     public Editeur(int largeur, int hauteur, int refreshRate) {
+
+        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+
         setSize(largeur, hauteur);
-        setLayout(null);
         box2d = new Box2D(getWidth(), getHeight());
 
         int fps = (int) (1.0 / refreshRate * 1000.0);
@@ -36,6 +44,17 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
         addMouseListener(this);
         addMouseMotionListener(this);
+
+        int marge = 10;
+        Insets insets = new Insets(marge, marge, marge, marge);
+
+        nomFichier = new JTextField("Nom par défaut");
+        nomFichier.setMargin(insets);
+        add(nomFichier);
+
+        boutonSauvgarde = new JButton("Sauvgarder");
+        boutonSauvgarde.setMargin(insets);
+        add(boutonSauvgarde);
 
         niveau = new Niveau();
     }

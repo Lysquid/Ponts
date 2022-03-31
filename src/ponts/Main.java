@@ -28,15 +28,15 @@ public class Main extends JFrame {
 
         refreshRate = getRefreshRate();
 
-        if (true) {
+        if (false) {
             Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
             add(jeu);
             setVisible(true);
             jeu.init(refreshRate);
         } else {
             Editeur editeur = new Editeur(LARGEUR, HAUTEUR, refreshRate);
-            setVisible(true);
             add(editeur);
+            setVisible(true);
         }
 
     }
