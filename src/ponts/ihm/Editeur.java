@@ -4,12 +4,20 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -25,27 +33,24 @@ import ponts.niveau.Niveau;
 
 public class Editeur extends JPanel implements ActionListener, MouseInputListener {
 
+    static final Path CHEMIN = Paths.get("res", "niveaux");
+
     Box2D box2d;
-    Timer timerGraphique;
     Niveau niveau;
 
     JLabel textNomFichier;
     JLabel textBudget;
     JTextField champNomFichier;
     JTextField champBudget;
-    JButton boutonSauvgarder;
+    JButton boutonSauvegarder;
     JButton boutonCharger;
+    JButton boutonUndo;
 
-    public Editeur(int largeur, int hauteur, int refreshRate) {
+    public Editeur(int largeur, int hauteur) {
 
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-
         setSize(largeur, hauteur);
         box2d = new Box2D(getWidth(), getHeight());
-
-        int fps = (int) (1.0 / refreshRate * 1000.0);
-        timerGraphique = new Timer(fps, this);
-        timerGraphique.start();
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -53,20 +58,26 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         textBudget = new JLabel("Budget");
         add(textBudget);
 
-        champBudget = new JTextField(6);
+        champBudget = new JTextField(4);
         add(champBudget);
 
         textNomFichier = new JLabel("Nom fichier");
         add(textNomFichier);
 
-        champNomFichier = new JTextField(8);
+        champNomFichier = new JTextField(6);
         add(champNomFichier);
 
+        boutonSauvegarder = new JButton("Sauvegarder");
+        add(boutonSauvegarder);
+        boutonSauvegarder.addActionListener(this);
+
         boutonCharger = new JButton("Charger");
+        boutonCharger.addActionListener(this);
         add(boutonCharger);
 
-        boutonSauvgarder = new JButton("Sauvgarder");
-        add(boutonSauvgarder);
+        boutonUndo = new JButton("Undo");
+        boutonUndo.addActionListener(this);
+        add(boutonUndo);
 
         niveau = new Niveau();
     }
@@ -88,9 +99,73 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == timerGraphique) {
+        if (e.getSource() == boutonSauvegarder) {
+            sauvegarderNiveau();
+        }
+        if (e.getSource() == boutonCharger) {
+            chargerNiveau();
+        }
+        if (e.getSource() == boutonUndo) {
+            niveau.undo();
             repaint();
         }
+    }
+
+    public String recupererChemin() {
+        String nomFichier = champNomFichier.getText();
+        return CHEMIN.resolve(nomFichier).toString();
+    }
+
+    public void sauvegarderNiveau() {
+
+        niveau.ajouterExtremitees(box2d);
+
+        String chemin = recupererChemin();
+        int budget;
+        try {
+            budget = Integer.parseInt(champBudget.getText());
+        } catch (NumberFormatException i) {
+            budget = 0;
+        }
+        niveau.setBudget(budget);
+
+        try {
+
+            FileOutputStream fileOut = new FileOutputStream(chemin);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(niveau);
+            objectOut.close();
+            fileOut.close();
+        } catch (FileNotFoundException i) {
+            System.out.println("Nom de fichier invalide");
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+        repaint();
+    }
+
+    public void chargerNiveau() {
+        String chemin = recupererChemin();
+
+        try {
+            FileInputStream fileIn = new FileInputStream(chemin);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            niveau = (Niveau) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
+
+        } catch (FileNotFoundException i) {
+            System.out.println("Fichier introuvable");
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (ClassNotFoundException i) {
+            i.printStackTrace();
+        }
+        int budget = niveau.getBudget();
+        if (budget != 0) {
+            champBudget.setText(Integer.toString(budget));
+        }
+        repaint();
     }
 
     public String boutonSouris(MouseEvent e) {
@@ -119,6 +194,7 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
                 niveau.ajouterLiaison(posSouris);
                 break;
         }
+        repaint();
     }
 
     @Override

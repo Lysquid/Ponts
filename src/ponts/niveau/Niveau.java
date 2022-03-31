@@ -13,29 +13,29 @@ import java.io.Serializable;
 
 public class Niveau implements Serializable {
 
+    private static final long serialVersionUID = 5014471600563766405L;
+
     LinkedList<Vec2> posCoins;
     LinkedList<Vec2> posLiaisons;
+    int budget;
 
     public Niveau() {
         posCoins = new LinkedList<Vec2>();
         posLiaisons = new LinkedList<Vec2>();
-
     }
 
     public void dessiner(Graphics2D g, Box2D box2d) {
         g.setColor(Color.BLACK);
-        Vec2 prevVec = null;
-        for (Vec2 vec : posCoins) {
-            if (prevVec != null) {
-
-                int x1 = box2d.worldToPixelX(prevVec.x);
-                int y1 = box2d.worldToPixelY(prevVec.y);
-                int x2 = box2d.worldToPixelX(vec.x);
-                int y2 = box2d.worldToPixelY(vec.y);
+        if (!posCoins.isEmpty()) {
+            Vec2 prevPos = posCoins.getFirst();
+            for (Vec2 pos : posCoins) {
+                int x1 = box2d.worldToPixelX(prevPos.x);
+                int y1 = box2d.worldToPixelY(prevPos.y);
+                int x2 = box2d.worldToPixelX(pos.x);
+                int y2 = box2d.worldToPixelY(pos.y);
                 g.drawLine(x1, y1, x2, y2);
+                prevPos = pos;
             }
-            prevVec = vec;
-
         }
 
         int r = box2d.worldToPixel(Liaison.RAYON);
@@ -57,9 +57,29 @@ public class Niveau implements Serializable {
 
     public void ajouterExtremitees(Box2D box2d) {
         Vec2 bordGauche = new Vec2(0, posCoins.getFirst().y);
-        posCoins.add(bordGauche);
+        posCoins.addFirst(bordGauche);
         Vec2 bordDroit = new Vec2(box2d.getLargeur(), posCoins.getLast().y);
         posCoins.add(bordDroit);
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
+    }
+
+    public int getBudget() {
+        return budget;
+    }
+
+    public void undo() {
+        if (!posCoins.isEmpty()) {
+            Vec2 dernierePos = posCoins.getLast();
+            posCoins.removeLast();
+            if (!posLiaisons.isEmpty()) {
+                if (posLiaisons.getLast() == dernierePos) {
+                    posLiaisons.removeLast();
+                }
+            }
+        }
     }
 
 }

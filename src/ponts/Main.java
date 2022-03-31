@@ -3,14 +3,12 @@ package ponts;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-
 import java.awt.Insets;
+
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import com.formdev.flatlaf.*;
-import com.formdev.flatlaf.ui.FlatBorder;
-import com.formdev.flatlaf.ui.FlatButtonBorder;
+
+import com.formdev.flatlaf.FlatLightLaf;
 
 import ponts.ihm.Editeur;
 import ponts.ihm.Jeu;
@@ -36,7 +34,7 @@ public class Main extends JFrame {
             setVisible(true);
             jeu.init(refreshRate);
         } else {
-            Editeur editeur = new Editeur(LARGEUR, HAUTEUR, refreshRate);
+            Editeur editeur = new Editeur(LARGEUR, HAUTEUR);
             add(editeur);
             setVisible(true);
         }
