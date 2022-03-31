@@ -9,14 +9,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -30,14 +22,12 @@ import ponts.niveau.Niveau;
 
 public class Editeur extends JPanel implements ActionListener, MouseInputListener {
 
-    static final Path CHEMIN = Paths.get("res", "niveaux");
-
     Box2D box2d;
     Niveau niveau;
 
-    JLabel textNomFichier;
+    JLabel textNomNiveau;
     JLabel textBudget;
-    JTextField champNomFichier;
+    JTextField champNomNiveau;
     JTextField champBudget;
     JButton boutonSauvegarder;
     JButton boutonCharger;
@@ -45,19 +35,19 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
     public Editeur(int largeur, int hauteur) {
 
+        setSize(largeur, hauteur);
         box2d = new Box2D(getWidth(), getHeight());
 
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        setSize(largeur, hauteur);
 
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        textNomFichier = new JLabel("Nom fichier");
-        add(textNomFichier);
+        textNomNiveau = new JLabel("Nom niveau");
+        add(textNomNiveau);
 
-        champNomFichier = new JTextField(6);
-        add(champNomFichier);
+        champNomNiveau = new JTextField(5);
+        add(champNomNiveau);
 
         boutonSauvegarder = new JButton("Sauvegarder");
         add(boutonSauvegarder);
@@ -98,68 +88,24 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == boutonSauvegarder) {
-            sauvegarderNiveau();
+            niveau.ajouterExtremitees(box2d);
+            try {
+                int budget = Integer.parseInt(champBudget.getText());
+                niveau.setBudget(budget);
+            } catch (NumberFormatException i) {
+            }
+            Niveau.sauvegarder(niveau, champNomNiveau.getText());
+            repaint();
         }
         if (e.getSource() == boutonCharger) {
-            chargerNiveau();
+            niveau = Niveau.charger(champNomNiveau.getText());
+            champBudget.setText(Integer.toString(niveau.getBudget()));
+            repaint();
         }
         if (e.getSource() == boutonUndo) {
             niveau.undo();
             repaint();
         }
-    }
-
-    public String recupererChemin() {
-        String nomFichier = champNomFichier.getText();
-        return CHEMIN.resolve(nomFichier).toString();
-    }
-
-    public void sauvegarderNiveau() {
-
-        niveau.ajouterExtremitees(box2d);
-
-        String chemin = recupererChemin();
-        try {
-            int budget = Integer.parseInt(champBudget.getText());
-            niveau.setBudget(budget);
-        } catch (NumberFormatException i) {
-        }
-
-        try {
-
-            FileOutputStream fileOut = new FileOutputStream(chemin);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(niveau);
-            objectOut.close();
-            fileOut.close();
-        } catch (FileNotFoundException i) {
-            System.out.println("Nom de fichier invalide");
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
-        repaint();
-    }
-
-    public void chargerNiveau() {
-        String chemin = recupererChemin();
-
-        try {
-            FileInputStream fileIn = new FileInputStream(chemin);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-            niveau = (Niveau) objectIn.readObject();
-            objectIn.close();
-            fileIn.close();
-
-        } catch (FileNotFoundException i) {
-            System.out.println("Fichier introuvable");
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (ClassNotFoundException i) {
-            i.printStackTrace();
-        }
-        int budget = niveau.getBudget();
-        champBudget.setText(Integer.toString(budget));
-        repaint();
     }
 
     @Override

@@ -8,8 +8,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
@@ -17,6 +19,7 @@ import javax.swing.event.MouseInputListener;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
+import ponts.niveau.Niveau;
 import ponts.physique.Partie;
 import ponts.physique.Pont;
 import ponts.physique.barres.Materiau;
@@ -30,6 +33,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     Timer timerPhysique;
     static final int TICK_PHYSIQUE = 16;
     long tempsPhysique;
+
+    JComboBox<String> comboBoxNiveaux;
     JButton boutonLancer;
     JButton boutonMateriauBois;
     JButton boutonMateriauGoudron;
@@ -50,6 +55,12 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public Jeu(int largeur, int hauteur) {
 
         setSize(largeur, hauteur);
+
+        String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
+        comboBoxNiveaux = new JComboBox<String>(nomsNiveaux);
+        comboBoxNiveaux.addActionListener(this);
+        add(comboBoxNiveaux);
+
         boutonLancer = new JButton("Lancer");
         boutonLancer.addActionListener(this);
         add(boutonLancer);
@@ -64,7 +75,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
-    public void init(int refreshRate) {
+    public void initialiser(int refreshRate) {
 
         box2d = new Box2D(getWidth(), getHeight());
 
@@ -142,6 +153,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             }
         }
 
+        if (e.getSource() == comboBoxNiveaux) {
+            String nomNiveau = (String) comboBoxNiveaux.getSelectedItem();
+            partie.chargerNiveau(nomNiveau);
+        }
+
         if (e.getSource() == boutonMateriauBois) {
             materiau = Materiau.BOIS;
             pont.arreterCreation(world);
@@ -152,7 +168,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
 
     }
-
 
     public void majInfosSouris(MouseEvent e) {
         posSouris = box2d.pixelToWorld(e.getX(), e.getY());

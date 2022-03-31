@@ -28,11 +28,11 @@ public class Main extends JFrame {
 
         refreshRate = getRefreshRate();
 
-        if (false) {
+        if (true) {
             Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
             add(jeu);
             setVisible(true);
-            jeu.init(refreshRate);
+            jeu.initialiser(refreshRate);
         } else {
             Editeur editeur = new Editeur(LARGEUR, HAUTEUR);
             add(editeur);
@@ -66,11 +66,15 @@ public class Main extends JFrame {
         UIManager.put("Button.arc", arrondi);
         UIManager.put("Component.arc", arrondi);
         UIManager.put("TextComponent.arc", arrondi);
+        UIManager.put("ComboBox.arc", arrondi);
 
         int marge = 10;
         Insets insets = new Insets(marge, marge, marge, marge);
         UIManager.put("Button.margin", insets);
         UIManager.put("TextField.margin", insets);
+        UIManager.put("Component.margin", insets);
+        UIManager.put("TextComponent.margin", insets);
+        UIManager.put("ComboBox.margin", insets);
 
     }
 

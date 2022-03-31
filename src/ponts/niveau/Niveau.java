@@ -1,5 +1,16 @@
 package ponts.niveau;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 
 import org.jbox2d.common.Vec2;
@@ -7,13 +18,10 @@ import org.jbox2d.common.Vec2;
 import ponts.ihm.Box2D;
 import ponts.physique.liaisons.Liaison;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.io.Serializable;
-
 public class Niveau implements Serializable {
 
-    private static final long serialVersionUID = 5014471600563766405L;
+    public static final Path CHEMIN = Paths.get("res", "niveaux");
+    static final long serialVersionUID = 5014471600563766405L;
 
     LinkedList<Vec2> posCoins;
     LinkedList<Vec2> posLiaisons;
@@ -80,6 +88,44 @@ public class Niveau implements Serializable {
                 }
             }
         }
+    }
+
+    public static void sauvegarder(Niveau niveau, String nomNiveau) {
+        String chemin = CHEMIN.resolve(nomNiveau).toString();
+
+        try {
+
+            FileOutputStream fileOut = new FileOutputStream(chemin);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(niveau);
+            objectOut.close();
+            fileOut.close();
+        } catch (FileNotFoundException i) {
+            System.out.println("Nom de fichier invalide");
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+
+    public static Niveau charger(String nomNiveau) {
+        String chemin = CHEMIN.resolve(nomNiveau).toString();
+        Niveau niveau = null;
+        try {
+            FileInputStream fileIn = new FileInputStream(chemin);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            niveau = (Niveau) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
+
+        } catch (FileNotFoundException i) {
+            System.out.println("Fichier introuvable");
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (ClassNotFoundException i) {
+            i.printStackTrace();
+        }
+
+        return niveau;
     }
 
 }
