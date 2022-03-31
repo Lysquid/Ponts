@@ -94,7 +94,7 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
                 niveau.setBudget(budget);
             } catch (NumberFormatException i) {
             }
-            Niveau.sauvegarder(niveau, champNomNiveau.getText());
+            niveau.sauvegarder(champNomNiveau.getText());
             repaint();
         }
         if (e.getSource() == boutonCharger) {

@@ -90,14 +90,14 @@ public class Niveau implements Serializable {
         }
     }
 
-    public static void sauvegarder(Niveau niveau, String nomNiveau) {
+    public void sauvegarder(String nomNiveau) {
         String chemin = CHEMIN.resolve(nomNiveau).toString();
 
         try {
 
             FileOutputStream fileOut = new FileOutputStream(chemin);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(niveau);
+            objectOut.writeObject(this);
             objectOut.close();
             fileOut.close();
         } catch (FileNotFoundException i) {
