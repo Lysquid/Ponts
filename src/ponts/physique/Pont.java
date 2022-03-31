@@ -62,7 +62,7 @@ public class Pont implements Serializable {
         }
     }
 
-    public void gererInput(World world, Vec2 posSouris, String boutonSouris, boolean clicSouris, Materiau materiau) {
+    public void gererInput(World world, Vec2 posSouris, int boutonSouris, boolean clicSouris, Materiau materiau) {
 
         Vec2 posSourisMax = posSourisMax(barreEnCreation, posSouris);
         liaisonProche = recupLiaisonProche(posSourisMax);
@@ -85,7 +85,7 @@ public class Pont implements Serializable {
 
             switch (boutonSouris) {
 
-                case "gauche":
+                case 1: // clic gauche
 
                     // Test si la barre vérifie des conditions
                     if (barreValide) {
@@ -107,7 +107,7 @@ public class Pont implements Serializable {
 
                     break;
 
-                case "droite":
+                case 3: // clic droit
                     if (barreEnCreation != null) {
                         arreterCreation(world);
                     } else {
@@ -116,9 +116,6 @@ public class Pont implements Serializable {
 
                     break;
 
-                default:
-
-                    break;
             }
         }
 

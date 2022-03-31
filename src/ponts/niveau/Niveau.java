@@ -17,7 +17,7 @@ public class Niveau implements Serializable {
 
     LinkedList<Vec2> posCoins;
     LinkedList<Vec2> posLiaisons;
-    int budget;
+    int budget = 0;
 
     public Niveau() {
         posCoins = new LinkedList<Vec2>();

@@ -9,7 +9,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,8 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 import org.jbox2d.common.Vec2;
@@ -48,18 +45,13 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
     public Editeur(int largeur, int hauteur) {
 
+        box2d = new Box2D(getWidth(), getHeight());
+
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         setSize(largeur, hauteur);
-        box2d = new Box2D(getWidth(), getHeight());
 
         addMouseListener(this);
         addMouseMotionListener(this);
-
-        textBudget = new JLabel("Budget");
-        add(textBudget);
-
-        champBudget = new JTextField(4);
-        add(champBudget);
 
         textNomFichier = new JLabel("Nom fichier");
         add(textNomFichier);
@@ -74,6 +66,12 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         boutonCharger = new JButton("Charger");
         boutonCharger.addActionListener(this);
         add(boutonCharger);
+
+        textBudget = new JLabel("Budget");
+        add(textBudget);
+
+        champBudget = new JTextField("0", 4);
+        add(champBudget);
 
         boutonUndo = new JButton("Undo");
         boutonUndo.addActionListener(this);
@@ -121,13 +119,11 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         niveau.ajouterExtremitees(box2d);
 
         String chemin = recupererChemin();
-        int budget;
         try {
-            budget = Integer.parseInt(champBudget.getText());
+            int budget = Integer.parseInt(champBudget.getText());
+            niveau.setBudget(budget);
         } catch (NumberFormatException i) {
-            budget = 0;
         }
-        niveau.setBudget(budget);
 
         try {
 
@@ -162,35 +158,21 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
             i.printStackTrace();
         }
         int budget = niveau.getBudget();
-        if (budget != 0) {
-            champBudget.setText(Integer.toString(budget));
-        }
+        champBudget.setText(Integer.toString(budget));
         repaint();
-    }
-
-    public String boutonSouris(MouseEvent e) {
-        String boutonSouris = null;
-        if (SwingUtilities.isLeftMouseButton(e)) {
-            boutonSouris = "gauche";
-        }
-        if (SwingUtilities.isRightMouseButton(e)) {
-            boutonSouris = "droite";
-        }
-        if (SwingUtilities.isMiddleMouseButton(e)) {
-            boutonSouris = "molette";
-        }
-        return boutonSouris;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         Vec2 posSouris = box2d.pixelToWorld(e.getX(), e.getY());
-        String boutonSouris = boutonSouris(e);
-        switch (boutonSouris) {
-            case "gauche":
+        switch (e.getButton()) {
+            case 1: // clic gauche
                 niveau.ajouterPoint(posSouris);
                 break;
-            case "droite":
+            case 2: // clic molette
+                niveau.undo();
+                break;
+            case 3: // clic droit
                 niveau.ajouterLiaison(posSouris);
                 break;
         }

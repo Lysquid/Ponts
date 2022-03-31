@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
@@ -38,14 +37,14 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     Pont pont;
     Partie partie;
 
-    String boutonSouris;
+    int boutonSouris;
     boolean clicSouris = false;
-    Vec2 posSouris;
+    Vec2 posSouris = new Vec2();
     boolean initilise = false;
 
     long tempsPrecedent = 0;
     static final int DELAI_APPARITION = 100;
-    boolean simulationPhysique;
+    boolean simulationPhysique = false;
     Materiau materiau = Materiau.BOIS;
 
     public Jeu(int largeur, int hauteur) {
@@ -63,8 +62,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boutonMateriauGoudron.addActionListener(this);
         add(boutonMateriauGoudron);
 
-        simulationPhysique = false;
-        posSouris = new Vec2();
     }
 
     public void init(int refreshRate) {
@@ -159,15 +156,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     public void majInfosSouris(MouseEvent e) {
         posSouris = box2d.pixelToWorld(e.getX(), e.getY());
-        if (SwingUtilities.isLeftMouseButton(e)) {
-            boutonSouris = "gauche";
-        }
-        if (SwingUtilities.isRightMouseButton(e)) {
-            boutonSouris = "droite";
-        }
-        if (SwingUtilities.isMiddleMouseButton(e)) {
-            boutonSouris = "molette";
-        }
+        boutonSouris = e.getButton();
     }
 
     @Override
