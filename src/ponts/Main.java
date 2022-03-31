@@ -4,11 +4,13 @@ import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
+import java.awt.Insets;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.ui.FlatBorder;
+import com.formdev.flatlaf.ui.FlatButtonBorder;
 
 import ponts.ihm.Editeur;
 import ponts.ihm.Jeu;
@@ -65,8 +67,13 @@ public class Main extends JFrame {
         int arrondi = 30;
         UIManager.put("Button.arc", arrondi);
         UIManager.put("Component.arc", arrondi);
-        UIManager.put("ProgressBar.arc", arrondi);
         UIManager.put("TextComponent.arc", arrondi);
+
+        int marge = 10;
+        Insets insets = new Insets(marge, marge, marge, marge);
+        UIManager.put("Button.margin", insets);
+        UIManager.put("TextField.margin", insets);
+
     }
 
 }

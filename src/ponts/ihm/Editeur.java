@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -28,8 +29,12 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     Timer timerGraphique;
     Niveau niveau;
 
-    JTextField nomFichier;
-    JButton boutonSauvgarde;
+    JLabel textNomFichier;
+    JLabel textBudget;
+    JTextField champNomFichier;
+    JTextField champBudget;
+    JButton boutonSauvgarder;
+    JButton boutonCharger;
 
     public Editeur(int largeur, int hauteur, int refreshRate) {
 
@@ -45,16 +50,23 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        int marge = 10;
-        Insets insets = new Insets(marge, marge, marge, marge);
+        textBudget = new JLabel("Budget");
+        add(textBudget);
 
-        nomFichier = new JTextField("Nom par défaut");
-        nomFichier.setMargin(insets);
-        add(nomFichier);
+        champBudget = new JTextField(6);
+        add(champBudget);
 
-        boutonSauvgarde = new JButton("Sauvgarder");
-        boutonSauvgarde.setMargin(insets);
-        add(boutonSauvgarde);
+        textNomFichier = new JLabel("Nom fichier");
+        add(textNomFichier);
+
+        champNomFichier = new JTextField(8);
+        add(champNomFichier);
+
+        boutonCharger = new JButton("Charger");
+        add(boutonCharger);
+
+        boutonSauvgarder = new JButton("Sauvgarder");
+        add(boutonSauvgarder);
 
         niveau = new Niveau();
     }
