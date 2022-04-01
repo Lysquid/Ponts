@@ -38,11 +38,11 @@ public abstract class Barre extends ObjetPhysique {
     Color couleurContour = Color.BLACK;
     boolean apercu;
 
-    PolygonShape shape;
     ArrayList<Liaison> liaisonsLiees;
-    ArrayList<RevoluteJoint> joints;
-    FixtureDef fixtureDef;
-    Fixture fixture;
+    transient ArrayList<RevoluteJoint> joints;
+    transient PolygonShape shape;
+    transient FixtureDef fixtureDef;
+    transient Fixture fixture;
 
     float longueur;
     float largeur;
@@ -195,7 +195,7 @@ public abstract class Barre extends ObjetPhysique {
         setPos(centre, angle);
 
         if (fixture != null) {
-            body.destroyFixture(fixture);
+            body.destroyFixture((Fixture) fixture);
         }
         fixtureDef.shape = shape;
         fixture = body.createFixture(fixtureDef);

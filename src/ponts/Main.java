@@ -3,9 +3,14 @@ package ponts;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
+import com.formdev.flatlaf.FlatLightLaf;
+
+import ponts.ihm.Editeur;
 import ponts.ihm.Jeu;
 
 public class Main extends JFrame {
@@ -21,13 +26,18 @@ public class Main extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
-        add(jeu);
-
-        setVisible(true);
-
         refreshRate = getRefreshRate();
-        jeu.init(refreshRate);
+
+        if (false) {
+            Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
+            add(jeu);
+            setVisible(true);
+            jeu.initialiser(refreshRate);
+        } else {
+            Editeur editeur = new Editeur(LARGEUR, HAUTEUR);
+            add(editeur);
+            setVisible(true);
+        }
 
     }
 
@@ -45,7 +55,27 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
+        setLookAndFeel();
         new Main();
+    }
+
+    public static void setLookAndFeel() {
+        FlatLightLaf.setup();
+
+        int arrondi = 30;
+        UIManager.put("Button.arc", arrondi);
+        UIManager.put("Component.arc", arrondi);
+        UIManager.put("TextComponent.arc", arrondi);
+        UIManager.put("ComboBox.arc", arrondi);
+
+        int marge = 10;
+        Insets insets = new Insets(marge, marge, marge, marge);
+        UIManager.put("Button.margin", insets);
+        UIManager.put("TextField.margin", insets);
+        UIManager.put("Component.margin", insets);
+        UIManager.put("TextComponent.margin", insets);
+        UIManager.put("ComboBox.margin", insets);
+
     }
 
 }

@@ -22,7 +22,7 @@ public abstract class Liaison extends ObjetPhysique {
     public static final int CATEGORY = 0b0100;
     public static final int MASK = Bord.CATEGORY | Voiture.CATEGORY;
 
-    static final float RAYON = 0.5f;
+    public static final float RAYON = 0.5f;
     static final float RAYON_CLICK = 1f;
 
     Color couleurRemplissage;
@@ -31,7 +31,7 @@ public abstract class Liaison extends ObjetPhysique {
 
     LinkedList<Barre> barresLiees;
     boolean cliquee;
-    CircleShape shape;
+    transient CircleShape shape;
 
     boolean apercu;
 

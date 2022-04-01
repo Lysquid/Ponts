@@ -8,19 +8,20 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
+import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
+import ponts.niveau.Niveau;
+import ponts.physique.Partie;
 import ponts.physique.Pont;
-import ponts.physique.barres.Barre;
 import ponts.physique.barres.Materiau;
 import ponts.physique.environnement.Bord;
 import ponts.physique.voiture.Voiture;
@@ -33,61 +34,53 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     Timer timerPhysique;
     static final int TICK_PHYSIQUE = 16;
     long tempsPhysique;
+
+    JComboBox<String> comboBoxNiveaux;
     JButton boutonLancer;
     JButton boutonMateriauBois;
     JButton boutonMateriauGoudron;
 
-    LinkedList<Barre> boites;
     Pont pont;
+    Partie partie;
 
-    String boutonSouris;
+    int boutonSouris;
     boolean clicSouris = false;
-    Vec2 posSouris;
+    Vec2 posSouris = new Vec2();
     boolean initilise = false;
 
     long tempsPrecedent = 0;
     static final int DELAI_APPARITION = 100;
-    boolean simulationPhysique;
+    boolean simulationPhysique = false;
     Materiau materiau = Materiau.BOIS;
 
     Voiture voiture;
 
     public Jeu(int largeur, int hauteur) {
-        boites = new LinkedList<Barre>();
 
         voiture = null;
 
         setSize(largeur, hauteur);
-        boutonLancer = new JButton();
-        boutonLancer.setBounds(10, 20, 100, 50);
-        boutonLancer.setText("Lancer");
-        boutonLancer.setBackground(Color.WHITE);
+
+        String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
+        comboBoxNiveaux = new JComboBox<String>(nomsNiveaux);
+        comboBoxNiveaux.addActionListener(this);
+        add(comboBoxNiveaux);
+
+        boutonLancer = new JButton("Lancer");
         boutonLancer.addActionListener(this);
-        setLayout(null);
         add(boutonLancer);
 
-        setSize(largeur, hauteur);
-        boutonMateriauBois = new JButton();
-        boutonMateriauBois.setBounds(150, 20, 100, 50);
-        boutonMateriauBois.setText("Bois");
-        boutonMateriauBois.setBackground(Color.WHITE);
+        boutonMateriauBois = new JButton("Bois");
         boutonMateriauBois.addActionListener(this);
-        setLayout(null);
         add(boutonMateriauBois);
 
-        boutonMateriauGoudron = new JButton();
-        boutonMateriauGoudron.setBounds(290, 20, 100, 50);
-        boutonMateriauGoudron.setText("Goudron");
-        boutonMateriauGoudron.setBackground(Color.WHITE);
+        boutonMateriauGoudron = new JButton("Goudron");
         boutonMateriauGoudron.addActionListener(this);
-        setLayout(null);
         add(boutonMateriauGoudron);
 
-        simulationPhysique = false;
-        posSouris = new Vec2();
     }
 
-    public void init(int refreshRate) {
+    public void initialiser(int refreshRate) {
 
         box2d = new Box2D(getWidth(), getHeight());
 
@@ -96,6 +89,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         new Bord(world, box2d.largeur, box2d.hauteur);
         pont = new Pont(world, box2d);
+        partie = new Partie(pont);
 
         voiture = new Voiture(world, new Vec2(box2d.largeur * 0.20f, box2d.hauteur * 0.10f));
 
@@ -128,12 +122,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         g.setColor(Color.decode("#55a3d4"));
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        for (Barre box : boites) {
-            box.dessiner(g, box2d);
-        }
-
-        if (pont != null) {
-            pont.dessiner(g, box2d, posSouris);
+        if (partie != null) {
+            partie.dessiner(g, box2d, posSouris);
         }
         if (voiture != null) {
             voiture.dessiner(g, box2d);
@@ -158,20 +148,25 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             }
         }
 
-        if (e.getSource() == timerGraphique)
-
-        {
+        if (e.getSource() == timerGraphique) {
             repaint();
         }
 
         if (e.getSource() == boutonLancer) {
-            simulationPhysique = !simulationPhysique;
             if (simulationPhysique) {
                 boutonLancer.setText("Arreter");
+                simulationPhysique = false;
             } else {
                 boutonLancer.setText("Lancer");
+                simulationPhysique = true;
             }
         }
+
+        if (e.getSource() == comboBoxNiveaux) {
+            String nomNiveau = (String) comboBoxNiveaux.getSelectedItem();
+            partie.chargerNiveau(nomNiveau);
+        }
+
         if (e.getSource() == boutonMateriauBois) {
             materiau = Materiau.BOIS;
             pont.arreterCreation(world);
@@ -184,19 +179,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     }
 
     public void majInfosSouris(MouseEvent e) {
-        float x = box2d.pixelToWorldX(e.getX());
-        float y = box2d.pixelToWorldY(e.getY());
-        posSouris = new Vec2(x, y);
-
-        if (SwingUtilities.isLeftMouseButton(e)) {
-            boutonSouris = "gauche";
-        }
-        if (SwingUtilities.isRightMouseButton(e)) {
-            boutonSouris = "droite";
-        }
-        if (SwingUtilities.isMiddleMouseButton(e)) {
-            boutonSouris = "molette";
-        }
+        posSouris = box2d.pixelToWorld(e.getX(), e.getY());
+        boutonSouris = e.getButton();
     }
 
     @Override

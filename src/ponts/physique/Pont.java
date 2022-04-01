@@ -1,6 +1,7 @@
 package ponts.physique;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import org.jbox2d.common.Vec2;
@@ -15,7 +16,7 @@ import ponts.physique.liaisons.Liaison;
 import ponts.physique.liaisons.LiaisonFixe;
 import ponts.physique.liaisons.LiaisonMobile;
 
-public class Pont {
+public class Pont implements Serializable {
 
     LinkedList<Barre> barres;
     LinkedList<Liaison> liaisons;
@@ -61,7 +62,7 @@ public class Pont {
         }
     }
 
-    public void gererInput(World world, Vec2 posSouris, String boutonSouris, boolean clicSouris, Materiau materiau) {
+    public void gererInput(World world, Vec2 posSouris, int boutonSouris, boolean clicSouris, Materiau materiau) {
 
         Vec2 posSourisMax = posSourisMax(barreEnCreation, posSouris);
         liaisonProche = recupLiaisonProche(posSourisMax);
@@ -84,7 +85,7 @@ public class Pont {
 
             switch (boutonSouris) {
 
-                case "gauche":
+                case 1: // clic gauche
 
                     // Test si la barre vérifie des conditions
                     if (barreValide) {
@@ -106,7 +107,7 @@ public class Pont {
 
                     break;
 
-                case "droite":
+                case 3: // clic droit
                     if (barreEnCreation != null) {
                         arreterCreation(world);
                     } else {
@@ -115,9 +116,6 @@ public class Pont {
 
                     break;
 
-                default:
-
-                    break;
             }
         }
 
