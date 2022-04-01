@@ -164,9 +164,11 @@ public class Pont implements Serializable {
     }
 
     public void arreterCreation(World world) {
-        supprimerBarre(world, barreEnCreation);
-        barreEnCreation = null;
-        liaisonEnCreation = null;
+        if (barreEnCreation != null) {
+            supprimerBarre(world, barreEnCreation);
+            barreEnCreation = null;
+            liaisonEnCreation = null;
+        }
     }
 
     private void supprimerBarre(World world, Barre barre) {
