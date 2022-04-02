@@ -26,6 +26,7 @@ public class Niveau implements Serializable {
     LinkedList<Vec2> posCoins;
     LinkedList<Vec2> posLiaisons;
     int budget = 0;
+    public Vec2[] getPosCoins;
 
     public Niveau() {
         posCoins = new LinkedList<Vec2>();
@@ -75,6 +76,11 @@ public class Niveau implements Serializable {
         posCoins.addFirst(bordGauche);
         Vec2 bordDroit = new Vec2(box2d.getLargeur(), posCoins.getLast().y);
         posCoins.add(bordDroit);
+
+        Vec2 coinGauche = new Vec2(0, 0);
+        posCoins.addFirst(coinGauche);
+        Vec2 coinDroit = new Vec2(box2d.getLargeur(), 0);
+        posCoins.add(coinDroit);
         return true;
     }
 
@@ -134,6 +140,10 @@ public class Niveau implements Serializable {
         }
 
         return niveau;
+    }
+
+    public LinkedList<Vec2> getPosCoins() {
+        return posCoins;
     }
 
 }

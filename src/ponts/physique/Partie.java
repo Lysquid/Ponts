@@ -15,6 +15,7 @@ public class Partie {
 
     World world;
     Pont pont;
+    Bord bord;
     Voiture voiture;
 
     private boolean simulationPhysique = false;
@@ -24,9 +25,9 @@ public class Partie {
         Vec2 gravity = new Vec2(0.0f, -9.81f);
         world = new World(gravity);
 
-        new Bord(world, box2d.getLargeur(), box2d.getHauteur());
+        bord = new Bord(world, niveau);
         pont = new Pont(world, box2d, niveau);
-        voiture = new Voiture(world, new Vec2(box2d.getLargeur() * 0.20f, box2d.getHauteur() * 0.10f));
+        voiture = new Voiture(world, new Vec2(box2d.getLargeur() * 0.10f, box2d.getHauteur() * 0.60f));
 
     }
 
@@ -34,11 +35,12 @@ public class Partie {
         return simulationPhysique;
     }
 
-    public void setSimulationPhysique(boolean estActive) {
-        simulationPhysique = estActive;
+    public void toggleSimulationPhysique() {
+        simulationPhysique = !simulationPhysique;
     }
 
     public void dessiner(Graphics2D g, Box2D box2d, Vec2 posSouris) {
+        bord.dessiner(g, box2d);
         pont.dessiner(g, box2d, posSouris);
         voiture.dessiner(g, box2d);
     }
@@ -59,10 +61,6 @@ public class Partie {
         this.materiau = materiau;
         pont.arreterCreation(world);
 
-    }
-
-    public void toggleSimulationPhysique() {
-        simulationPhysique = !simulationPhysique;
     }
 
 }
