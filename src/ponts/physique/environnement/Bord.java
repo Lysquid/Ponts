@@ -1,7 +1,6 @@
 package ponts.physique.environnement;
 
 import java.awt.Color;
-
 import java.awt.Graphics2D;
 import java.util.LinkedList;
 
@@ -10,13 +9,11 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 import ponts.ihm.Box2D;
 import ponts.niveau.Niveau;
-import ponts.physique.ObjetPhysique;
 
 public class Bord {
 
