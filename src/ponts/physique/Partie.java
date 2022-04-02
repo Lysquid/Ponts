@@ -9,11 +9,14 @@ import ponts.ihm.Box2D;
 import ponts.niveau.Niveau;
 import ponts.physique.barres.Materiau;
 import ponts.physique.environnement.Bord;
+import ponts.physique.voiture.Voiture;
 
 public class Partie {
 
-    Pont pont;
     World world;
+    Pont pont;
+    Voiture voiture;
+
     private boolean simulationPhysique = false;
     Materiau materiau = Materiau.BOIS;
 
@@ -23,6 +26,7 @@ public class Partie {
 
         new Bord(world, box2d.getLargeur(), box2d.getHauteur());
         pont = new Pont(world, box2d);
+        voiture = new Voiture(world, new Vec2(box2d.getLargeur() * 0.20f, box2d.getHauteur() * 0.10f));
 
     }
 
@@ -36,12 +40,12 @@ public class Partie {
 
     public void dessiner(Graphics2D g, Box2D box2d, Vec2 posSouris) {
         pont.dessiner(g, box2d, posSouris);
+        voiture.dessiner(g, box2d);
     }
 
     public void tickPhysique(Vec2 posSouris, int boutonSouris, boolean clicSouris, float dt) {
 
         pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau);
-
         pont.testCasse(world, dt);
 
         if (isSimulationPhysique()) {

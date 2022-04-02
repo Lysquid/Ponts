@@ -17,14 +17,10 @@ import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
 
 import ponts.niveau.Niveau;
 import ponts.physique.Partie;
-import ponts.physique.Pont;
 import ponts.physique.barres.Materiau;
-import ponts.physique.environnement.Bord;
-import ponts.physique.voiture.Voiture;
 
 public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
@@ -48,11 +44,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     long tempsPrecedent = 0;
 
-    Voiture voiture;
-
     public Jeu(int largeur, int hauteur) {
-
-        voiture = null;
 
         setSize(largeur, hauteur);
 
@@ -80,8 +72,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         box2d = new Box2D(getWidth(), getHeight());
 
         partie = new Partie(box2d, recupererNiveau());
-
-        voiture = new Voiture(world, new Vec2(box2d.largeur * 0.20f, box2d.hauteur * 0.10f));
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -114,9 +104,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         if (partie != null) {
             partie.dessiner(g, box2d, posSouris);
-        }
-        if (voiture != null) {
-            voiture.dessiner(g, box2d);
         }
     }
 
