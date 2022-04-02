@@ -27,7 +27,7 @@ import ponts.physique.voiture.Voiture;
 public abstract class Barre extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0010;
-    public static final int MASK = Bord.CATEGORY | Voiture.CATEGORY | Barre.CATEGORY;
+    public static final int MASK = Bord.CATEGORY | Voiture.CATEGORY;
 
     static final float LONGUEUR_MAX = 8;
     static final float LONGUEUR_MIN = 3;
@@ -189,7 +189,7 @@ public abstract class Barre extends ObjetPhysique {
         Vec2 centre = liaison1.getPos().add(liaison2.getPos()).mul(0.5f);
         Vec2 difference = liaison1.getPos().sub(liaison2.getPos());
         float angle = (float) Math.atan(difference.y / difference.x);
-        longueur = difference.length() - Liaison.RAYON * 2;
+        longueur = difference.length();
 
         shape.setAsBox(longueur / 2, largeur / 2);
         setPos(centre, angle);

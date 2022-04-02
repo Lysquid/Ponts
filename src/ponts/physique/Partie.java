@@ -37,6 +37,7 @@ public class Partie {
 
     public void toggleSimulationPhysique() {
         simulationPhysique = !simulationPhysique;
+        pont.arreterCreation(world);
     }
 
     public void dessiner(Graphics2D g, Box2D box2d, Vec2 posSouris) {

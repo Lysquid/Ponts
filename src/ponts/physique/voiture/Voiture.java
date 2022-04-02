@@ -20,11 +20,14 @@ public class Voiture {
     Carrosserie carrosserie;
 
     public Voiture(World world, Niveau niveau) {
-        Vec2 pos = niveau.getPosCoins().get(1);
-        pos.addLocal(0, Roue.RAYON);
-        carrosserie = new Carrosserie(world, pos.add(new Vec2(2.5f, 2f)));
-        roueAvant = new Roue(world, pos.add(new Vec2(5f, 0.0f)));
-        roueArriere = new Roue(world, pos);
+        Vec2 posRoueArriere = niveau.getPosCoins().get(1).add(new Vec2(0, Roue.RAYON));
+        Vec2 posRoueAvant = posRoueArriere.add(new Vec2(5f, 0f));
+        Vec2 posCarrosserie = new Vec2(0.5f * (posRoueArriere.x + posRoueAvant.x), posRoueArriere.y + 2f);
+
+        carrosserie = new Carrosserie(world, posCarrosserie);
+        roueArriere = new Roue(world, posRoueArriere);
+        roueAvant = new Roue(world, posRoueAvant);
+
         roueArriere.lierVoiture(world, carrosserie);
         roueAvant.lierVoiture(world, carrosserie);
 
