@@ -25,7 +25,7 @@ public class Partie {
         world = new World(gravity);
 
         new Bord(world, box2d.getLargeur(), box2d.getHauteur());
-        pont = new Pont(world, box2d);
+        pont = new Pont(world, box2d, niveau);
         voiture = new Voiture(world, new Vec2(box2d.getLargeur() * 0.20f, box2d.getHauteur() * 0.10f));
 
     }

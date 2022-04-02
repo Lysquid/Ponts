@@ -8,6 +8,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
 import ponts.ihm.Box2D;
+import ponts.niveau.Niveau;
 import ponts.physique.barres.Barre;
 import ponts.physique.barres.BarreBois;
 import ponts.physique.barres.BarreGoudron;
@@ -24,14 +25,14 @@ public class Pont implements Serializable {
     Liaison liaisonEnCreation;
     Liaison liaisonProche;
 
-    public Pont(World world, Box2D box2d) {
+    public Pont(World world, Box2D box2d, Niveau niveau) {
 
         barres = new LinkedList<Barre>();
         liaisons = new LinkedList<Liaison>();
 
-        liaisons.add(new LiaisonFixe(world, new Vec2(box2d.getLargeur() * 0.5f, box2d.getHauteur() * 0.05f)));
-        liaisons.add(new LiaisonFixe(world, new Vec2(box2d.getLargeur() * 0.15f, box2d.getHauteur() * 0.4f)));
-        liaisons.add(new LiaisonFixe(world, new Vec2(box2d.getLargeur() * 0.86f, box2d.getHauteur() * 0.43f)));
+        for (Vec2 posLiaison : niveau.getPosLiaisons()) {
+            liaisons.add(new LiaisonFixe(world, posLiaison));
+        }
 
     }
 

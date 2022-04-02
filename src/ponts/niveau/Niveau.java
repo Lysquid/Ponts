@@ -32,6 +32,10 @@ public class Niveau implements Serializable {
         posLiaisons = new LinkedList<Vec2>();
     }
 
+    public LinkedList<Vec2> getPosLiaisons() {
+        return posLiaisons;
+    }
+
     public void dessiner(Graphics2D g, Box2D box2d) {
         g.setColor(Color.BLACK);
         if (!posCoins.isEmpty()) {
@@ -63,11 +67,15 @@ public class Niveau implements Serializable {
         posLiaisons.add(posSouris);
     }
 
-    public void ajouterExtremitees(Box2D box2d) {
+    public boolean ajouterExtremitees(Box2D box2d) {
+        if (posCoins.isEmpty()) {
+            return false;
+        }
         Vec2 bordGauche = new Vec2(0, posCoins.getFirst().y);
         posCoins.addFirst(bordGauche);
         Vec2 bordDroit = new Vec2(box2d.getLargeur(), posCoins.getLast().y);
         posCoins.add(bordDroit);
+        return true;
     }
 
     public void setBudget(int budget) {

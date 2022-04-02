@@ -32,6 +32,7 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     JButton boutonSauvegarder;
     JButton boutonCharger;
     JButton boutonUndo;
+    JButton boutonEffacer;
 
     public Editeur(int largeur, int hauteur) {
 
@@ -67,6 +68,10 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         boutonUndo.addActionListener(this);
         add(boutonUndo);
 
+        boutonEffacer = new JButton("Effacer");
+        boutonEffacer.addActionListener(this);
+        add(boutonEffacer);
+
         niveau = new Niveau();
     }
 
@@ -88,24 +93,31 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == boutonSauvegarder) {
-            niveau.ajouterExtremitees(box2d);
-            try {
-                int budget = Integer.parseInt(champBudget.getText());
-                niveau.setBudget(budget);
-            } catch (NumberFormatException i) {
+            boolean niveauValide = niveau.ajouterExtremitees(box2d);
+            if (!niveauValide) {
+                System.out.println("Le niveau est invalide");
+            } else {
+                try {
+                    int budget = Integer.parseInt(champBudget.getText());
+                    niveau.setBudget(budget);
+                    niveau.sauvegarder(champNomNiveau.getText());
+                } catch (NumberFormatException i) {
+                    System.out.println("Le budget est invalide");
+                }
             }
-            niveau.sauvegarder(champNomNiveau.getText());
-            repaint();
+
         }
         if (e.getSource() == boutonCharger) {
             niveau = Niveau.charger(champNomNiveau.getText());
             champBudget.setText(Integer.toString(niveau.getBudget()));
-            repaint();
         }
         if (e.getSource() == boutonUndo) {
             niveau.undo();
-            repaint();
         }
+        if (e.getSource() == boutonEffacer) {
+            niveau = new Niveau();
+        }
+        repaint();
     }
 
     @Override
