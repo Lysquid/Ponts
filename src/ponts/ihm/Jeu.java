@@ -27,8 +27,6 @@ import ponts.physique.environnement.Bord;
 
 public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
-    Box2D box2d;
-    World world;
     Timer timerGraphique;
     Timer timerPhysique;
     static final int TICK_PHYSIQUE = 16;
@@ -39,7 +37,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     JButton boutonMateriauBois;
     JButton boutonMateriauGoudron;
 
-    Pont pont;
+    Box2D box2d;
     Partie partie;
 
     int boutonSouris;
@@ -48,9 +46,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     boolean initilise = false;
 
     long tempsPrecedent = 0;
-    static final int DELAI_APPARITION = 100;
-    boolean simulationPhysique = false;
-    Materiau materiau = Materiau.BOIS;
 
     public Jeu(int largeur, int hauteur) {
 
@@ -79,12 +74,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         box2d = new Box2D(getWidth(), getHeight());
 
-        Vec2 gravity = new Vec2(0.0f, -9.81f);
-        world = new World(gravity);
-
-        new Bord(world, box2d.largeur, box2d.hauteur);
-        pont = new Pont(world, box2d);
-        partie = new Partie(pont);
+        partie = new Partie(box2d, recupererNiveau());
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -124,19 +114,14 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == timerPhysique) {
-            pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau);
-            clicSouris = false;
 
             long nouveauTempsPhysique = System.currentTimeMillis();
             float dt = (nouveauTempsPhysique - tempsPhysique) / 1000f;
             tempsPhysique = nouveauTempsPhysique;
 
-            pont.testCasse(world, dt);
+            partie.tickPhysique(posSouris, boutonSouris, clicSouris, dt);
+            clicSouris = false;
 
-            if (simulationPhysique) {
-                world.step(dt, 10, 8);
-
-            }
         }
 
         if (e.getSource() == timerGraphique) {
@@ -144,28 +129,34 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
 
         if (e.getSource() == boutonLancer) {
-            if (simulationPhysique) {
+            partie.toggleSimulationPhysique();
+            if (partie.isSimulationPhysique()) {
                 boutonLancer.setText("Arreter");
-                simulationPhysique = false;
             } else {
                 boutonLancer.setText("Lancer");
-                simulationPhysique = true;
             }
         }
 
         if (e.getSource() == comboBoxNiveaux) {
-            String nomNiveau = (String) comboBoxNiveaux.getSelectedItem();
-            partie.chargerNiveau(nomNiveau);
+            partie = new Partie(box2d, recupererNiveau());
         }
 
+        Materiau materiau = null;
         if (e.getSource() == boutonMateriauBois) {
             materiau = Materiau.BOIS;
-            pont.arreterCreation(world);
         }
         if (e.getSource() == boutonMateriauGoudron) {
             materiau = Materiau.GOUDRON;
-            pont.arreterCreation(world);
         }
+        if (materiau != null) {
+            partie.changementMateriau(materiau);
+        }
+
+    }
+
+    private Niveau recupererNiveau() {
+        String nomNiveau = (String) comboBoxNiveaux.getSelectedItem();
+        return Niveau.charger(nomNiveau);
 
     }
 
