@@ -27,7 +27,7 @@ import ponts.physique.voiture.Voiture;
 public abstract class Barre extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0010;
-    public static final int MASK = Bord.CATEGORY | Voiture.CATEGORY;
+    public static final int MASK = Bord.CATEGORY  | Voiture.CATEGORY;
 
     static final float LONGUEUR_MAX = 8;
     static final float LONGUEUR_MIN = 3;

@@ -151,6 +151,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     }
 
     private Niveau recupererNiveau() {
+        boutonLancer.setText("Lancer");
         String nomNiveau = (String) comboBoxNiveaux.getSelectedItem();
         return Niveau.charger(nomNiveau);
 

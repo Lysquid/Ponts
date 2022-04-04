@@ -100,10 +100,10 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
                 try {
                     int budget = Integer.parseInt(champBudget.getText());
                     niveau.setBudget(budget);
-                    niveau.sauvegarder(champNomNiveau.getText());
                 } catch (NumberFormatException i) {
                     System.out.println("Le budget est invalide");
                 }
+                niveau.sauvegarder(champNomNiveau.getText());
             }
 
         }
