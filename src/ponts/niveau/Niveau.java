@@ -2,6 +2,7 @@ package ponts.niveau;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -67,10 +68,11 @@ public class Niveau implements Serializable {
         posLiaisons.add(posSouris);
     }
 
+    public boolean valide() {
+        return !posCoins.isEmpty();
+    }
+
     public boolean ajouterExtremitees(Box2D box2d) {
-        if (posCoins.isEmpty()) {
-            return false;
-        }
         Vec2 bordGauche = new Vec2(0, posCoins.getFirst().y);
         posCoins.addFirst(bordGauche);
         Vec2 bordDroit = new Vec2(box2d.getLargeur(), posCoins.getLast().y);
@@ -103,16 +105,21 @@ public class Niveau implements Serializable {
         }
     }
 
-    public void sauvegarder(String nomNiveau) {
-        String chemin = CHEMIN.resolve(nomNiveau).toString();
+    public void sauvegarder(String nomNiveau, String texteBudget) {
+        String chemin = cheminNiveau(nomNiveau);
 
+        if (!valide()) {
+            System.out.println("Le niveau est invalide");
+        }
         try {
-
+            budget = Integer.parseInt(texteBudget);
             FileOutputStream fileOut = new FileOutputStream(chemin);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(this);
             objectOut.close();
             fileOut.close();
+        } catch (NumberFormatException i) {
+            System.out.println("Le budget est invalide");
         } catch (FileNotFoundException i) {
             System.out.println("Nom de fichier invalide");
         } catch (IOException i) {
@@ -121,7 +128,7 @@ public class Niveau implements Serializable {
     }
 
     public static Niveau charger(String nomNiveau) {
-        String chemin = CHEMIN.resolve(nomNiveau).toString();
+        String chemin = cheminNiveau(nomNiveau);
         Niveau niveau = null;
         try {
             FileInputStream fileIn = new FileInputStream(chemin);
@@ -143,6 +150,19 @@ public class Niveau implements Serializable {
 
     public LinkedList<Vec2> getPosCoins() {
         return posCoins;
+    }
+
+    public static String cheminNiveau(String nomNiveau) {
+        return CHEMIN.resolve(nomNiveau).toString();
+    }
+
+    public static void supprimer(String nomNiveau) {
+        File file = new File(cheminNiveau(nomNiveau));
+        if (file.delete()) {
+            System.out.println("Fichier supprimé");
+        } else {
+            System.out.println("Fichier introuvable");
+        }
     }
 
 }

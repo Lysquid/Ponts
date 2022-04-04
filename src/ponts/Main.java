@@ -28,7 +28,7 @@ public class Main extends JFrame {
 
         refreshRate = getRefreshRate();
 
-        if (true) {
+        if (false) {
             Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
             add(jeu);
             setVisible(true);

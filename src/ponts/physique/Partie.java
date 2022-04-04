@@ -22,6 +22,8 @@ public class Partie {
     Materiau materiau = Materiau.BOIS;
 
     public Partie(Box2D box2d, Niveau niveau) {
+        niveau.ajouterExtremitees(box2d);
+        
         Vec2 gravity = new Vec2(0.0f, -9.81f);
         world = new World(gravity);
 

@@ -33,6 +33,7 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     JButton boutonCharger;
     JButton boutonUndo;
     JButton boutonEffacer;
+    JButton boutonSupprimer;
 
     public Editeur(int largeur, int hauteur) {
 
@@ -57,6 +58,10 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         boutonCharger = new JButton("Charger");
         boutonCharger.addActionListener(this);
         add(boutonCharger);
+
+        boutonSupprimer = new JButton("Supprimer");
+        boutonSupprimer.addActionListener(this);
+        add(boutonSupprimer);
 
         textBudget = new JLabel("Budget");
         add(textBudget);
@@ -93,23 +98,14 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == boutonSauvegarder) {
-            boolean niveauValide = niveau.ajouterExtremitees(box2d);
-            if (!niveauValide) {
-                System.out.println("Le niveau est invalide");
-            } else {
-                try {
-                    int budget = Integer.parseInt(champBudget.getText());
-                    niveau.setBudget(budget);
-                } catch (NumberFormatException i) {
-                    System.out.println("Le budget est invalide");
-                }
-                niveau.sauvegarder(champNomNiveau.getText());
-            }
-
+            niveau.sauvegarder(nomNiveau(), champBudget.getText());
         }
         if (e.getSource() == boutonCharger) {
-            niveau = Niveau.charger(champNomNiveau.getText());
+            niveau = Niveau.charger(nomNiveau());
             champBudget.setText(Integer.toString(niveau.getBudget()));
+        }
+        if (e.getSource() == boutonSupprimer) {
+            Niveau.supprimer(nomNiveau());
         }
         if (e.getSource() == boutonUndo) {
             niveau.undo();
@@ -135,6 +131,10 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
                 break;
         }
         repaint();
+    }
+
+    public String nomNiveau() {
+        return champNomNiveau.getText();
     }
 
     @Override
