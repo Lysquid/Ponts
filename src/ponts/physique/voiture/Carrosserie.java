@@ -3,25 +3,15 @@ package ponts.physique.voiture;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
-import java.awt.image.AffineTransformOp;
 import java.awt.geom.AffineTransform;
-
-import java.lang.Object;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-
-import java.awt.Image;
-
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-
-import com.formdev.flatlaf.util.Graphics2DProxy;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -30,7 +20,6 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
-import javafx.scene.transform.Affine;
 import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
 
@@ -117,7 +106,6 @@ public class Carrosserie extends ObjetPhysique {
             g2d.drawImage(image2, null, x2 - w3 / 7, y2 - h3 / 5);
             g2d.rotate(getAngle(), x2, y2);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
