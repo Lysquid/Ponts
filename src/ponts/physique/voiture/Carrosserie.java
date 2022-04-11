@@ -2,6 +2,12 @@ package ponts.physique.voiture;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -17,6 +23,7 @@ public class Carrosserie extends ObjetPhysique {
 
     public static final int CATEGORY = Voiture.CATEGORY;
     public static final int MASK = Voiture.MASK;
+    public static final Path CHEMIN = Paths.get("res", "images");
 
     Color couleurContour = Color.BLACK;
     Color couleurRemplissage = Color.RED;
@@ -68,6 +75,9 @@ public class Carrosserie extends ObjetPhysique {
         g.fillPolygon(xCoins, yCoins, 4);
         g.setColor(couleurContour);
         g.drawPolygon(xCoins, yCoins, 4);
+        String chemin = CHEMIN.resolve("Remycar").toString();
+        //BufferedImage image = ImageIO.read(new File(CHEMIN));
+
 
     }
 

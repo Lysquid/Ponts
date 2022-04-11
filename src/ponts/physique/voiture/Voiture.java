@@ -20,7 +20,7 @@ public class Voiture {
     Carrosserie carrosserie;
 
     public Voiture(World world, Niveau niveau) {
-        Vec2 posRoueArriere = niveau.getPosCoins().get(1).add(new Vec2(Roue.RAYON, Roue.RAYON));
+        Vec2 posRoueArriere = niveau.getPosCoins().get(3).add(new Vec2(Roue.RAYON, Roue.RAYON));
         Vec2 posRoueAvant = posRoueArriere.add(new Vec2(5f, 0f));
         Vec2 posCarrosserie = new Vec2(0.5f * (posRoueArriere.x + posRoueAvant.x), posRoueArriere.y + 2f);
 
