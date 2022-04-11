@@ -27,16 +27,14 @@ import ponts.physique.voiture.Voiture;
 public abstract class Barre extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0010;
-    public static final int MASK = Bord.CATEGORY  | Voiture.CATEGORY;
+    public static final int MASK = Bord.CATEGORY | Voiture.CATEGORY;
 
     static final float LONGUEUR_MAX = 8;
     static final float LONGUEUR_MIN = 3;
 
-    float forceMax;
-
     Color couleurRemplissage;
     Color couleurContour = Color.BLACK;
-    boolean apercu;
+    boolean apercu = true;
 
     ArrayList<Liaison> liaisonsLiees;
     transient ArrayList<RevoluteJoint> joints;
@@ -45,11 +43,14 @@ public abstract class Barre extends ObjetPhysique {
     transient Fixture fixture;
 
     float longueur;
-    float largeur;
+    float largeur = 1;
+
+    float forceMax = 4000f;
+    int prix_barre = 50;
+    int prix;
 
     protected Barre(World world, Liaison liaison1, Liaison liaison2) {
 
-        apercu = true;
         liaisonsLiees = new ArrayList<Liaison>(2);
         joints = new ArrayList<RevoluteJoint>(2);
         ajouterLiaison(liaison1);
@@ -205,6 +206,7 @@ public abstract class Barre extends ObjetPhysique {
     public void activerPhysique() {
         body.setType(BodyType.DYNAMIC);
         apercu = false;
+        prix = Math.round(longueur / LONGUEUR_MAX * prix_barre);
     }
 
     public void accrocher(World world, Liaison liaisonCliquee) {
