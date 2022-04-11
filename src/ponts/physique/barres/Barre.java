@@ -47,7 +47,7 @@ public abstract class Barre extends ObjetPhysique {
 
     float forceMax = 4000f;
     int prix_barre = 50;
-    int prix;
+    private int prix;
 
     protected Barre(World world, Liaison liaison1, Liaison liaison2) {
 
@@ -58,6 +58,10 @@ public abstract class Barre extends ObjetPhysique {
 
         creerObjetPhysique(world);
         ajusterPos();
+    }
+
+    public int getPrix() {
+        return prix;
     }
 
     public void creerObjetPhysique(World world) {

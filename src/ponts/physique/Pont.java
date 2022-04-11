@@ -243,11 +243,22 @@ public class Pont implements Serializable {
     }
 
     public void supprimerBarresCliquees(World world, Vec2 posClic) {
+        LinkedList<Barre> barresASupprimer = new LinkedList<Barre>();
         for (Barre barre : barres) {
             if (barre.testBarreCliquee(posClic)) {
                 supprimerBarre(world, barre);
+                barresASupprimer.add(barre);
             }
         }
+        barres.removeAll(barresASupprimer);
+    }
+
+    public int prix() {
+        int prix = 0;
+        for (Barre barre : barres) {
+            prix += barre.getPrix();
+        }
+        return prix;
     }
 
 }
