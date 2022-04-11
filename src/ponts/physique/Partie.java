@@ -17,6 +17,7 @@ public class Partie {
     Pont pont;
     Bord bord;
     Voiture voiture;
+    int budget;
 
     private boolean simulationPhysique = false;
     Materiau materiau = Materiau.BOIS;
@@ -30,6 +31,7 @@ public class Partie {
         bord = new Bord(world, niveau);
         pont = new Pont(world, box2d, niveau);
         voiture = new Voiture(world, niveau);
+        budget = niveau.getBudget();
 
     }
 
@@ -68,6 +70,10 @@ public class Partie {
 
     public int prix() {
         return pont.prix();
+    }
+
+    public int budget() {
+        return budget;
     }
 
 }

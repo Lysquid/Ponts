@@ -34,7 +34,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     JButton boutonLancer;
     JButton boutonMateriauBois;
     JButton boutonMateriauGoudron;
-    JLabel labelPrix;
+    JLabel textPrix;
+    JLabel textBudget;
 
     Box2D box2d;
     Partie partie;
@@ -67,8 +68,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boutonMateriauGoudron.addActionListener(this);
         add(boutonMateriauGoudron);
 
-        labelPrix = new JLabel("Prix : 0 $");
-        add(labelPrix);
+        textPrix = new JLabel();
+        add(textPrix);
+
+        textBudget = new JLabel();
+        add(textBudget);
 
     }
 
@@ -95,22 +99,27 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     @Override
     public void paintComponent(Graphics g0) {
-        
+
         // Activer l'anti-alias
         Graphics2D g = (Graphics2D) g0;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        
+
         // Fonction pour améliorer l'affichage sur Mac/Linux
         Toolkit.getDefaultToolkit().sync();
-        
+
         g.setColor(Color.decode("#55a3d4"));
         g.fillRect(0, 0, getWidth(), getHeight());
 
         if (partie != null) {
-            labelPrix.setText("Prix : " + Integer.toString(partie.prix()) + "$");
+            majTextLabels();
             partie.dessiner(g, box2d, posSouris);
         }
+    }
+
+    private void majTextLabels() {
+        textPrix.setText("Prix : " + Integer.toString(partie.prix()) + " $");
+        textBudget.setText("Budget : " + Integer.toString(partie.budget()) + " $");
     }
 
     public void actionPerformed(ActionEvent e) {
