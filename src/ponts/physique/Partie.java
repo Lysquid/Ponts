@@ -53,9 +53,9 @@ public class Partie {
     public void tickPhysique(Vec2 posSouris, int boutonSouris, boolean clicSouris, float dt) {
 
         pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau);
-        pont.testCasse(world, dt);
-
+        
         if (isSimulationPhysique()) {
+            pont.testCasse(world, dt);
             world.step(dt, 10, 8);
 
         }

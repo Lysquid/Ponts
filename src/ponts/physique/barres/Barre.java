@@ -45,7 +45,7 @@ public abstract class Barre extends ObjetPhysique {
     float longueur;
     float largeur = 1;
 
-    float forceMax = 4000f;
+    float forceMax = 1000f;
     int prix_barre = 50;
     private int prix;
 
@@ -110,11 +110,7 @@ public abstract class Barre extends ObjetPhysique {
 
             if (liaison.getBarresLiees().size() > 1) {
 
-                Vec2 force = new Vec2();
-                joint.getReactionForce(1 / dt, force);
-                float norme = force.length();
-
-                if (norme > forceMax) {
+                if (calculCasse(joint, liaison, dt)) {
                     supprimerLiaison(world, i);
 
                     LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, liaison.getPos());
@@ -126,6 +122,20 @@ public abstract class Barre extends ObjetPhysique {
             }
         }
         return nouvellesLiaisons;
+    }
+
+    public boolean calculCasse(RevoluteJoint joint, Liaison liaison, float dt) {
+
+        Vec2 force = new Vec2();
+        joint.getReactionForce(1 / dt, force);
+
+        Vec2 vectBarre = liaisonsLiees.get(0).getPos().sub(liaisonsLiees.get(1).getPos());
+        Vec2 orthogonal = new Vec2(-vectBarre.y, vectBarre.x);
+        orthogonal.normalize();
+
+        float produitScalaire = Math.abs(Vec2.dot(orthogonal, force));
+
+        return produitScalaire > forceMax;
     }
 
     public void supprimerLiaison(World world, int index) {
