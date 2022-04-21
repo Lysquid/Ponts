@@ -43,6 +43,7 @@ public class Carrosserie extends ObjetPhysique {
 
     }
 
+    @Override
     public void creerObjetPhysique(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
@@ -76,17 +77,18 @@ public class Carrosserie extends ObjetPhysique {
         }
 
         /*
-        g.setColor(couleurRemplissage);
-        g.fillPolygon(xCoins, yCoins, 4);
-        g.setColor(couleurContour);
-        g.drawPolygon(xCoins, yCoins, 4);
+         * g.setColor(couleurRemplissage);
+         * g.fillPolygon(xCoins, yCoins, 4);
+         * g.setColor(couleurContour);
+         * g.drawPolygon(xCoins, yCoins, 4);
          */
 
         String chemin = CHEMIN.resolve("Remycar.png").toString();
 
         try {
             BufferedImage image = ImageIO.read(new File(chemin));
-            //Image image2 = image.getScaledInstance((int)(longueur/2), (int)(largeur/2), BufferedImage.SCALE_SMOOTH);
+            // Image image2 = image.getScaledInstance((int)(longueur/2), (int)(largeur/2),
+            // BufferedImage.SCALE_SMOOTH);
 
             int w2 = (int) (image.getWidth());
             int h2 = (int) (image.getHeight());
@@ -94,13 +96,13 @@ public class Carrosserie extends ObjetPhysique {
             AffineTransform at = new AffineTransform();
             at.scale(0.3, 0.6);
             AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-            image2 = scaleOp.filter(image,image2);
+            image2 = scaleOp.filter(image, image2);
 
-            int w3 = (int)(image2.getWidth());
-            int h3 = (int)(image2.getHeight());
-            int x2 = (int) box2d.worldToPixelX(getPos().x);//(int) x;
+            int w3 = (int) (image2.getWidth());
+            int h3 = (int) (image2.getHeight());
+            int x2 = (int) box2d.worldToPixelX(getPos().x);// (int) x;
             int y2 = (int) box2d.worldToPixelY(getPos().y);
-            
+
             Graphics2D g2d = (Graphics2D) g;
             g2d.rotate(-getAngle(), x2, y2);
             g2d.drawImage(image2, null, x2 - w3 / 7, y2 - h3 / 5);
@@ -108,11 +110,6 @@ public class Carrosserie extends ObjetPhysique {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        
-
-        
-
 
     }
 

@@ -9,7 +9,7 @@ import org.jbox2d.dynamics.World;
 public class LiaisonMobile extends Liaison {
 
     public LiaisonMobile(World world, Vec2 pos) {
-        super(world, pos, BodyType.KINEMATIC);
+        super(world, pos);
 
         couleurRemplissage = Color.decode("#e3f069");
         apercu = true;

@@ -35,7 +35,7 @@ public abstract class Liaison extends ObjetPhysique {
 
     boolean apercu;
 
-    protected Liaison(World world, Vec2 pos, BodyType bodyType) {
+    protected Liaison(World world, Vec2 pos) {
 
         couleurContour = Color.BLACK;
         couleurSurvolee = Color.decode("#e86933");

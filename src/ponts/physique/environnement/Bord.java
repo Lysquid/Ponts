@@ -36,6 +36,7 @@ public class Bord extends ObjetPhysique {
 
     }
 
+    @Override
     public void creerObjetPhysique(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.STATIC;

@@ -66,6 +66,7 @@ public abstract class Barre extends ObjetPhysique {
         return prix;
     }
 
+    @Override
     public void creerObjetPhysique(World world) {
 
         // Etape 1 : Définir le "body"

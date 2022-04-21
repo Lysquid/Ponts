@@ -9,21 +9,18 @@ import org.jbox2d.dynamics.World;
 public class LiaisonFixe extends Liaison {
 
     public LiaisonFixe(World world, Vec2 pos) {
-        super(world, pos, BodyType.STATIC);
+        super(world, pos);
 
         couleurRemplissage = Color.decode("#d33d3d");
-
         apercu = false;
     }
-
 
     public void activerPhysique() {
     }
 
-
     @Override
     public void creerObjetPhysique(World world) {
         creerObjetPhysique(world, BodyType.STATIC);
-        
+
     }
 }

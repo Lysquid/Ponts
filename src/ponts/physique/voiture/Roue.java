@@ -35,6 +35,7 @@ public class Roue extends ObjetPhysique {
         setPos(pos);
     }
 
+    @Override
     public void creerObjetPhysique(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
