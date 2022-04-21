@@ -1,5 +1,6 @@
 package ponts;
 
+import java.awt.BorderLayout;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -7,13 +8,11 @@ import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import java.awt.Dimension;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
 import ponts.ihm.Editeur;
 import ponts.ihm.Jeu;
-import java.awt.BorderLayout;
 
 public class Main extends JFrame {
 
