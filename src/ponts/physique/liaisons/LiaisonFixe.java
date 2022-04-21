@@ -16,6 +16,14 @@ public class LiaisonFixe extends Liaison {
         apercu = false;
     }
 
+
     public void activerPhysique() {
+    }
+
+
+    @Override
+    public void creerObjetPhysique(World world) {
+        creerObjetPhysique(world, BodyType.STATIC);
+        
     }
 }

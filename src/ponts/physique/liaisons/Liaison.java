@@ -44,7 +44,7 @@ public abstract class Liaison extends ObjetPhysique {
 
         cliquee = false;
 
-        creerObjetPhysique(world, bodyType);
+        creerObjetPhysique(world);
         setPos(pos);
 
     }

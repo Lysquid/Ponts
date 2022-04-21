@@ -21,13 +21,15 @@ import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
 import ponts.physique.environnement.Bord;
 import ponts.physique.liaisons.Liaison;
+import ponts.physique.liaisons.LiaisonFixe;
 import ponts.physique.liaisons.LiaisonMobile;
 import ponts.physique.voiture.Voiture;
 
 public abstract class Barre extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0010;
-    public static final int MASK = Bord.CATEGORY | Voiture.CATEGORY;
+    public static final int MASK = Voiture.CATEGORY;
+    public static final int MASK2 = MASK | Bord.CATEGORY;
 
     static final float LONGUEUR_MAX = 8;
     static final float LONGUEUR_MIN = 3;
@@ -37,10 +39,11 @@ public abstract class Barre extends ObjetPhysique {
     boolean apercu = true;
 
     ArrayList<Liaison> liaisonsLiees;
-    transient ArrayList<RevoluteJoint> joints;
-    transient PolygonShape shape;
-    transient FixtureDef fixtureDef;
-    transient Fixture fixture;
+    ArrayList<RevoluteJoint> joints;
+    PolygonShape shape;
+    FixtureDef fixtureDef;
+    Fixture fixture;
+    LigneBarre ligneBarre;
 
     float longueur;
     float largeur = 1;
@@ -221,6 +224,17 @@ public abstract class Barre extends ObjetPhysique {
         body.setType(BodyType.DYNAMIC);
         apercu = false;
         prix = Math.round(longueur / LONGUEUR_MAX * prix_barre);
+
+        // Choix du mask
+        boolean fixe = false;
+        for (Liaison liaison : liaisonsLiees) {
+            if (liaison instanceof LiaisonFixe)
+                fixe = true;
+        }
+        if (!fixe) {
+            fixtureDef.filter.maskBits = MASK2;
+        }
+        ajusterPos();
     }
 
     public void accrocher(World world, Liaison liaisonCliquee) {

@@ -4,10 +4,13 @@ import java.awt.Color;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.World;
 
 public abstract class ObjetPhysique {
 
     protected Body body;
+
+    public abstract void creerObjetPhysique(World world);
 
     public Vec2 getPos() {
         return body.getTransform().p;

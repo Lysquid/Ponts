@@ -24,4 +24,10 @@ public class LiaisonMobile extends Liaison {
         apercu = false;
     }
 
+    @Override
+    public void creerObjetPhysique(World world) {
+        creerObjetPhysique(world, BodyType.KINEMATIC);
+
+    }
+
 }

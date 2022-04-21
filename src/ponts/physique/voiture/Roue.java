@@ -31,14 +31,13 @@ public class Roue extends ObjetPhysique {
     CircleShape shape;
 
     public Roue(World world, Vec2 pos) {
-        creerObjetPhysique(world, pos);
-
+        creerObjetPhysique(world);
+        setPos(pos);
     }
 
-    public void creerObjetPhysique(World world, Vec2 pos) {
+    public void creerObjetPhysique(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
-        bodyDef.position = pos;
         body = world.createBody(bodyDef);
 
         shape = new CircleShape();
