@@ -19,7 +19,7 @@ public class BarreBois extends Barre {
     }
 
     @Override
-    public void deifnirFiltre() {
+    public void definirFiltre() {
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;
     }

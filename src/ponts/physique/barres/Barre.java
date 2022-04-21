@@ -82,12 +82,12 @@ public abstract class Barre extends ObjetPhysique {
         fixtureDef.density = 1f;
         fixtureDef.restitution = elasticite;
         // fixtureDef.friction = 0.3f;
-        deifnirFiltre();
+        definirFiltre();
         fixtureDef.filter.categoryBits |= Barre.CATEGORY;
 
     }
 
-    public abstract void deifnirFiltre();
+    public abstract void definirFiltre();
 
     public void ajouterLiaison(Liaison liaison) {
         liaisonsLiees.add(liaison);
