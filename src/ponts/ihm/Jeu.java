@@ -48,9 +48,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     long tempsPrecedent = 0;
 
-    public Jeu(int largeur, int hauteur) {
-
-        setSize(largeur, hauteur);
+    public Jeu() {
 
         String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
         comboBoxNiveaux = new JComboBox<String>(nomsNiveaux);

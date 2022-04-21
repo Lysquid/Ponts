@@ -22,7 +22,8 @@ public class Roue extends ObjetPhysique {
 
     static final float RAYON = 1f;
     static final float MOTOR_SPEED = 10f; // Vitesse du moteur
-    static final float MOTOR_TORQUE = 1000f; // Puissance du moteur
+    static final float MOTOR_TORQUE = 80f; // Puissance du moteur
+    static final float FRICTION = 0.9f; // Coefficient de frottement
 
     Color couleurContour = Color.BLACK;
     Color couleurRemplissage = Color.decode("#555555");
@@ -47,7 +48,7 @@ public class Roue extends ObjetPhysique {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;
-        fixtureDef.friction = 0.5f;
+        fixtureDef.friction = FRICTION;
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;

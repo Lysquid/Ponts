@@ -12,11 +12,12 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import ponts.ihm.Editeur;
 import ponts.ihm.Jeu;
+import java.awt.BorderLayout;
 
 public class Main extends JFrame {
 
-    static final int LARGEUR = 600;
-    static final int HAUTEUR = 600;
+    static final int LARGEUR = 1600;
+    static final int HAUTEUR = 900;
 
     int refreshRate;
 
@@ -24,14 +25,16 @@ public class Main extends JFrame {
         setTitle("Project");
         setSize(LARGEUR, HAUTEUR);
         // setExtendedState(MAXIMIZED_BOTH);
-        // pack();
+
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         refreshRate = getRefreshRate();
 
+        setLayout(new BorderLayout());
+
         if (true) {
-            Jeu jeu = new Jeu(LARGEUR, HAUTEUR);
+            Jeu jeu = new Jeu();
             add(jeu);
             setVisible(true);
             jeu.initialiser(refreshRate);

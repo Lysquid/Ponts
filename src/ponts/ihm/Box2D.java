@@ -16,7 +16,7 @@ public class Box2D {
         this.largeurP = largeurP;
         this.hauteurP = hauteurP;
 
-        largeur = 50f;
+        largeur = 100f;
         coeff = largeur / largeurP;
         hauteur = hauteurP * coeff;
         // coefficient du nombre de metre par pixel
