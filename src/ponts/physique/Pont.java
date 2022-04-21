@@ -72,11 +72,11 @@ public class Pont implements Serializable {
 
         if (barreEnCreation != null) {
 
-            if (!barreEnCreation.inferieurLongeurMax(posSouris)) {
+            if (liaisonProche != null && barreValide) {
+                majPreview(liaisonProche.getPos());
+            } else if (!barreEnCreation.inferieurLongeurMax(posSouris)) {
                 majPreview(posSourisMax);
                 liaisonProche = null;
-            } else if (liaisonProche != null && barreValide) {
-                majPreview(liaisonProche.getPos());
             } else {
                 majPreview(posSouris);
             }
@@ -202,12 +202,12 @@ public class Pont implements Serializable {
         barreEnCreation.ajusterPos();
     }
 
-    public Liaison recupLiaisonProche(Vec2 posClic) {
+    public Liaison recupLiaisonProche(Vec2 posSouris) {
         Liaison liaisonPlusProche = null;
         float distanceMin = Float.POSITIVE_INFINITY;
         for (Liaison liaison : liaisons) {
-            if (liaison.testLiaisonCliquee(posClic) && liaison != liaisonEnCreation) {
-                float distance = liaison.distancePoint(posClic);
+            if (liaison.testLiaisonCliquee(posSouris) && liaison != liaisonEnCreation) {
+                float distance = liaison.distancePoint(posSouris);
                 if (distance < distanceMin) {
                     distanceMin = distance;
                     liaisonPlusProche = liaison;
