@@ -87,7 +87,6 @@ public abstract class Barre extends ObjetPhysique {
         // fixtureDef.friction = 0.3f;
         definirFiltre();
         fixtureDef.filter.categoryBits |= Barre.CATEGORY;
-        ajouterCollisionBord();
 
     }
 
@@ -247,6 +246,7 @@ public abstract class Barre extends ObjetPhysique {
         body.setType(BodyType.DYNAMIC);
         apercu = false;
         prix = Math.round(longueur / LONGUEUR_MAX * prix_barre);
+        ajouterCollisionBord();
         ajusterPos();
     }
 
