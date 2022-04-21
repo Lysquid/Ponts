@@ -23,6 +23,8 @@ public class Main extends JFrame {
     public Main() {
         setTitle("Project");
         setSize(LARGEUR, HAUTEUR);
+        // setExtendedState(MAXIMIZED_BOTH);
+        // pack();
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 

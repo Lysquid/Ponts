@@ -47,7 +47,7 @@ public abstract class Barre extends ObjetPhysique {
     float longueur;
     float largeur = 1;
 
-    float forceMax = 1000f;
+    float forceMax = 1500f;
     int prix_barre = 50;
     private int prix;
 

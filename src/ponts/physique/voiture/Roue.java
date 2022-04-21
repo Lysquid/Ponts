@@ -46,6 +46,7 @@ public class Roue extends ObjetPhysique {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;
+        fixtureDef.friction = 0.5f;
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;

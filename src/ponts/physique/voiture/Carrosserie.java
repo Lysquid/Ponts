@@ -32,14 +32,16 @@ public class Carrosserie extends ObjetPhysique {
     Color couleurContour = Color.BLACK;
     Color couleurRemplissage = Color.RED;
 
+    BufferedImage image;
+
     PolygonShape shape;
     float longueur = 8f;
     float largeur = 3f;
 
     public Carrosserie(World world, Vec2 pos) {
-
         creerObjetPhysique(world);
         setPos(pos);
+        chargerImage();
 
     }
 
@@ -60,56 +62,49 @@ public class Carrosserie extends ObjetPhysique {
         body.createFixture(fixtureDef);
     }
 
+    private void chargerImage() {
+        String chemin = CHEMIN.resolve("Remycar.png").toString();
+        try {
+            image = ImageIO.read(new File(chemin));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void dessiner(Graphics g, Box2D box2d) {
+        // Grossissement
+        double ratio = 1.2 * box2d.worldToPixel(longueur) / (double) image.getWidth();
+        int w = (int) Math.ceil(image.getWidth() * ratio);
+        int h = (int) Math.ceil(image.getHeight() * ratio);
+        BufferedImage imageTournee = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        AffineTransform transform = new AffineTransform();
+        transform.scale(ratio, ratio);
+        AffineTransformOp transformOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+        imageTournee = transformOp.filter(image, imageTournee);
+
+        // Rotation
+        int x = box2d.worldToPixelX(getPos().x);
+        int y = box2d.worldToPixelY(getPos().y);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.rotate(-getAngle(), x, y);
+        g2d.drawImage(imageTournee, null, x - w / 2, y - h / 2);
+        g2d.rotate(getAngle(), x, y);
+
+        // Hitbox
         int[] xCoins = new int[4];
         int[] yCoins = new int[4];
-
         for (int i = 0; i < 4; i++) {
             Vec2 pos = shape.getVertex(i);
 
             float cos = (float) Math.cos(getAngle());
             float sin = (float) Math.sin(getAngle());
-            float x = pos.x * cos - pos.y * sin + getX();
-            float y = pos.x * sin + pos.y * cos + getY();
-
-            xCoins[i] = box2d.worldToPixelX(x);
-            yCoins[i] = box2d.worldToPixelY(y);
+            float x2 = pos.x * cos - pos.y * sin + getX();
+            float y2 = pos.x * sin + pos.y * cos + getY();
+            xCoins[i] = box2d.worldToPixelX(x2);
+            yCoins[i] = box2d.worldToPixelY(y2);
         }
-
-        /*
-         * g.setColor(couleurRemplissage);
-         * g.fillPolygon(xCoins, yCoins, 4);
-         * g.setColor(couleurContour);
-         * g.drawPolygon(xCoins, yCoins, 4);
-         */
-
-        String chemin = CHEMIN.resolve("Remycar.png").toString();
-
-        try {
-            BufferedImage image = ImageIO.read(new File(chemin));
-            // Image image2 = image.getScaledInstance((int)(longueur/2), (int)(largeur/2),
-            // BufferedImage.SCALE_SMOOTH);
-
-            int w2 = (int) (image.getWidth());
-            int h2 = (int) (image.getHeight());
-            BufferedImage image2 = new BufferedImage(w2, h2, BufferedImage.TYPE_INT_ARGB);
-            AffineTransform at = new AffineTransform();
-            at.scale(0.3, 0.6);
-            AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-            image2 = scaleOp.filter(image, image2);
-
-            int w3 = (int) (image2.getWidth());
-            int h3 = (int) (image2.getHeight());
-            int x2 = (int) box2d.worldToPixelX(getPos().x);// (int) x;
-            int y2 = (int) box2d.worldToPixelY(getPos().y);
-
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.rotate(-getAngle(), x2, y2);
-            g2d.drawImage(image2, null, x2 - w3 / 7, y2 - h3 / 5);
-            g2d.rotate(getAngle(), x2, y2);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        g.setColor(ObjetPhysique.setColorAlpha(couleurContour, 0));
+        g.drawPolygon(xCoins, yCoins, 4);
 
     }
 
