@@ -16,13 +16,14 @@ import org.jbox2d.dynamics.World;
 import ponts.ihm.Box2D;
 import ponts.niveau.Niveau;
 import ponts.physique.ObjetPhysique;
+import ponts.physique.barres.Barre;
 import ponts.physique.liaisons.Liaison;
 import ponts.physique.voiture.Voiture;
 
 public class Bord extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0001;
-    public static final int MASK = Voiture.CATEGORY | Liaison.CATEGORY;
+    public static final int MASK = Voiture.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
 
     Color couleur_remplissage = Color.decode("#49a03f");
     Color couleur_contour = Color.BLACK;

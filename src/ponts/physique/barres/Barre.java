@@ -11,6 +11,7 @@ import org.jbox2d.common.Transform;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.Filter;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
@@ -19,7 +20,9 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
+import ponts.physique.environnement.Bord;
 import ponts.physique.liaisons.Liaison;
+import ponts.physique.liaisons.LiaisonFixe;
 import ponts.physique.liaisons.LiaisonMobile;
 import ponts.physique.voiture.Voiture;
 
@@ -29,7 +32,7 @@ public abstract class Barre extends ObjetPhysique {
     public static final int MASK = Voiture.CATEGORY;
 
     static final float LONGUEUR_MAX = 8;
-    static final float LONGUEUR_MIN = 3;
+    static final float LONGUEUR_MIN = 0;
 
     Color couleurRemplissage;
     Color couleurContour = Color.BLACK;
@@ -84,6 +87,7 @@ public abstract class Barre extends ObjetPhysique {
         // fixtureDef.friction = 0.3f;
         definirFiltre();
         fixtureDef.filter.categoryBits |= Barre.CATEGORY;
+        ajouterCollisionBord();
 
     }
 
@@ -125,6 +129,7 @@ public abstract class Barre extends ObjetPhysique {
                 }
             }
         }
+        ajouterCollisionBord();
         return nouvellesLiaisons;
     }
 
@@ -154,6 +159,21 @@ public abstract class Barre extends ObjetPhysique {
         Liaison liaison = liaisonsLiees.get(index);
         liaison.getBarresLiees().remove(this);
         liaisonsLiees.remove(index);
+    }
+
+    public void ajouterCollisionBord() {
+        // On ajoute des collisions avec les bords seulement si la barre n'est liée
+        // a aucune liaisons fixe (sinon, problemes de collision)
+        boolean fixe = false;
+        for (Liaison liaison : liaisonsLiees) {
+            if (liaison instanceof LiaisonFixe)
+                fixe = true;
+        }
+        if (!fixe) {
+            Filter filter = fixture.getFilterData();
+            filter.maskBits |= Bord.CATEGORY;
+            fixture.setFilterData(filter);
+        }
     }
 
     public void dessiner(Graphics g, Box2D box2d) {
