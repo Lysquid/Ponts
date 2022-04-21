@@ -39,7 +39,7 @@ public abstract class Barre extends ObjetPhysique {
     boolean apercu = true;
 
     ArrayList<Liaison> liaisonsLiees;
-    ArrayList<RevoluteJoint> joints;
+    public ArrayList<RevoluteJoint> joints;
     PolygonShape shape;
     FixtureDef fixtureDef;
     Fixture fixture;
@@ -116,7 +116,7 @@ public abstract class Barre extends ObjetPhysique {
                     supprimerLiaison(world, i);
 
                     LiaisonMobile nouvelleLiaison = new LiaisonMobile(world, liaison.getPos());
-                    liaisonsLiees.add(nouvelleLiaison);
+                    ajouterLiaison(nouvelleLiaison);
                     nouvelleLiaison.activerPhysique();
                     lier(world, nouvelleLiaison);
                     nouvellesLiaisons.add(nouvelleLiaison);
@@ -141,6 +141,8 @@ public abstract class Barre extends ObjetPhysique {
     }
 
     public void supprimerLiaison(World world, int index) {
+        // Condition nécessaire car si la physique n'a pas été activé,
+        // les joints n'ont pas été crées
         if (!joints.isEmpty()) {
             RevoluteJoint joint = joints.get(index);
             world.destroyJoint(joint);
