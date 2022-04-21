@@ -128,19 +128,6 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Vec2 posSouris = box2d.pixelToWorld(e.getX(), e.getY());
-        switch (e.getButton()) {
-            case 1: // clic gauche
-                niveau.ajouterPoint(posSouris);
-                break;
-            case 2: // clic molette
-                niveau.undo();
-                break;
-            case 3: // clic droit
-                niveau.ajouterLiaison(posSouris);
-                break;
-        }
-        repaint();
     }
 
     public String nomNiveau() {
@@ -157,6 +144,19 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
     @Override
     public void mousePressed(MouseEvent e) {
+        Vec2 posSouris = box2d.pixelToWorld(e.getX(), e.getY());
+        switch (e.getButton()) {
+            case 1: // clic gauche
+                niveau.ajouterPoint(posSouris);
+                break;
+            case 2: // clic molette
+                niveau.undo();
+                break;
+            case 3: // clic droit
+                niveau.ajouterLiaison(posSouris);
+                break;
+        }
+        repaint();
     }
 
     @Override

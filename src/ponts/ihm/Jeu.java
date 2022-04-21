@@ -62,6 +62,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         int fps = (int) (1.0 / refreshRate * 1000.0);
         timerGraphique = new Timer(fps, this);
         timerGraphique.start();
+
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
     public void ihm(JFrame fenetre) {
@@ -91,9 +94,6 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         textBudget = new JLabel();
         add(textBudget);
-
-        addMouseListener(this);
-        addMouseMotionListener(this);
 
         // Pour une raison extremement obscure, sur Linux, le planel
         // se place bien seulement si on l'ajoute deux fois
@@ -182,9 +182,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
-    public void majInfosSouris(MouseEvent e) {
+    public void majPosSouris(MouseEvent e) {
         posSouris = box2d.pixelToWorld(e.getX(), e.getY());
-        boutonSouris = e.getButton();
     }
 
     @Override
@@ -203,22 +202,23 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        majInfosSouris(e);
+        majPosSouris(e);
+        boutonSouris = e.getButton();
         clicSouris = true;
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        majInfosSouris(e);
+        majPosSouris(e);
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        majInfosSouris(e);
+        majPosSouris(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        majInfosSouris(e);
+        majPosSouris(e);
     }
 }
