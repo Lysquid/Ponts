@@ -25,7 +25,8 @@ public class Roue extends ObjetPhysique {
     static final float MOTOR_TORQUE = 1000f; // Puissance du moteur
 
     Color couleurContour = Color.BLACK;
-    Color couleurRemplissage = Color.GRAY;
+    Color couleurRemplissage = Color.decode("#555555");
+    Color couleurRayons = Color.decode("#888888");
 
     RevoluteJoint joint;
     CircleShape shape;
@@ -71,11 +72,18 @@ public class Roue extends ObjetPhysique {
 
         g.setColor(couleurRemplissage);
         g.fillOval(x - r, y - r, r * 2, r * 2);
+
+        g.setColor(couleurRayons);
+        int nombreRayons = 5;
+        for (int i = 0; i < nombreRayons; i++) {
+            double angle = getAngle() + 2 * Math.PI * i / (double) nombreRayons;
+            int x2 = box2d.worldToPixelX(getX() + RAYON * (float) Math.cos(angle));
+            int y2 = box2d.worldToPixelY(getY() + RAYON * (float) Math.sin(angle));
+            g.drawLine(x, y, x2, y2);
+        }
+
         g.setColor(couleurContour);
         g.drawOval(x - r, y - r, r * 2, r * 2);
-        int x2 = (int) (x + r * Math.cos(-getAngle()));
-        int y2 = (int) (y + r * Math.sin(-getAngle()));
-        g.drawLine(x, y, x2, y2);
     }
 
 }
