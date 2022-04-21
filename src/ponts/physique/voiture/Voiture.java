@@ -7,13 +7,13 @@ import org.jbox2d.dynamics.World;
 
 import ponts.ihm.Box2D;
 import ponts.niveau.Niveau;
-import ponts.physique.barres.Barre;
+import ponts.physique.barres.BarreGoudron;
 import ponts.physique.environnement.Bord;
 
 public class Voiture {
 
-    public static final int CATEGORY = 0b1000;
-    public static final int MASK = Bord.CATEGORY | Barre.CATEGORY;
+    public static final int CATEGORY = 0b0010;
+    public static final int MASK = Bord.CATEGORY | BarreGoudron.CATEGORY;
 
     Roue roueAvant;
     Roue roueArriere;

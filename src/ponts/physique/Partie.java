@@ -20,7 +20,7 @@ public class Partie {
     int budget;
 
     private boolean simulationPhysique = false;
-    Materiau materiau = Materiau.BOIS;
+    Materiau materiau = Materiau.GOUDRON;
 
     public Partie(Box2D box2d, Niveau niveau) {
         niveau.ajouterExtremitees(box2d);

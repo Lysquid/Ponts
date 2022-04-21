@@ -24,6 +24,7 @@ public abstract class Liaison extends ObjetPhysique {
 
     public static final float RAYON = 0.5f;
     static final float RAYON_CLICK = 1f;
+    public static final float ELASTICITE = 0.3f;
 
     Color couleurRemplissage;
     Color couleurContour;
@@ -60,6 +61,7 @@ public abstract class Liaison extends ObjetPhysique {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
+        fixtureDef.restitution = ELASTICITE;
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;
 

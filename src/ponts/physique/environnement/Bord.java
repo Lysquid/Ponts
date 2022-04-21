@@ -2,8 +2,8 @@ package ponts.physique.environnement;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.LinkedList;
 import java.awt.Polygon;
+import java.util.LinkedList;
 
 import org.jbox2d.collision.shapes.EdgeShape;
 import org.jbox2d.common.Vec2;
@@ -16,14 +16,13 @@ import org.jbox2d.dynamics.World;
 import ponts.ihm.Box2D;
 import ponts.niveau.Niveau;
 import ponts.physique.ObjetPhysique;
-import ponts.physique.barres.Barre;
 import ponts.physique.liaisons.Liaison;
 import ponts.physique.voiture.Voiture;
 
 public class Bord extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0001;
-    public static final int MASK = Voiture.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
+    public static final int MASK = Voiture.CATEGORY | Liaison.CATEGORY;
 
     Color couleur_remplissage = Color.decode("#49a03f");
     Color couleur_contour = Color.BLACK;

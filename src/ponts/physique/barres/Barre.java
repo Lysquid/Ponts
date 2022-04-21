@@ -19,17 +19,14 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
-import ponts.physique.environnement.Bord;
 import ponts.physique.liaisons.Liaison;
-import ponts.physique.liaisons.LiaisonFixe;
 import ponts.physique.liaisons.LiaisonMobile;
 import ponts.physique.voiture.Voiture;
 
 public abstract class Barre extends ObjetPhysique {
 
-    public static final int CATEGORY = 0b0010;
+    public static final int CATEGORY = 0b1000;
     public static final int MASK = Voiture.CATEGORY;
-    public static final int MASK2 = MASK | Bord.CATEGORY;
 
     static final float LONGUEUR_MAX = 8;
     static final float LONGUEUR_MIN = 3;
@@ -47,6 +44,7 @@ public abstract class Barre extends ObjetPhysique {
     float longueur;
     float largeur = 1;
 
+    float elasticite = Liaison.ELASTICITE;
     float forceMax = 2000f;
     int prix_barre = 50;
     private int prix;
@@ -82,12 +80,14 @@ public abstract class Barre extends ObjetPhysique {
         // Etape 4 : Définir la "fixture"
         fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;
-        // fixtureDef.restitution = 0.5f;
+        fixtureDef.restitution = elasticite;
         // fixtureDef.friction = 0.3f;
-        fixtureDef.filter.categoryBits = CATEGORY;
-        fixtureDef.filter.maskBits = MASK;
+        deifnirFiltre();
+        fixtureDef.filter.categoryBits |= Barre.CATEGORY;
 
     }
+
+    public abstract void deifnirFiltre();
 
     public void ajouterLiaison(Liaison liaison) {
         liaisonsLiees.add(liaison);
@@ -97,6 +97,7 @@ public abstract class Barre extends ObjetPhysique {
     public void lier(World world, Liaison liaison) {
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.initialize(body, liaison.getBody(), liaison.getPos());
+        jointDef.collideConnected = true;
         RevoluteJoint joint = (RevoluteJoint) world.createJoint(jointDef);
 
         joints.add(joint);
@@ -226,16 +227,6 @@ public abstract class Barre extends ObjetPhysique {
         body.setType(BodyType.DYNAMIC);
         apercu = false;
         prix = Math.round(longueur / LONGUEUR_MAX * prix_barre);
-
-        // Choix du mask
-        boolean fixe = false;
-        for (Liaison liaison : liaisonsLiees) {
-            if (liaison instanceof LiaisonFixe)
-                fixe = true;
-        }
-        if (!fixe) {
-            fixtureDef.filter.maskBits = MASK2;
-        }
         ajusterPos();
     }
 
