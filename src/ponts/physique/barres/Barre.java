@@ -43,7 +43,6 @@ public abstract class Barre extends ObjetPhysique {
     PolygonShape shape;
     FixtureDef fixtureDef;
     Fixture fixture;
-    LigneBarre ligneBarre;
 
     float longueur;
     float largeur = 1;
