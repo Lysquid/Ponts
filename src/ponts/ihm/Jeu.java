@@ -32,6 +32,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     JComboBox<String> comboBoxNiveaux;
     JButton boutonLancer;
+    JButton boutonRecommencer;
     JButton boutonMateriauBois;
     JButton boutonMateriauGoudron;
     JLabel textPrix;
@@ -59,6 +60,10 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boutonLancer = new JButton("Lancer");
         boutonLancer.addActionListener(this);
         add(boutonLancer);
+
+        boutonRecommencer = new JButton("Recommencer");
+        boutonRecommencer.addActionListener(this);
+        add(boutonRecommencer);
 
         boutonMateriauBois = new JButton("Bois");
         boutonMateriauBois.addActionListener(this);
@@ -146,6 +151,10 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             } else {
                 boutonLancer.setText("Lancer");
             }
+        }
+
+        if (e.getSource() == boutonRecommencer) {
+            partie = new Partie(box2d, recupererNiveau());
         }
 
         if (e.getSource() == comboBoxNiveaux) {
