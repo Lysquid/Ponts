@@ -12,6 +12,7 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -44,12 +45,26 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     int boutonSouris;
     boolean clicSouris = false;
     Vec2 posSouris = new Vec2();
-    boolean initilise = false;
 
     long tempsPrecedent = 0;
 
-    public Jeu() {
+    public Jeu(JFrame fenetre, int refreshRate) {
 
+        ihm(fenetre);
+
+        box2d = new Box2D(getWidth(), getHeight());
+        partie = new Partie(box2d, recupererNiveau());
+
+        timerPhysique = new Timer(TICK_PHYSIQUE, this);
+        timerPhysique.start();
+        tempsPhysique = System.currentTimeMillis();
+
+        int fps = (int) (1.0 / refreshRate * 1000.0);
+        timerGraphique = new Timer(fps, this);
+        timerGraphique.start();
+    }
+
+    public void ihm(JFrame fenetre) {
         String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
         comboBoxNiveaux = new JComboBox<String>(nomsNiveaux);
         comboBoxNiveaux.addActionListener(this);
@@ -77,27 +92,15 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         textBudget = new JLabel();
         add(textBudget);
 
-    }
-
-    public void initialiser(int refreshRate) {
-
-        box2d = new Box2D(getWidth(), getHeight());
-
-        partie = new Partie(box2d, recupererNiveau());
-
         addMouseListener(this);
         addMouseMotionListener(this);
 
-        timerPhysique = new Timer(TICK_PHYSIQUE, this);
-        timerPhysique.start();
-        tempsPhysique = System.currentTimeMillis();
-
-        int fps = (int) (1.0 / refreshRate * 1000.0);
-        timerGraphique = new Timer(fps, this);
-        timerGraphique.start();
-
-        initilise = true;
-
+        // Pour une raison extremement obscure, sur Linux, le planel
+        // se place bien seulement si on l'ajoute deux fois
+        fenetre.add(this);
+        fenetre.remove(this);
+        fenetre.add(this);
+        fenetre.setVisible(true);
     }
 
     @Override

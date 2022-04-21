@@ -7,6 +7,7 @@ import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import java.awt.Dimension;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -16,32 +17,22 @@ import java.awt.BorderLayout;
 
 public class Main extends JFrame {
 
-    static final int LARGEUR = 1600;
-    static final int HAUTEUR = 900;
-
-    int refreshRate;
-
     public Main() {
-        setTitle("Project");
-        setSize(LARGEUR, HAUTEUR);
-        // setExtendedState(MAXIMIZED_BOTH);
 
-        setResizable(false);
+        setTitle("Ponts");
+        setExtendedState(MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible(true);
 
-        refreshRate = getRefreshRate();
+        int refreshRate = getRefreshRate();
 
         setLayout(new BorderLayout());
 
         if (true) {
-            Jeu jeu = new Jeu();
-            add(jeu);
-            setVisible(true);
-            jeu.initialiser(refreshRate);
+            new Jeu(this, refreshRate);
         } else {
-            Editeur editeur = new Editeur(LARGEUR, HAUTEUR);
-            add(editeur);
-            setVisible(true);
+            new Editeur(this, refreshRate);
         }
 
     }

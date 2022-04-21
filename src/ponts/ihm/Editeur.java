@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -35,11 +36,15 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     JButton boutonEffacer;
     JButton boutonSupprimer;
 
-    public Editeur(int largeur, int hauteur) {
+    public Editeur(JFrame fenetre, int refreshRate) {
 
-        setSize(largeur, hauteur);
+        ihm(fenetre);
+
         box2d = new Box2D(getWidth(), getHeight());
+        niveau = new Niveau();
+    }
 
+    public void ihm(JFrame fenetre) {
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         addMouseListener(this);
@@ -77,7 +82,12 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         boutonEffacer.addActionListener(this);
         add(boutonEffacer);
 
-        niveau = new Niveau();
+        // Pour une raison extremement obscure, sur Linux, le planel
+        // se place bien seulement si on l'ajoute deux fois
+        fenetre.add(this);
+        fenetre.remove(this);
+        fenetre.add(this);
+        fenetre.setVisible(true);
     }
 
     @Override
