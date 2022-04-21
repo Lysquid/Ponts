@@ -3,6 +3,7 @@ package ponts.physique.environnement;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
+import java.awt.Polygon;
 
 import org.jbox2d.collision.shapes.EdgeShape;
 import org.jbox2d.common.Vec2;
@@ -14,11 +15,12 @@ import org.jbox2d.dynamics.World;
 
 import ponts.ihm.Box2D;
 import ponts.niveau.Niveau;
+import ponts.physique.ObjetPhysique;
 import ponts.physique.barres.Barre;
 import ponts.physique.liaisons.Liaison;
 import ponts.physique.voiture.Voiture;
 
-public class Bord {
+public class Bord extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0001;
     public static final int MASK = Voiture.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
@@ -28,35 +30,13 @@ public class Bord {
 
     LinkedList<Vec2> posCoins;
 
-    public Bord(World world, float frameX, float frameY) {
-
-        posCoins = new LinkedList<>();
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.STATIC;
-        bodyDef.position.set(frameX / 2, 0);
-
-        Body body = world.createBody(bodyDef);
-
-        Vec2 gauche = new Vec2(-frameX * 9, 0);
-        Vec2 droite = new Vec2(frameX * 10, 0);
-        EdgeShape shape = new EdgeShape();
-        shape.set(gauche, droite);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        fixtureDef.filter.categoryBits = CATEGORY;
-        fixtureDef.filter.maskBits = MASK;
-
-        body.createFixture(fixtureDef);
+    public Bord(World world, Niveau niveau) {
+        posCoins = niveau.getPosCoins();
+        creerObjetPhysique(world);
 
     }
 
-    public Bord(World world, Niveau niveau) {
-
-        posCoins = niveau.getPosCoins();
-
+    public void creerObjetPhysique(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.STATIC;
 
@@ -79,27 +59,31 @@ public class Bord {
             prevPosCoin = posCoin;
 
         }
+    }
 
+    public boolean estDansBord(Vec2 pos) {
+        Polygon polygon = new Polygon();
+        for (Vec2 posCoin : posCoins) {
+            int x = Math.round(posCoin.x * 1000);
+            int y = Math.round(posCoin.y * 1000);
+            polygon.addPoint(x, y);
+        }
+        int x = Math.round(pos.x * 1000);
+        int y = Math.round(pos.y * 1000);
+        return polygon.contains(x, y);
     }
 
     public void dessiner(Graphics2D g, Box2D box2d) {
-
-        int n = posCoins.size();
-        int[] xCoins = new int[n];
-        int[] yCoins = new int[n];
-
-        int i = 0;
+        Polygon polygon = new Polygon();
         for (Vec2 posCoin : posCoins) {
-            xCoins[i] = box2d.worldToPixelX(posCoin.x);
-            ;
-            yCoins[i] = box2d.worldToPixelY(posCoin.y);
-            i++;
+            int x = box2d.worldToPixelX(posCoin.x);
+            int y = box2d.worldToPixelY(posCoin.y);
+            polygon.addPoint(x, y);
         }
-
         g.setColor(couleur_remplissage);
-        g.fillPolygon(xCoins, yCoins, n);
+        g.fillPolygon(polygon);
         g.setColor(couleur_contour);
-        g.drawPolygon(xCoins, yCoins, n);
+        g.drawPolygon(polygon);
 
     }
 }

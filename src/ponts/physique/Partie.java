@@ -29,7 +29,7 @@ public class Partie {
         world = new World(gravity);
 
         bord = new Bord(world, niveau);
-        pont = new Pont(world, box2d, niveau);
+        pont = new Pont(world, niveau);
         voiture = new Voiture(world, niveau);
         budget = niveau.getBudget();
 
@@ -52,8 +52,9 @@ public class Partie {
 
     public void tickPhysique(Vec2 posSouris, int boutonSouris, boolean clicSouris, float dt) {
 
-        pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau);
-        
+        boolean sourisDansBord = bord.estDansBord(posSouris);
+        pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau, sourisDansBord);
+
         if (isSimulationPhysique()) {
             pont.testCasse(world, dt);
             world.step(dt, 10, 8);

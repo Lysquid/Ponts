@@ -25,7 +25,7 @@ public class Pont implements Serializable {
     Liaison liaisonEnCreation;
     Liaison liaisonProche;
 
-    public Pont(World world, Box2D box2d, Niveau niveau) {
+    public Pont(World world, Niveau niveau) {
 
         barres = new LinkedList<Barre>();
         liaisons = new LinkedList<Liaison>();
@@ -63,11 +63,12 @@ public class Pont implements Serializable {
         }
     }
 
-    public void gererInput(World world, Vec2 posSouris, int boutonSouris, boolean clicSouris, Materiau materiau) {
+    public void gererInput(World world, Vec2 posSouris, int boutonSouris, boolean clicSouris, Materiau materiau,
+            boolean sourisDansBord) {
 
         Vec2 posSourisMax = posSourisMax(barreEnCreation, posSouris);
         liaisonProche = recupLiaisonProche(posSourisMax);
-        boolean barreValide = barreValide(barreEnCreation, liaisonProche);
+        boolean barreValide = barreValide(barreEnCreation, liaisonProche, sourisDansBord);
 
         if (barreEnCreation != null) {
 
@@ -132,7 +133,7 @@ public class Pont implements Serializable {
         }
     }
 
-    private boolean barreValide(Barre barre, Liaison liaisonProche) {
+    private boolean barreValide(Barre barre, Liaison liaisonProche, boolean sourisDansBord) {
         // barre n'existe pas
         if (barre == null)
             return false;
@@ -147,6 +148,11 @@ public class Pont implements Serializable {
             // la barre ne boucle pas sur elle même
             if (barre.getLiaisonsLiees().contains(liaisonProche))
                 return false;
+        } else {
+            // Si la souris est dans le bord et proche d'aucune liaison
+            if (sourisDansBord) {
+                return false;
+            }
         }
         return true;
     }
