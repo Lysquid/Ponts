@@ -31,7 +31,7 @@ public class Box2D {
     }
 
     public float pixelToWorldY(int yP) {
-        return pixelToWorld(fenetre.getHeight() - yP);
+        return pixelToWorld(getHauteurPixels() - yP);
     }
 
     public Vec2 pixelToWorld(int xP, int yP) {
@@ -47,7 +47,7 @@ public class Box2D {
     }
 
     public int worldToPixelY(float y) {
-        return fenetre.getHeight() - worldToPixel(y);
+        return getHauteurPixels() - worldToPixel(y);
     }
 
     public float getLargeur() {
@@ -56,6 +56,14 @@ public class Box2D {
 
     public float getHauteur() {
         return hauteur;
+    }
+
+    public int getLargeurPixels() {
+        return fenetre.getWidth();
+    }
+
+    public int getHauteurPixels() {
+        return fenetre.getHeight();
     }
 
 }

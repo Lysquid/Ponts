@@ -58,7 +58,8 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         this.setOpaque(false);
 
         JPanel ligneHaut = new JPanel();
-        ligneHaut.setLayout(new FlowLayout(FlowLayout.CENTER, fenetre.getWidth() / 20, fenetre.getHeight() / 100));
+        ligneHaut.setLayout(
+                new FlowLayout(FlowLayout.CENTER, box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 100));
         ligneHaut.setOpaque(false);
         this.add(ligneHaut, BorderLayout.PAGE_START);
 
@@ -145,7 +146,7 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         ligneJeu.add(boutonJeu);
 
         JPanel bas = new JPanel();
-        bas.setLayout(new FlowLayout(FlowLayout.CENTER, fenetre.getWidth() / 20, fenetre.getHeight() / 50));
+        bas.setLayout(new FlowLayout(FlowLayout.CENTER, box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 50));
         bas.setOpaque(false);
         this.add(bas, BorderLayout.PAGE_END);
 

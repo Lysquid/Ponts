@@ -18,7 +18,6 @@ public class Fenetre extends JFrame {
 
     Jeu jeu;
     Editeur editeur;
-    Box2D box2d;
 
     public Fenetre() {
 
@@ -28,7 +27,7 @@ public class Fenetre extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         int refreshRate = getRefreshRate();
-        box2d = new Box2D(this);
+        Box2D box2d = new Box2D(this);
 
         jeu = new Jeu(this, box2d, refreshRate);
         editeur = new Editeur(this, box2d, refreshRate);
