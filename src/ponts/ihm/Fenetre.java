@@ -31,7 +31,7 @@ public class Fenetre extends JFrame {
         // Pour une raison obscure, sur Linux, le planel
         // se place bien seulement seulement après un certains délai
         try {
-            TimeUnit.MILLISECONDS.sleep(50);
+            TimeUnit.MILLISECONDS.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

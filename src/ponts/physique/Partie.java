@@ -20,6 +20,7 @@ public class Partie {
     int budget;
 
     private boolean simulationPhysique = false;
+    private boolean creationPont = true;
     Materiau materiau = Materiau.GOUDRON;
 
     public Partie(Box2D box2d, Niveau niveau) {
@@ -43,22 +44,25 @@ public class Partie {
     public void toggleSimulationPhysique() {
         simulationPhysique = !simulationPhysique;
         pont.arreterCreation(world);
+        if (creationPont) {
+            creationPont = false;
+        }
     }
 
     public void dessiner(Graphics2D g, Box2D box2d, Vec2 posSouris) {
         bord.dessiner(g, box2d);
-        pont.dessiner(g, box2d, posSouris);
+        pont.dessiner(g, box2d, posSouris, creationPont);
         voiture.dessiner(g, box2d);
     }
 
     public void tickPhysique(Vec2 posSouris, int boutonSouris, boolean clicSouris, float dt) {
 
-        pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau, bord);
-
-        if (isSimulationPhysique()) {
+        if (simulationPhysique) {
             pont.testCasse(world, dt);
             world.step(dt, 10, 8);
 
+        } else if (creationPont) {
+            pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau, bord);
         }
 
     }

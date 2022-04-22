@@ -37,7 +37,7 @@ public class Pont implements Serializable {
 
     }
 
-    public void dessiner(Graphics g, Box2D box2d, Vec2 posSouris) {
+    public void dessiner(Graphics g, Box2D box2d, Vec2 posSouris, boolean creationPont) {
         LinkedList<Barre> barresDesinees = new LinkedList<Barre>();
         for (Liaison liaison : liaisons) {
             for (Barre barre : liaison.getBarresLiees()) {
@@ -58,9 +58,11 @@ public class Pont implements Serializable {
         }
         // On redessine la liaison proche pour quelle soit d'une autre couleur
         // et qu'elle se supperpose sur la liaison en création
-        Liaison liaisonSurvolee = recupLiaisonProche(posSouris);
-        if (liaisonSurvolee != null) {
-            liaisonSurvolee.dessiner(g, box2d, true);
+        if (creationPont) {
+            Liaison liaisonSurvolee = recupLiaisonProche(posSouris);
+            if (liaisonSurvolee != null) {
+                liaisonSurvolee.dessiner(g, box2d, true);
+            }
         }
     }
 

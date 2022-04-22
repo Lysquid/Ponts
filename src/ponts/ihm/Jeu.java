@@ -274,7 +274,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             if (partie.isSimulationPhysique()) {
                 boutonLancer.setText("Pause");
             } else {
-                boutonLancer.setText("Lancer");
+                boutonLancer.setText("Reprendre");
             }
         }
 
