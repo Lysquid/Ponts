@@ -20,6 +20,7 @@ public class Voiture {
     Carrosserie carrosserie;
 
     boolean arretee = false;
+    boolean arrivee = false;
     float xDepart;
     float xArret;
     float xArrivee;
@@ -51,11 +52,20 @@ public class Voiture {
     }
 
     public boolean testArrivee() {
-        return carrosserie.getBody().getLinearVelocity().x <= 0.01f && arretee;
+        return carrosserie.getBody().getLinearVelocity().x <= 0.001f && arrivee;
     }
 
     public void arreter() {
-        if (!arretee && roueArriere.getX() > xArret) {
+        if (arretee) {
+            return;
+        }
+        float vitesse = carrosserie.getBody().getLinearVelocity().length();
+        if (roueArriere.getX() > xArret) {
+            roueArriere.arreter();
+            roueAvant.arreter();
+            arretee = true;
+            arrivee = true;
+        } else if (vitesse <= 0.001f && roueArriere.getX() > xDepart) {
             roueArriere.arreter();
             roueAvant.arreter();
             arretee = true;

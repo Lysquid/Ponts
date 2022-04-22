@@ -267,16 +267,16 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             int numero = comboBoxNiveaux.getSelectedIndex();
             if (numero > 0) {
                 numero--;
+                comboBoxNiveaux.setSelectedIndex(numero);
             }
-            comboBoxNiveaux.setSelectedIndex(numero);
         }
 
         if (source == boutonSuivant) {
             int numero = comboBoxNiveaux.getSelectedIndex();
             if (numero < comboBoxNiveaux.getItemCount() - 1) {
                 numero++;
+                comboBoxNiveaux.setSelectedIndex(numero);
             }
-            comboBoxNiveaux.setSelectedIndex(numero);
         }
 
         if (source == comboBoxNiveaux) {
@@ -387,7 +387,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         texte += "\n" + "Quand tu es prêt, lance la simulation en cliquant sur le bouton ";
         texte += boutonDemarrer.getText() + ".";
         texte += "\n\n" + "Le niveau sera réussi si tu la voiture arrive de l'autre côté";
-        texte += "\n" + "et si le prix du pont est inférieur au budget";
+        texte += "\n" + "et si le prix du pont est inférieur au budget.";
         texte += "\n\n" + "Bonne chance !";
         JOptionPane.showMessageDialog(fenetre, texte, "Tutoriel", JOptionPane.PLAIN_MESSAGE);
     }
