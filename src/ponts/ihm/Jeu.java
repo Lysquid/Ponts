@@ -340,9 +340,26 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         majPosSouris(e);
     }
 
-    public void finPartie() {
-        JOptionPane.showMessageDialog(this, "Bravo !", "Niveau terminé", JOptionPane.PLAIN_MESSAGE);
+    public void finPartie(boolean niveauReussi) {
+        String text = "";
+        String titre = "";
+        if (niveauReussi) {
+            titre = "Niveau terminé";
+            text += "Bravo, tu as réussi le niveau " + comboBoxNiveaux.getSelectedItem() + " !";
+            text += "\n" + "Prix du pont " + Integer.toString(partie.prix()) + " $";
+            text += "\n" + "Tu peux passer au niveau suivant";
+            text += "\n" + "ou essayer de faire un pont moins cher.";
+        } else {
+            titre = "Niveau échoué";
+            text += "Dommage, tu n'as pas réussi le niveau " + comboBoxNiveaux.getSelectedItem();
+            text += "\n" + "Ton pont a couté trop cher :";
+            text += "\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
+            text += "   Budget : " + Integer.toString(partie.budget()) + " $";
+            text += "\n" + "Tu peux réessayer en cliquant sur recommencer.";
+        }
+        JOptionPane.showMessageDialog(this, text, titre, JOptionPane.PLAIN_MESSAGE);
         reinitialiserTemps();
+
     }
 
     public void reinitialiserTemps() {

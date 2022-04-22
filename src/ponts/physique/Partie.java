@@ -71,7 +71,8 @@ public class Partie {
             pont.testCasse(world, dt);
             voiture.arreter();
             if (!terminee && voiture.testArrivee()) {
-                jeu.finPartie();
+                boolean niveauReussi = prix() <= budget();
+                jeu.finPartie(niveauReussi);
                 terminee = true;
             }
 
