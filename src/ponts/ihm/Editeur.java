@@ -82,10 +82,6 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         boutonEffacer.addActionListener(this);
         add(boutonEffacer);
 
-        // Pour une raison extremement obscure, sur Linux, le planel
-        // se place bien seulement si on l'ajoute deux fois
-        fenetre.add(this);
-        fenetre.remove(this);
         fenetre.add(this);
         fenetre.setVisible(true);
     }

@@ -23,6 +23,7 @@ public class Partie {
     Materiau materiau = Materiau.GOUDRON;
 
     public Partie(Box2D box2d, Niveau niveau) {
+        niveau.centrer(box2d);
         niveau.ajouterExtremitees(box2d);
 
         Vec2 gravity = new Vec2(0.0f, -9.81f);
