@@ -71,15 +71,19 @@ public class Partie {
             pont.testCasse(world, dt);
             voiture.arreter();
             if (!terminee && voiture.testArrivee()) {
-                boolean niveauReussi = prix() <= budget();
-                jeu.finPartie(niveauReussi);
-                terminee = true;
+                finPartie();
             }
 
         } else if (creationPont) {
             pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau, bord);
         }
 
+    }
+
+    private void finPartie() {
+        boolean niveauReussi = prix() <= budget();
+        jeu.finPartie(niveauReussi, prix());
+        terminee = true;
     }
 
     public void changementMateriau(Materiau materiau) {

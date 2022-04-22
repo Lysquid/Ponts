@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -54,9 +56,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     int boutonSouris;
     boolean clicSouris = false;
     Vec2 posSouris = new Vec2();
+    public Map<String, Integer> meilleursPrix;
 
     public Jeu(Fenetre fenetre, int refreshRate) {
 
+        meilleursPrix = new HashMap<String, Integer>();
         this.fenetre = fenetre;
         ihm();
 
@@ -188,7 +192,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         JLabel meilleur = new JLabel("Meilleur");
         meilleur.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneMeilleur.add(meilleur);
-        texteMeilleur = new JLabel("Ø");
+        texteMeilleur = new JLabel();
         texteMeilleur.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneMeilleur.add(texteMeilleur);
     }
@@ -216,6 +220,12 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     private void majTextLabels() {
         textePrix.setText(Integer.toString(partie.prix()) + " $");
         texteBudget.setText(Integer.toString(partie.budget()) + " $");
+        int meilleurPrix = recupererMeilleurPrix();
+        if (meilleurPrix == -1) {
+            texteMeilleur.setText("Ø");
+        } else {
+            texteMeilleur.setText(Integer.toString(meilleurPrix) + " $");
+        }
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -295,9 +305,13 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     private Niveau recupererNiveau() {
         boutonLancer.setText("Lancer");
-        String nomNiveau = (String) comboBoxNiveaux.getSelectedItem();
+        String nomNiveau = recupererNomNiveau();
         return Niveau.charger(nomNiveau);
 
+    }
+
+    public String recupererNomNiveau() {
+        return (String) comboBoxNiveaux.getSelectedItem();
     }
 
     public void majPosSouris(MouseEvent e) {
@@ -340,26 +354,45 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         majPosSouris(e);
     }
 
-    public void finPartie(boolean niveauReussi) {
+    public void finPartie(boolean niveauReussi, int prix) {
+        messageFinPartie(niveauReussi);
+        majMeilleurPrix(prix);
+        reinitialiserTemps();
+    }
+
+    public void messageFinPartie(boolean niveauReussi) {
         String text = "";
         String titre = "";
         if (niveauReussi) {
             titre = "Niveau terminé";
-            text += "Bravo, tu as réussi le niveau " + comboBoxNiveaux.getSelectedItem() + " !";
+            text += "Bravo, tu as réussi le niveau " + recupererNomNiveau() + " !";
             text += "\n" + "Prix du pont " + Integer.toString(partie.prix()) + " $";
             text += "\n" + "Tu peux passer au niveau suivant";
             text += "\n" + "ou essayer de faire un pont moins cher.";
         } else {
             titre = "Niveau échoué";
-            text += "Dommage, tu n'as pas réussi le niveau " + comboBoxNiveaux.getSelectedItem();
+            text += "Dommage, tu n'as pas réussi le niveau " + recupererNomNiveau();
             text += "\n" + "Ton pont a couté trop cher :";
             text += "\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
             text += "   Budget : " + Integer.toString(partie.budget()) + " $";
             text += "\n" + "Tu peux réessayer en cliquant sur recommencer.";
         }
         JOptionPane.showMessageDialog(this, text, titre, JOptionPane.PLAIN_MESSAGE);
-        reinitialiserTemps();
+    }
 
+    public void majMeilleurPrix(int prix) {
+        int meilleurPrix = recupererMeilleurPrix();
+        if (prix <= meilleurPrix || meilleurPrix == -1) {
+            meilleursPrix.put(recupererNomNiveau(), prix);
+        }
+    }
+
+    public int recupererMeilleurPrix() {
+        if (meilleursPrix.containsKey(recupererNomNiveau())) {
+            return meilleursPrix.get(recupererNomNiveau());
+        } else {
+            return -1;
+        }
     }
 
     public void reinitialiserTemps() {
