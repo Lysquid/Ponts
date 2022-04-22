@@ -125,16 +125,16 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boutonMateriauGoudron.addActionListener(this);
         ligneMateriau.add(boutonMateriauGoudron);
 
-        JPanel colonneControles = new JPanel();
-        colonneControles.setLayout(new BoxLayout(colonneControles, BoxLayout.Y_AXIS));
-        colonneControles.setOpaque(false);
-        ligneHaut.add(colonneControles);
-        JLabel texteControles = new JLabel("Controles");
+        JPanel colonneSimulation = new JPanel();
+        colonneSimulation.setLayout(new BoxLayout(colonneSimulation, BoxLayout.Y_AXIS));
+        colonneSimulation.setOpaque(false);
+        ligneHaut.add(colonneSimulation);
+        JLabel texteControles = new JLabel("Simulation");
         texteControles.setAlignmentX(Component.CENTER_ALIGNMENT);
-        colonneControles.add(texteControles);
+        colonneSimulation.add(texteControles);
         JPanel ligneControles = new JPanel();
         ligneControles.setOpaque(false);
-        colonneControles.add(ligneControles);
+        colonneSimulation.add(ligneControles);
         boutonLancer = new JButton("Lancer");
         boutonLancer.addActionListener(this);
         ligneControles.add(boutonLancer);
@@ -272,7 +272,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         if (source == boutonLancer) {
             partie.toggleSimulationPhysique();
             if (partie.isSimulationPhysique()) {
-                boutonLancer.setText("Arreter");
+                boutonLancer.setText("Pause");
             } else {
                 boutonLancer.setText("Lancer");
             }
