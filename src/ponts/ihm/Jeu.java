@@ -1,18 +1,20 @@
 package ponts.ihm;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.LayoutManager;
-import java.awt.*;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.awt.Dimension;
+
+import java.awt.event.ActionEvent;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,7 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
-import javax.swing.*;
 
 import org.jbox2d.common.Vec2;
 
@@ -48,6 +49,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     JLabel texteBudget;
     JLabel texteMeilleur;
 
+    Fenetre fenetre;
     Box2D box2d;
     Partie partie;
 
@@ -57,9 +59,10 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     long tempsPrecedent = 0;
 
-    public Jeu(JFrame fenetre, int refreshRate) {
+    public Jeu(Fenetre fenetre, int refreshRate) {
 
-        ihm(fenetre);
+        this.fenetre = fenetre;
+        ihm();
 
         box2d = new Box2D(getWidth(), getHeight());
         partie = new Partie(box2d, recupererNiveau());
@@ -76,7 +79,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         addMouseMotionListener(this);
     }
 
-    public void ihm(JFrame fenetre) {
+    public void ihm() {
 
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
@@ -232,8 +235,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
 
-        if (e.getSource() == timerPhysique) {
+        if (source == timerPhysique) {
 
             long nouveauTempsPhysique = System.currentTimeMillis();
             float dt = (nouveauTempsPhysique - tempsPhysique) / 1000f;
@@ -244,11 +248,42 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         }
 
-        if (e.getSource() == timerGraphique) {
+        if (source == timerGraphique) {
             repaint();
         }
 
-        if (e.getSource() == boutonLancer) {
+        if (source == boutonPrecedent) {
+            int numero = comboBoxNiveaux.getSelectedIndex();
+            if (numero > 0) {
+                numero--;
+            }
+            comboBoxNiveaux.setSelectedIndex(numero);
+        }
+
+        if (source == boutonSuivant) {
+            int numero = comboBoxNiveaux.getSelectedIndex();
+            if (numero < comboBoxNiveaux.getItemCount() - 1) {
+                numero++;
+            }
+            comboBoxNiveaux.setSelectedIndex(numero);
+        }
+
+        if (source == comboBoxNiveaux) {
+            partie = new Partie(box2d, recupererNiveau());
+        }
+
+        Materiau materiau = null;
+        if (source == boutonMateriauBois) {
+            materiau = Materiau.BOIS;
+        }
+        if (source == boutonMateriauGoudron) {
+            materiau = Materiau.GOUDRON;
+        }
+        if (materiau != null) {
+            partie.changementMateriau(materiau);
+        }
+
+        if (source == boutonLancer) {
             partie.toggleSimulationPhysique();
             if (partie.isSimulationPhysique()) {
                 boutonLancer.setText("Arreter");
@@ -257,23 +292,12 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             }
         }
 
-        if (e.getSource() == boutonRecommencer) {
+        if (source == boutonRecommencer) {
             partie = new Partie(box2d, recupererNiveau());
         }
 
-        if (e.getSource() == comboBoxNiveaux) {
-            partie = new Partie(box2d, recupererNiveau());
-        }
-
-        Materiau materiau = null;
-        if (e.getSource() == boutonMateriauBois) {
-            materiau = Materiau.BOIS;
-        }
-        if (e.getSource() == boutonMateriauGoudron) {
-            materiau = Materiau.GOUDRON;
-        }
-        if (materiau != null) {
-            partie.changementMateriau(materiau);
+        if (source == boutonEditeur) {
+            fenetre.lancerEditeur();
         }
 
     }

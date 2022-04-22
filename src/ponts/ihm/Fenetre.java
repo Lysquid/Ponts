@@ -6,7 +6,10 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.util.concurrent.TimeUnit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
@@ -15,6 +18,10 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 public class Fenetre extends JFrame {
 
+    Jeu jeu;
+    Editeur editeur;
+    int refreshRate;
+
     public Fenetre() {
 
         setTitle("Ponts");
@@ -22,9 +29,9 @@ public class Fenetre extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
 
-        int refreshRate = getRefreshRate();
+        refreshRate = getRefreshRate();
 
-        // Pour une raison extremement obscure, sur Linux, le planel
+        // Pour une raison obscure, sur Linux, le planel
         // se place bien seulement seulement après un certains délai
         try {
             TimeUnit.MILLISECONDS.sleep(50);
@@ -33,10 +40,14 @@ public class Fenetre extends JFrame {
         }
 
         if (true) {
-            new Jeu(this, refreshRate);
+            jeu = new Jeu(this, refreshRate);
         } else {
-            new Editeur(this, refreshRate);
+            editeur = new Editeur(this, refreshRate);
         }
+
+    }
+
+    public void lancerJeu() {
 
     }
 
@@ -86,6 +97,16 @@ public class Fenetre extends JFrame {
         UIManager.put("Button.font", fontResource);
         UIManager.put("ComboBox.font", fontResource);
 
+    }
+
+    public void lancerEditeur() {
+        remove(jeu);
+        if (editeur != null) {
+            add(editeur);
+            editeur.setVisible(true);
+        } else {
+            editeur = new Editeur(this, refreshRate);
+        }
     }
 
 }
