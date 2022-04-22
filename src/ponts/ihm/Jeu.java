@@ -61,13 +61,13 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     Vec2 posSouris = new Vec2();
     public Map<String, Integer> meilleursPrix;
 
-    public Jeu(Fenetre fenetre, int refreshRate) {
+    public Jeu(Fenetre fenetre, Box2D box2d, int refreshRate) {
 
         this.fenetre = fenetre;
+        this.box2d = box2d;
         meilleursPrix = new HashMap<String, Integer>();
         ihm();
 
-        box2d = new Box2D(fenetre.getWidth(), fenetre.getHeight());
         majListeNiveaux();
 
         timerPhysique = new Timer(TICK_PHYSIQUE, this);
@@ -386,7 +386,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         texte += "\n" + "Choisis bien le materiau en fonction de ses propriétés et son prix.";
         texte += "\n" + "Quand tu es prêt, lance la simulation en cliquant sur le bouton ";
         texte += boutonDemarrer.getText() + ".";
-        texte += "\n\n" + "Le niveau sera réussi si tu la voiture arrive de l'autre côté";
+        texte += "\n\n" + "Le niveau sera réussi si la voiture arrive de l'autre côté";
         texte += "\n" + "et si le prix du pont est inférieur au budget.";
         texte += "\n\n" + "Bonne chance !";
         JOptionPane.showMessageDialog(fenetre, texte, "Tutoriel", JOptionPane.PLAIN_MESSAGE);

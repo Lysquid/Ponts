@@ -19,16 +19,18 @@ public class Fenetre extends JFrame {
 
     Jeu jeu;
     Editeur editeur;
+    Box2D box2d;
 
     public Fenetre() {
 
         setTitle("Ponts");
-        setMinimumSize(new Dimension(1400, 800));
+        setMinimumSize(new Dimension(600, 400));
         setExtendedState(MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
 
         int refreshRate = getRefreshRate();
+        box2d = new Box2D(this);
 
         // Pour une raison obscure, sur Linux, le planel
         // se place bien seulement seulement après un certains délai
@@ -38,8 +40,8 @@ public class Fenetre extends JFrame {
             e.printStackTrace();
         }
 
-        jeu = new Jeu(this, refreshRate);
-        editeur = new Editeur(this, refreshRate);
+        jeu = new Jeu(this, box2d, refreshRate);
+        editeur = new Editeur(this, box2d, refreshRate);
         lancerJeu();
         jeu.messageDebutJeu();
     }

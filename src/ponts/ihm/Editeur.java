@@ -40,12 +40,12 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
     JButton boutonSupprimer;
     JButton boutonJeu;
 
-    public Editeur(Fenetre fenetre, int refreshRate) {
+    public Editeur(Fenetre fenetre, Box2D box2d, int refreshRate) {
 
         this.fenetre = fenetre;
+        this.box2d = box2d;
         ihm();
 
-        box2d = new Box2D(fenetre.getWidth(), fenetre.getHeight());
         niveau = new Niveau();
 
         addMouseListener(this);

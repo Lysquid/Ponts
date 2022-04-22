@@ -183,7 +183,7 @@ public class Niveau implements Serializable {
         Vec2 bordDroit = posCoins.getLast();
 
         float deltaX = box2d.getLargeur() / 2 - (bordGauche.x + bordDroit.x) / 2;
-        float deltaY = 1.1f * box2d.getHauteur() / 2 - (bordDroit.y + bordGauche.y) / 2;
+        float deltaY = 0.9f * box2d.getHauteur() / 2 - (bordDroit.y + bordGauche.y) / 2;
         for (Vec2 posCoin : posCoins) {
             posCoin.addLocal(deltaX, deltaY);
         }
