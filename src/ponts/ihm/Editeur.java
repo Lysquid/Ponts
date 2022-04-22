@@ -192,14 +192,17 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         Object source = e.getSource();
 
         if (source == boutonSauvegarder) {
-            niveau.sauvegarder(nomNiveau(), champBudget.getText());
+            niveau.sauvegarder(fenetre, nomNiveau(), champBudget.getText());
         }
         if (source == boutonCharger) {
-            niveau = Niveau.charger(nomNiveau());
+            Niveau niveauChargee = Niveau.charger(fenetre, nomNiveau());
+            if (niveauChargee != null) {
+                niveau = niveauChargee;
+            }
             champBudget.setText(Integer.toString(niveau.getBudget()));
         }
         if (source == boutonSupprimer) {
-            Niveau.supprimer(nomNiveau());
+            Niveau.supprimer(fenetre, nomNiveau());
         }
         if (source == boutonAnnuler) {
             niveau.undo();

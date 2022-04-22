@@ -14,9 +14,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 import org.jbox2d.common.Vec2;
 
 import ponts.ihm.Box2D;
+import ponts.ihm.Fenetre;
 import ponts.physique.liaisons.Liaison;
 
 public class Niveau implements Serializable {
@@ -105,11 +108,13 @@ public class Niveau implements Serializable {
         }
     }
 
-    public void sauvegarder(String nomNiveau, String texteBudget) {
+    public void sauvegarder(Fenetre fenetre, String nomNiveau, String texteBudget) {
         String chemin = cheminNiveau(nomNiveau);
+        String titre = "Sauvegarde niveau";
 
         if (!valide()) {
-            System.out.println("Le niveau est invalide");
+            JOptionPane.showMessageDialog(fenetre, "Le niveau est invalide", titre,
+                    JOptionPane.ERROR_MESSAGE);
         }
         try {
             budget = Integer.parseInt(texteBudget);
@@ -118,17 +123,22 @@ public class Niveau implements Serializable {
             objectOut.writeObject(this);
             objectOut.close();
             fileOut.close();
+            JOptionPane.showMessageDialog(fenetre, "Niveau sauvegardé", titre,
+                    JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException i) {
-            System.out.println("Le budget est invalide");
+            JOptionPane.showMessageDialog(fenetre, "Le budget est invalide", titre,
+                    JOptionPane.ERROR_MESSAGE);
         } catch (FileNotFoundException i) {
-            System.out.println("Nom de fichier invalide");
+            JOptionPane.showMessageDialog(fenetre, "Le nom de niveau est invalide", titre,
+                    JOptionPane.ERROR_MESSAGE);
         } catch (IOException i) {
             i.printStackTrace();
         }
     }
 
-    public static Niveau charger(String nomNiveau) {
+    public static Niveau charger(Fenetre fenetre, String nomNiveau) {
         String chemin = cheminNiveau(nomNiveau);
+        String titre = "Charge niveau";
         Niveau niveau = null;
         try {
             FileInputStream fileIn = new FileInputStream(chemin);
@@ -138,7 +148,7 @@ public class Niveau implements Serializable {
             fileIn.close();
 
         } catch (FileNotFoundException i) {
-            System.out.println("Fichier introuvable");
+            JOptionPane.showMessageDialog(fenetre, "Niveau introuvable", titre, JOptionPane.ERROR_MESSAGE);
         } catch (IOException i) {
             i.printStackTrace();
         } catch (ClassNotFoundException i) {
@@ -156,12 +166,15 @@ public class Niveau implements Serializable {
         return CHEMIN.resolve(nomNiveau).toString();
     }
 
-    public static void supprimer(String nomNiveau) {
+    public static void supprimer(Fenetre fenetre, String nomNiveau) {
         File file = new File(cheminNiveau(nomNiveau));
+        String titre = "Suppression niveau";
         if (file.delete()) {
-            System.out.println("Fichier supprimé");
+            JOptionPane.showMessageDialog(fenetre, "Niveau supprimé", titre,
+                    JOptionPane.INFORMATION_MESSAGE);
         } else {
-            System.out.println("Fichier introuvable");
+            JOptionPane.showMessageDialog(fenetre, "Niveau introuvable", titre,
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 

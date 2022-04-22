@@ -48,7 +48,7 @@ public class Fenetre extends JFrame {
 
     public void lancerJeu() {
         changerEcran(editeur, jeu);
-        jeu.listeNiveaux();
+        jeu.majListeNiveaux();
     }
 
     public void changerEcran(JPanel actuel, JPanel nouveau) {

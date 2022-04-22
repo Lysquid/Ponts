@@ -63,13 +63,12 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     public Jeu(Fenetre fenetre, int refreshRate) {
 
-        meilleursPrix = new HashMap<String, Integer>();
         this.fenetre = fenetre;
+        meilleursPrix = new HashMap<String, Integer>();
         ihm();
-        listeNiveaux();
 
         box2d = new Box2D(fenetre.getWidth(), fenetre.getHeight());
-        partie = new Partie(this, box2d, recupererNiveau());
+        majListeNiveaux();
 
         timerPhysique = new Timer(TICK_PHYSIQUE, this);
         timerPhysique.start();
@@ -234,13 +233,15 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
     }
 
-    public void listeNiveaux() {
+    public void majListeNiveaux() {
         String niveauSelectionne = recupererNomNiveau();
         String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(nomsNiveaux);
         comboBoxNiveaux.setModel(model);
         if (niveauSelectionne != null && Arrays.asList(nomsNiveaux).contains(niveauSelectionne)) {
             comboBoxNiveaux.setSelectedItem(niveauSelectionne);
+        } else {
+            nouvellePartie();
         }
     }
 
@@ -279,7 +280,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
 
         if (source == comboBoxNiveaux) {
-            partie = new Partie(this, box2d, recupererNiveau());
+            nouvellePartie();
         }
 
         Materiau materiau = null;
@@ -302,7 +303,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
 
         if (source == boutonRecommencer) {
-            partie = new Partie(this, box2d, recupererNiveau());
+            nouvellePartie();
         }
 
         if (source == boutonEditeur) {
@@ -325,7 +326,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     private Niveau recupererNiveau() {
         boutonDemarrer.setText("Démarrer");
         String nomNiveau = recupererNomNiveau();
-        return Niveau.charger(nomNiveau);
+        return Niveau.charger(fenetre, nomNiveau);
 
     }
 
@@ -388,7 +389,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         texte += "\n\n" + "Le niveau sera réussi si tu la voiture arrive de l'autre côté";
         texte += "\n" + "et si le prix du pont est inférieur au budget";
         texte += "\n\n" + "Bonne chance !";
-        JOptionPane.showMessageDialog(this, texte, "Tutoriel", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(fenetre, texte, "Tutoriel", JOptionPane.PLAIN_MESSAGE);
     }
 
     public void messageFinPartie(boolean niveauReussi) {
@@ -404,12 +405,12 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         } else {
             titre = "Niveau échoué";
             texte += "Dommage, tu n'as pas réussi le niveau " + recupererNomNiveau() + ".";
-            texte += "\n\n" + "Ton pont a couté trop cher :";
+            texte += "\n\n" + "Ton pont a coûté trop cher :";
             texte += "\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
             texte += "\n" + "Budget : " + Integer.toString(partie.budget()) + " $";
             texte += "\n\n" + "Tu peux réessayer en cliquant sur " + boutonRecommencer.getText() + ".";
         }
-        JOptionPane.showMessageDialog(this, texte, titre, JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(fenetre, texte, titre, JOptionPane.PLAIN_MESSAGE);
     }
 
     public void majMeilleurPrix(int prix) {
@@ -429,5 +430,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     public void reinitialiserTemps() {
         tempsPhysique = System.currentTimeMillis();
+    }
+
+    public void nouvellePartie() {
+        partie = new Partie(this, box2d, recupererNiveau());
     }
 }
