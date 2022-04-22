@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.awt.Dimension;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ public class Fenetre extends JFrame {
     public Fenetre() {
 
         setTitle("Ponts");
+        setMinimumSize(new Dimension(1400, 800));
         setExtendedState(MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
