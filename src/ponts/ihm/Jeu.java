@@ -123,12 +123,15 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         ligneMateriau.setOpaque(false);
         colonneMateriau.add(ligneMateriau);
         boutonMateriauGoudron = new JButton("Goudron");
+        boutonMateriauGoudron.setToolTipText("Le seul materiau sur lequel la voiture peut rouler");
         boutonMateriauGoudron.addActionListener(this);
         ligneMateriau.add(boutonMateriauGoudron);
         boutonMateriauBois = new JButton("Bois");
+        boutonMateriauBois.setToolTipText("Materiau peu coûteux mais peu résistant");
         boutonMateriauBois.addActionListener(this);
         ligneMateriau.add(boutonMateriauBois);
         boutonMateriauAcier = new JButton("Acier");
+        boutonMateriauAcier.setToolTipText("Materiau plus cher mais aussi plus solide");
         boutonMateriauAcier.addActionListener(this);
         ligneMateriau.add(boutonMateriauAcier);
 
