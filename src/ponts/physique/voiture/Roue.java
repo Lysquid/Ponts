@@ -89,7 +89,7 @@ public class Roue extends ObjetPhysique {
 
     public void arreter() {
         joint.setMotorSpeed(0);
-        joint.setMaxMotorTorque(MOTOR_TORQUE * 0.75f);
+        // joint.setMaxMotorTorque(MOTOR_TORQUE * 0.75f);
 
     }
 

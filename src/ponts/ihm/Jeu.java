@@ -355,8 +355,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     }
 
     public void finPartie(boolean niveauReussi, int prix) {
-        messageFinPartie(niveauReussi);
         majMeilleurPrix(prix);
+        messageFinPartie(niveauReussi);
         reinitialiserTemps();
     }
 
@@ -378,7 +378,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         if (niveauReussi) {
             titre = "Niveau terminé";
             texte += "Bravo, tu as réussi le niveau " + recupererNomNiveau() + " !";
-            texte += "\n" + "Prix du pont " + Integer.toString(partie.prix()) + " $";
+            texte += "\n\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
+            texte += "\n" + "Meilleur : " + Integer.toString(recupererMeilleurPrix()) + " $";
             texte += "\n\n" + "Tu peux passer au niveau suivant";
             texte += "\n" + "ou essayer de faire un pont moins cher.";
         } else {
@@ -386,7 +387,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             texte += "Dommage, tu n'as pas réussi le niveau " + recupererNomNiveau() + ".";
             texte += "\n\n" + "Ton pont a couté trop cher :";
             texte += "\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
-            texte += "   Budget : " + Integer.toString(partie.budget()) + " $";
+            texte += "\n" + "Budget : " + Integer.toString(partie.budget()) + " $";
             texte += "\n\n" + "Tu peux réessayer en cliquant sur " + boutonRecommencer.getText() + ".";
         }
         JOptionPane.showMessageDialog(this, texte, titre, JOptionPane.PLAIN_MESSAGE);

@@ -30,8 +30,9 @@ public class Voiture {
         xArret = niveau.calculerArret();
         xArrivee = niveau.calculerArrivee();
 
-        Vec2 posRoueArriere = niveau.getPosCoins().get(1).add(new Vec2(Roue.RAYON + 2f, Roue.RAYON));
-        Vec2 posRoueAvant = posRoueArriere.add(new Vec2(6f, 0f));
+        float ecartRoues = 6f;
+        Vec2 posRoueArriere = new Vec2(xDepart - ecartRoues / 2, niveau.getPosCoins().get(1).y + Roue.RAYON);
+        Vec2 posRoueAvant = posRoueArriere.add(new Vec2(ecartRoues, 0f));
         Vec2 posCarrosserie = new Vec2(0.5f * (posRoueArriere.x + posRoueAvant.x), posRoueArriere.y + 1.4f);
 
         carrosserie = new Carrosserie(world, posCarrosserie);
@@ -54,7 +55,7 @@ public class Voiture {
     }
 
     public void arreter() {
-        if (!arretee && carrosserie.getX() > xArret) {
+        if (!arretee && roueArriere.getX() > xArret) {
             roueArriere.arreter();
             roueAvant.arreter();
             arretee = true;
