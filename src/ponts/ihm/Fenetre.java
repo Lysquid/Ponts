@@ -1,12 +1,11 @@
 package ponts.ihm;
 
+import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
-import java.awt.Dimension;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,22 +26,14 @@ public class Fenetre extends JFrame {
         setMinimumSize(new Dimension(960, 540));
         setExtendedState(MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
 
         int refreshRate = getRefreshRate();
         box2d = new Box2D(this);
 
-        // Pour une raison obscure, sur Linux, le planel
-        // se place bien seulement seulement après un certains délai
-        try {
-            TimeUnit.MILLISECONDS.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         jeu = new Jeu(this, box2d, refreshRate);
         editeur = new Editeur(this, box2d, refreshRate);
         lancerJeu();
+        setVisible(true);
         jeu.messageDebutJeu();
     }
 
@@ -58,7 +49,6 @@ public class Fenetre extends JFrame {
     public void changerEcran(JPanel actuel, JPanel nouveau) {
         remove(actuel);
         add(nouveau);
-        setVisible(true);
         nouveau.repaint();
     }
 
