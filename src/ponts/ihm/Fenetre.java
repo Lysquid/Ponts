@@ -18,11 +18,13 @@ public class Fenetre extends JFrame {
 
     Jeu jeu;
     Editeur editeur;
+    final int LARGEUR_MIN = 960;
+    final int HAUTEUR_MIN = 540;
 
     public Fenetre() {
 
         setTitle("Ponts");
-        setMinimumSize(new Dimension(960, 540));
+        setMinimumSize(new Dimension(LARGEUR_MIN, HAUTEUR_MIN));
         setExtendedState(MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
