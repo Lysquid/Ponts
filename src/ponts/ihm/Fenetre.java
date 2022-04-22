@@ -24,7 +24,7 @@ public class Fenetre extends JFrame {
     public Fenetre() {
 
         setTitle("Ponts");
-        setMinimumSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(960, 540));
         setExtendedState(MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
