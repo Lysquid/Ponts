@@ -6,6 +6,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
 import ponts.ihm.Box2D;
+import ponts.ihm.Jeu;
 import ponts.niveau.Niveau;
 import ponts.physique.barres.Materiau;
 import ponts.physique.environnement.Bord;
@@ -13,6 +14,7 @@ import ponts.physique.voiture.Voiture;
 
 public class Partie {
 
+    Jeu jeu;
     World world;
     Pont pont;
     Bord bord;
@@ -24,7 +26,9 @@ public class Partie {
     boolean terminee = false;
     Materiau materiau = Materiau.GOUDRON;
 
-    public Partie(Box2D box2d, Niveau niveau) {
+    public Partie(Jeu jeu, Box2D box2d, Niveau niveau) {
+        this.jeu = jeu;
+
         niveau.centrer(box2d);
         niveau.ajouterExtremitees(box2d);
 
@@ -42,12 +46,16 @@ public class Partie {
         return simulationPhysique;
     }
 
-    public void toggleSimulationPhysique() {
-        simulationPhysique = !simulationPhysique;
+    public void setSimulationPhsyique(boolean simulationPhysique) {
+        this.simulationPhysique = simulationPhysique;
         pont.arreterCreation(world);
         if (creationPont) {
             creationPont = false;
         }
+    }
+
+    public void toggleSimulationPhysique() {
+        setSimulationPhsyique(!isSimulationPhysique());
     }
 
     public void dessiner(Graphics2D g, Box2D box2d, Vec2 posSouris) {
@@ -61,9 +69,9 @@ public class Partie {
         if (simulationPhysique) {
             world.step(dt, 10, 8);
             pont.testCasse(world, dt);
+            voiture.arreter();
             if (!terminee && voiture.testArrivee()) {
-                System.out.println("GG");
-                voiture.arreter();
+                jeu.finPartie();
                 terminee = true;
             }
 

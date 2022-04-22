@@ -17,6 +17,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
@@ -54,19 +55,16 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     boolean clicSouris = false;
     Vec2 posSouris = new Vec2();
 
-    long tempsPrecedent = 0;
-
     public Jeu(Fenetre fenetre, int refreshRate) {
 
         this.fenetre = fenetre;
         ihm();
 
         box2d = new Box2D(fenetre.getWidth(), fenetre.getHeight());
-        partie = new Partie(box2d, recupererNiveau());
+        partie = new Partie(this, box2d, recupererNiveau());
 
         timerPhysique = new Timer(TICK_PHYSIQUE, this);
         timerPhysique.start();
-        tempsPhysique = System.currentTimeMillis();
 
         int fps = (int) (1.0 / refreshRate * 1000.0);
         timerGraphique = new Timer(fps, this);
@@ -255,7 +253,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
 
         if (source == comboBoxNiveaux) {
-            partie = new Partie(box2d, recupererNiveau());
+            partie = new Partie(this, box2d, recupererNiveau());
         }
 
         Materiau materiau = null;
@@ -271,21 +269,28 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         if (source == boutonLancer) {
             partie.toggleSimulationPhysique();
-            if (partie.isSimulationPhysique()) {
-                boutonLancer.setText("Pause");
-            } else {
-                boutonLancer.setText("Reprendre");
-            }
+            majSimulation();
         }
 
         if (source == boutonRecommencer) {
-            partie = new Partie(box2d, recupererNiveau());
+            partie = new Partie(this, box2d, recupererNiveau());
         }
 
         if (source == boutonEditeur) {
+            partie.setSimulationPhsyique(false);
+            majSimulation();
             fenetre.lancerEditeur();
         }
 
+    }
+
+    public void majSimulation() {
+        reinitialiserTemps();
+        if (partie.isSimulationPhysique()) {
+            boutonLancer.setText("Pause");
+        } else {
+            boutonLancer.setText("Reprendre");
+        }
     }
 
     private Niveau recupererNiveau() {
@@ -333,5 +338,14 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     @Override
     public void mouseMoved(MouseEvent e) {
         majPosSouris(e);
+    }
+
+    public void finPartie() {
+        JOptionPane.showMessageDialog(this, "Bravo !", "Niveau terminé", JOptionPane.PLAIN_MESSAGE);
+        reinitialiserTemps();
+    }
+
+    public void reinitialiserTemps() {
+        tempsPhysique = System.currentTimeMillis();
     }
 }

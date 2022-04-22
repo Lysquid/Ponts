@@ -19,12 +19,15 @@ public class Voiture {
     Roue roueArriere;
     Carrosserie carrosserie;
 
+    boolean arretee = false;
     float xDepart;
+    float xArret;
     float xArrivee;
 
     public Voiture(World world, Niveau niveau) {
 
         xDepart = niveau.calculerDepart();
+        xArret = niveau.calculerArret();
         xArrivee = niveau.calculerArrivee();
 
         Vec2 posRoueArriere = niveau.getPosCoins().get(1).add(new Vec2(Roue.RAYON + 2f, Roue.RAYON));
@@ -47,11 +50,15 @@ public class Voiture {
     }
 
     public boolean testArrivee() {
-        return carrosserie.getX() > xArrivee;
+        return carrosserie.getBody().getLinearVelocity().x <= 0.01f && arretee;
     }
 
     public void arreter() {
-        roueArriere.arreter();
-        roueAvant.arreter();
+        if (!arretee && carrosserie.getX() > xArret) {
+            roueArriere.arreter();
+            roueAvant.arreter();
+            arretee = true;
+        }
     }
+
 }
