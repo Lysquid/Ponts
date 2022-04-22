@@ -6,10 +6,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.util.concurrent.TimeUnit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
@@ -39,16 +36,25 @@ public class Fenetre extends JFrame {
             e.printStackTrace();
         }
 
-        if (true) {
-            jeu = new Jeu(this, refreshRate);
-        } else {
-            editeur = new Editeur(this, refreshRate);
-        }
+        jeu = new Jeu(this, refreshRate);
+        editeur = new Editeur(this, refreshRate);
+        add(jeu);
+        setVisible(true);
 
     }
 
-    public void lancerJeu() {
+    public void lancerEditeur() {
+        remove(jeu);
+        add(editeur);
+        setVisible(true);
+        editeur.repaint();
+    }
 
+    public void lancerJeu() {
+        remove(editeur);
+        add(jeu);
+        setVisible(true);
+        jeu.repaint();
     }
 
     public int getRefreshRate() {
@@ -83,10 +89,6 @@ public class Fenetre extends JFrame {
         UIManager.put("Component.margin", insets);
         UIManager.put("TextComponent.margin", insets);
         UIManager.put("ComboBox.margin", insets);
-        UIManager.put("Label.margin", insets);
-        UIManager.put("Panel.margin", insets);
-        UIManager.put("TextArea.margin", insets);
-        UIManager.put("TextPane.margin", insets);
 
         Font defaultFont = UIManager.getDefaults().getFont("Label.font");
         Font font = defaultFont.deriveFont(18f);
@@ -96,17 +98,8 @@ public class Fenetre extends JFrame {
         UIManager.put("Label.font", fontResourceBold);
         UIManager.put("Button.font", fontResource);
         UIManager.put("ComboBox.font", fontResource);
+        UIManager.put("TextField.font", fontResource);
 
-    }
-
-    public void lancerEditeur() {
-        remove(jeu);
-        if (editeur != null) {
-            add(editeur);
-            editeur.setVisible(true);
-        } else {
-            editeur = new Editeur(this, refreshRate);
-        }
     }
 
 }

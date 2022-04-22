@@ -53,8 +53,7 @@ public class Partie {
 
     public void tickPhysique(Vec2 posSouris, int boutonSouris, boolean clicSouris, float dt) {
 
-        boolean sourisDansBord = bord.estDansBord(posSouris);
-        pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau, sourisDansBord);
+        pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau, bord);
 
         if (isSimulationPhysique()) {
             pont.testCasse(world, dt);

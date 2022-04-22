@@ -13,12 +13,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -64,7 +61,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         this.fenetre = fenetre;
         ihm();
 
-        box2d = new Box2D(getWidth(), getHeight());
+        box2d = new Box2D(fenetre.getWidth(), fenetre.getHeight());
         partie = new Partie(box2d, recupererNiveau());
 
         timerPhysique = new Timer(TICK_PHYSIQUE, this);
@@ -83,11 +80,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
-        fenetre.add(this);
-        fenetre.setVisible(true);
 
         JPanel ligneHaut = new JPanel();
-        ligneHaut.setLayout(new FlowLayout(FlowLayout.CENTER, getWidth() / 20, getHeight() / 100));
+        ligneHaut.setLayout(new FlowLayout(FlowLayout.CENTER, fenetre.getWidth() / 20, fenetre.getHeight() / 100));
         ligneHaut.setOpaque(false);
         this.add(ligneHaut, BorderLayout.PAGE_START);
 
@@ -95,25 +90,20 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         colonneNiveau.setLayout(new BoxLayout(colonneNiveau, BoxLayout.Y_AXIS));
         colonneNiveau.setOpaque(false);
         ligneHaut.add(colonneNiveau);
-
         JLabel texteNiveau = new JLabel("Niveau");
         texteNiveau.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneNiveau.add(texteNiveau);
-
         JPanel ligneNiveau = new JPanel();
         ligneNiveau.setOpaque(false);
         ligneNiveau.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneNiveau.add(ligneNiveau);
-
         boutonPrecedent = new JButton("Précédent");
         boutonPrecedent.addActionListener(this);
         ligneNiveau.add(boutonPrecedent);
-
         String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
         comboBoxNiveaux = new JComboBox<String>(nomsNiveaux);
         comboBoxNiveaux.addActionListener(this);
         ligneNiveau.add(comboBoxNiveaux);
-
         boutonSuivant = new JButton("Suivant");
         boutonSuivant.addActionListener(this);
         ligneNiveau.add(boutonSuivant);
@@ -122,19 +112,15 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         colonneMateriau.setLayout(new BoxLayout(colonneMateriau, BoxLayout.Y_AXIS));
         colonneMateriau.setOpaque(false);
         ligneHaut.add(colonneMateriau);
-
         JLabel textMateriau = new JLabel("Materiaux");
         textMateriau.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneMateriau.add(textMateriau);
-
         JPanel ligneMateriau = new JPanel();
         ligneMateriau.setOpaque(false);
         colonneMateriau.add(ligneMateriau);
-
         boutonMateriauBois = new JButton("Bois");
         boutonMateriauBois.addActionListener(this);
         ligneMateriau.add(boutonMateriauBois);
-
         boutonMateriauGoudron = new JButton("Goudron");
         boutonMateriauGoudron.addActionListener(this);
         ligneMateriau.add(boutonMateriauGoudron);
@@ -143,29 +129,35 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         colonneControles.setLayout(new BoxLayout(colonneControles, BoxLayout.Y_AXIS));
         colonneControles.setOpaque(false);
         ligneHaut.add(colonneControles);
-
-        JLabel textControles = new JLabel("Controles");
-        textControles.setAlignmentX(Component.CENTER_ALIGNMENT);
-        colonneControles.add(textControles);
-
-        JPanel controles = new JPanel();
-        controles.setOpaque(false);
-        colonneControles.add(controles);
-
+        JLabel texteControles = new JLabel("Controles");
+        texteControles.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneControles.add(texteControles);
+        JPanel ligneControles = new JPanel();
+        ligneControles.setOpaque(false);
+        colonneControles.add(ligneControles);
         boutonLancer = new JButton("Lancer");
         boutonLancer.addActionListener(this);
-        controles.add(boutonLancer);
-
+        ligneControles.add(boutonLancer);
         boutonRecommencer = new JButton("Recommencer");
         boutonRecommencer.addActionListener(this);
-        controles.add(boutonRecommencer);
+        ligneControles.add(boutonRecommencer);
 
-        boutonEditeur = new JButton("Editeur");
+        JPanel colonneEditeur = new JPanel();
+        colonneEditeur.setLayout(new BoxLayout(colonneEditeur, BoxLayout.Y_AXIS));
+        colonneEditeur.setOpaque(false);
+        ligneHaut.add(colonneEditeur);
+        JLabel texteEditeur = new JLabel("Editeur");
+        texteEditeur.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneEditeur.add(texteEditeur);
+        JPanel ligneEditeur = new JPanel();
+        ligneEditeur.setOpaque(false);
+        colonneEditeur.add(ligneEditeur);
+        boutonEditeur = new JButton("Editer un niveau");
         boutonEditeur.addActionListener(this);
-        controles.add(boutonEditeur);
+        ligneEditeur.add(boutonEditeur);
 
         JPanel bas = new JPanel();
-        bas.setLayout(new FlowLayout(FlowLayout.CENTER, getWidth() / 20, getHeight() / 50));
+        bas.setLayout(new FlowLayout(FlowLayout.CENTER, fenetre.getWidth() / 20, fenetre.getHeight() / 50));
         bas.setOpaque(false);
         this.add(bas, BorderLayout.PAGE_END);
 
@@ -173,11 +165,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         colonnePrix.setLayout(new BoxLayout(colonnePrix, BoxLayout.Y_AXIS));
         colonnePrix.setOpaque(false);
         bas.add(colonnePrix);
-
         JLabel prix = new JLabel("Prix");
         prix.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonnePrix.add(prix);
-
         textePrix = new JLabel();
         textePrix.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonnePrix.add(textePrix);
@@ -186,11 +176,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         colonneBudget.setLayout(new BoxLayout(colonneBudget, BoxLayout.Y_AXIS));
         colonneBudget.setOpaque(false);
         bas.add(colonneBudget);
-
         JLabel budget = new JLabel("Budget");
         budget.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneBudget.add(budget);
-
         texteBudget = new JLabel();
         texteBudget.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneBudget.add(texteBudget);
@@ -199,11 +187,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         colonneMeilleur.setLayout(new BoxLayout(colonneMeilleur, BoxLayout.Y_AXIS));
         colonneMeilleur.setOpaque(false);
         bas.add(colonneMeilleur);
-
         JLabel meilleur = new JLabel("Meilleur");
         meilleur.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneMeilleur.add(meilleur);
-
         texteMeilleur = new JLabel("Ø");
         texteMeilleur.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneMeilleur.add(texteMeilleur);

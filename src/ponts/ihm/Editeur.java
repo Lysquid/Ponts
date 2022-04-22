@@ -1,6 +1,8 @@
 package ponts.ihm;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,8 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -23,67 +25,151 @@ import ponts.niveau.Niveau;
 
 public class Editeur extends JPanel implements ActionListener, MouseInputListener {
 
+    Fenetre fenetre;
     Box2D box2d;
     Niveau niveau;
 
-    JLabel textNomNiveau;
-    JLabel textBudget;
+    JLabel texteNomNiveau;
+    JLabel texteBudget;
     JTextField champNomNiveau;
     JTextField champBudget;
     JButton boutonSauvegarder;
     JButton boutonCharger;
-    JButton boutonUndo;
+    JButton boutonAnnuler;
     JButton boutonEffacer;
     JButton boutonSupprimer;
+    JButton boutonJeu;
 
-    public Editeur(JFrame fenetre, int refreshRate) {
+    public Editeur(Fenetre fenetre, int refreshRate) {
 
-        ihm(fenetre);
+        this.fenetre = fenetre;
+        ihm();
 
-        box2d = new Box2D(getWidth(), getHeight());
+        box2d = new Box2D(fenetre.getWidth(), fenetre.getHeight());
         niveau = new Niveau();
-    }
-
-    public void ihm(JFrame fenetre) {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         addMouseListener(this);
         addMouseMotionListener(this);
+    }
 
-        textNomNiveau = new JLabel("Nom niveau");
-        add(textNomNiveau);
+    public void ihm() {
 
-        champNomNiveau = new JTextField(5);
-        add(champNomNiveau);
+        this.setLayout(new BorderLayout());
+        this.setOpaque(false);
 
+        JPanel ligneHaut = new JPanel();
+        ligneHaut.setLayout(new FlowLayout(FlowLayout.CENTER, fenetre.getWidth() / 20, fenetre.getHeight() / 100));
+        ligneHaut.setOpaque(false);
+        this.add(ligneHaut, BorderLayout.PAGE_START);
+
+        JPanel colonneFichier = new JPanel();
+        colonneFichier.setLayout(new BoxLayout(colonneFichier, BoxLayout.Y_AXIS));
+        colonneFichier.setOpaque(false);
+        ligneHaut.add(colonneFichier);
+        JLabel texteFichier = new JLabel("Fichier");
+        texteFichier.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneFichier.add(texteFichier);
+        JPanel ligneFichier = new JPanel();
+        ligneFichier.setOpaque(false);
+        ligneFichier.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneFichier.add(ligneFichier);
         boutonSauvegarder = new JButton("Sauvegarder");
-        add(boutonSauvegarder);
         boutonSauvegarder.addActionListener(this);
-
+        ligneFichier.add(boutonSauvegarder);
         boutonCharger = new JButton("Charger");
         boutonCharger.addActionListener(this);
-        add(boutonCharger);
-
+        ligneFichier.add(boutonCharger);
         boutonSupprimer = new JButton("Supprimer");
         boutonSupprimer.addActionListener(this);
-        add(boutonSupprimer);
+        ligneFichier.add(boutonSupprimer);
 
-        textBudget = new JLabel("Budget");
-        add(textBudget);
+        JPanel colonneNom = new JPanel();
+        colonneNom.setLayout(new BoxLayout(colonneNom, BoxLayout.Y_AXIS));
+        colonneNom.setOpaque(false);
+        ligneHaut.add(colonneNom);
+        JLabel texteNom = new JLabel("Nom");
+        texteNom.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneNom.add(texteNom);
+        JPanel ligneNom = new JPanel();
+        ligneNom.setOpaque(false);
+        ligneNom.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneNom.add(ligneNom);
+        champNomNiveau = new JTextField(6);
+        ligneNom.add(champNomNiveau);
 
-        champBudget = new JTextField("0", 4);
-        add(champBudget);
+        JPanel colonneBudget = new JPanel();
+        colonneBudget.setLayout(new BoxLayout(colonneBudget, BoxLayout.Y_AXIS));
+        colonneBudget.setOpaque(false);
+        ligneHaut.add(colonneBudget);
+        texteBudget = new JLabel("Budget");
+        colonneBudget.add(texteBudget);
+        JPanel ligneBudget = new JPanel();
+        ligneBudget.setOpaque(false);
+        ligneBudget.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneBudget.add(ligneBudget);
+        champBudget = new JTextField("0", 5);
+        ligneBudget.add(champBudget);
 
-        boutonUndo = new JButton("Undo");
-        boutonUndo.addActionListener(this);
-        add(boutonUndo);
-
+        JPanel colonneCreation = new JPanel();
+        colonneCreation.setLayout(new BoxLayout(colonneCreation, BoxLayout.Y_AXIS));
+        colonneCreation.setOpaque(false);
+        ligneHaut.add(colonneCreation);
+        JLabel texteCreation = new JLabel("Creation");
+        texteCreation.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneCreation.add(texteCreation);
+        JPanel ligneCreation = new JPanel();
+        ligneCreation.setOpaque(false);
+        ligneCreation.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneCreation.add(ligneCreation);
+        boutonAnnuler = new JButton("Annuler");
+        boutonAnnuler.addActionListener(this);
+        ligneCreation.add(boutonAnnuler);
         boutonEffacer = new JButton("Effacer");
         boutonEffacer.addActionListener(this);
-        add(boutonEffacer);
+        ligneCreation.add(boutonEffacer);
 
-        fenetre.add(this);
-        fenetre.setVisible(true);
+        JPanel colonneJeu = new JPanel();
+        colonneJeu.setLayout(new BoxLayout(colonneJeu, BoxLayout.Y_AXIS));
+        colonneJeu.setOpaque(false);
+        ligneHaut.add(colonneJeu);
+        JLabel texteJeu = new JLabel("Jeu");
+        texteJeu.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneJeu.add(texteJeu);
+        JPanel ligneJeu = new JPanel();
+        ligneJeu.setOpaque(false);
+        ligneJeu.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneJeu.add(ligneJeu);
+        boutonJeu = new JButton("Retour au jeu");
+        boutonJeu.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boutonJeu.addActionListener(this);
+        ligneJeu.add(boutonJeu);
+
+        JPanel bas = new JPanel();
+        bas.setLayout(new FlowLayout(FlowLayout.CENTER, fenetre.getWidth() / 20, fenetre.getHeight() / 50));
+        bas.setOpaque(false);
+        this.add(bas, BorderLayout.PAGE_END);
+
+        JPanel colonnePoint = new JPanel();
+        colonnePoint.setLayout(new BoxLayout(colonnePoint, BoxLayout.Y_AXIS));
+        colonnePoint.setOpaque(false);
+        bas.add(colonnePoint);
+        JLabel pointCommande = new JLabel("Clic gauche :");
+        pointCommande.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonnePoint.add(pointCommande);
+        JLabel point = new JLabel("ajouter un point");
+        point.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonnePoint.add(point);
+
+        JPanel colonneLiaison = new JPanel();
+        colonneLiaison.setLayout(new BoxLayout(colonneLiaison, BoxLayout.Y_AXIS));
+        colonneLiaison.setOpaque(false);
+        bas.add(colonneLiaison);
+        JLabel liaisonCommande = new JLabel("Clic droit :");
+        liaisonCommande.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneLiaison.add(liaisonCommande);
+        JLabel liaison = new JLabel("ajouter une liaison");
+        liaison.setAlignmentX(Component.CENTER_ALIGNMENT);
+        colonneLiaison.add(liaison);
     }
 
     @Override
@@ -103,21 +189,26 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == boutonSauvegarder) {
+        Object source = e.getSource();
+
+        if (source == boutonSauvegarder) {
             niveau.sauvegarder(nomNiveau(), champBudget.getText());
         }
-        if (e.getSource() == boutonCharger) {
+        if (source == boutonCharger) {
             niveau = Niveau.charger(nomNiveau());
             champBudget.setText(Integer.toString(niveau.getBudget()));
         }
-        if (e.getSource() == boutonSupprimer) {
+        if (source == boutonSupprimer) {
             Niveau.supprimer(nomNiveau());
         }
-        if (e.getSource() == boutonUndo) {
+        if (source == boutonAnnuler) {
             niveau.undo();
         }
-        if (e.getSource() == boutonEffacer) {
+        if (source == boutonEffacer) {
             niveau = new Niveau();
+        }
+        if (source == boutonJeu) {
+            fenetre.lancerJeu();
         }
         repaint();
     }

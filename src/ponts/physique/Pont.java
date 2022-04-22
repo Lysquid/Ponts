@@ -13,6 +13,7 @@ import ponts.physique.barres.Barre;
 import ponts.physique.barres.BarreBois;
 import ponts.physique.barres.BarreGoudron;
 import ponts.physique.barres.Materiau;
+import ponts.physique.environnement.Bord;
 import ponts.physique.liaisons.Liaison;
 import ponts.physique.liaisons.LiaisonFixe;
 import ponts.physique.liaisons.LiaisonMobile;
@@ -64,10 +65,11 @@ public class Pont implements Serializable {
     }
 
     public void gererInput(World world, Vec2 posSouris, int boutonSouris, boolean clicSouris, Materiau materiau,
-            boolean sourisDansBord) {
+            Bord bord) {
 
         Vec2 posSourisMax = posSourisMax(barreEnCreation, posSouris);
         liaisonProche = recupLiaisonProche(posSourisMax);
+        boolean sourisDansBord = bord.estDansBord(posSourisMax);
         boolean barreValide = barreValide(barreEnCreation, liaisonProche, sourisDansBord);
 
         if (barreEnCreation != null) {
