@@ -1,6 +1,7 @@
 package ponts.physique.barres;
 
 public enum Materiau {
+    GOUDRON,
     BOIS,
-    GOUDRON
+    ACIER
 }

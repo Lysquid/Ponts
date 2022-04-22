@@ -48,8 +48,8 @@ public abstract class Barre extends ObjetPhysique {
     float largeur = 1;
 
     float elasticite = Liaison.ELASTICITE;
-    float forceMax = 2000f;
-    int prix_barre = 50;
+    float forceMax = 1000f;
+    int prixMateriau = 1000;
     private int prix;
 
     protected Barre(World world, Liaison liaison1, Liaison liaison2) {
@@ -245,7 +245,7 @@ public abstract class Barre extends ObjetPhysique {
     public void activerPhysique() {
         body.setType(BodyType.DYNAMIC);
         apercu = false;
-        prix = Math.round(longueur / LONGUEUR_MAX * prix_barre);
+        prix = Math.round(longueur / LONGUEUR_MAX * prixMateriau);
         ajouterCollisionBord();
         ajusterPos();
     }

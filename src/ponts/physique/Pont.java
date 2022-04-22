@@ -10,6 +10,7 @@ import org.jbox2d.dynamics.World;
 import ponts.ihm.Box2D;
 import ponts.niveau.Niveau;
 import ponts.physique.barres.Barre;
+import ponts.physique.barres.BarreAcier;
 import ponts.physique.barres.BarreBois;
 import ponts.physique.barres.BarreGoudron;
 import ponts.physique.barres.Materiau;
@@ -230,11 +231,14 @@ public class Pont implements Serializable {
         Liaison liaison2 = liaisonEnCreation;
 
         switch (materiau) {
+            case GOUDRON:
+                barreEnCreation = new BarreGoudron(world, liaison1, liaison2);
+                break;
             case BOIS:
                 barreEnCreation = new BarreBois(world, liaison1, liaison2);
                 break;
-            case GOUDRON:
-                barreEnCreation = new BarreGoudron(world, liaison1, liaison2);
+            case ACIER:
+                barreEnCreation = new BarreAcier(world, liaison1, liaison2);
                 break;
         }
 

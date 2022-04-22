@@ -12,10 +12,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -40,8 +42,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     JButton boutonPrecedent;
     JComboBox<String> comboBoxNiveaux;
     JButton boutonSuivant;
-    JButton boutonMateriauBois;
     JButton boutonMateriauGoudron;
+    JButton boutonMateriauBois;
+    JButton boutonMateriauAcier;
     JButton boutonDemarrer;
     JButton boutonRecommencer;
     JButton boutonEditeur;
@@ -63,6 +66,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         meilleursPrix = new HashMap<String, Integer>();
         this.fenetre = fenetre;
         ihm();
+        listeNiveaux();
 
         box2d = new Box2D(fenetre.getWidth(), fenetre.getHeight());
         partie = new Partie(this, box2d, recupererNiveau());
@@ -102,8 +106,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boutonPrecedent = new JButton("Précédent");
         boutonPrecedent.addActionListener(this);
         ligneNiveau.add(boutonPrecedent);
-        String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
-        comboBoxNiveaux = new JComboBox<String>(nomsNiveaux);
+        comboBoxNiveaux = new JComboBox<String>();
         comboBoxNiveaux.addActionListener(this);
         ligneNiveau.add(comboBoxNiveaux);
         boutonSuivant = new JButton("Suivant");
@@ -126,6 +129,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boutonMateriauBois = new JButton("Bois");
         boutonMateriauBois.addActionListener(this);
         ligneMateriau.add(boutonMateriauBois);
+        boutonMateriauAcier = new JButton("Acier");
+        boutonMateriauAcier.addActionListener(this);
+        ligneMateriau.add(boutonMateriauAcier);
 
         JPanel colonneSimulation = new JPanel();
         colonneSimulation.setLayout(new BoxLayout(colonneSimulation, BoxLayout.Y_AXIS));
@@ -228,6 +234,16 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
     }
 
+    public void listeNiveaux() {
+        String niveauSelectionne = recupererNomNiveau();
+        String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(nomsNiveaux);
+        comboBoxNiveaux.setModel(model);
+        if (niveauSelectionne != null && Arrays.asList(nomsNiveaux).contains(niveauSelectionne)) {
+            comboBoxNiveaux.setSelectedItem(niveauSelectionne);
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
@@ -272,6 +288,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
         if (source == boutonMateriauGoudron) {
             materiau = Materiau.GOUDRON;
+        }
+        if (source == boutonMateriauAcier) {
+            materiau = Materiau.ACIER;
         }
         if (materiau != null) {
             partie.changementMateriau(materiau);
