@@ -39,6 +39,7 @@ public class Fenetre extends JFrame {
         jeu = new Jeu(this, refreshRate);
         editeur = new Editeur(this, refreshRate);
         lancerJeu();
+        jeu.messageDebutJeu();
     }
 
     public void lancerEditeur() {

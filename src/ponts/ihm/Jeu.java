@@ -42,7 +42,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     JButton boutonSuivant;
     JButton boutonMateriauBois;
     JButton boutonMateriauGoudron;
-    JButton boutonLancer;
+    JButton boutonDemarrer;
     JButton boutonRecommencer;
     JButton boutonEditeur;
     JLabel textePrix;
@@ -120,12 +120,12 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         JPanel ligneMateriau = new JPanel();
         ligneMateriau.setOpaque(false);
         colonneMateriau.add(ligneMateriau);
-        boutonMateriauBois = new JButton("Bois");
-        boutonMateriauBois.addActionListener(this);
-        ligneMateriau.add(boutonMateriauBois);
         boutonMateriauGoudron = new JButton("Goudron");
         boutonMateriauGoudron.addActionListener(this);
         ligneMateriau.add(boutonMateriauGoudron);
+        boutonMateriauBois = new JButton("Bois");
+        boutonMateriauBois.addActionListener(this);
+        ligneMateriau.add(boutonMateriauBois);
 
         JPanel colonneSimulation = new JPanel();
         colonneSimulation.setLayout(new BoxLayout(colonneSimulation, BoxLayout.Y_AXIS));
@@ -137,9 +137,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         JPanel ligneControles = new JPanel();
         ligneControles.setOpaque(false);
         colonneSimulation.add(ligneControles);
-        boutonLancer = new JButton("Lancer");
-        boutonLancer.addActionListener(this);
-        ligneControles.add(boutonLancer);
+        boutonDemarrer = new JButton();
+        boutonDemarrer.addActionListener(this);
+        ligneControles.add(boutonDemarrer);
         boutonRecommencer = new JButton("Recommencer");
         boutonRecommencer.addActionListener(this);
         ligneControles.add(boutonRecommencer);
@@ -277,7 +277,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             partie.changementMateriau(materiau);
         }
 
-        if (source == boutonLancer) {
+        if (source == boutonDemarrer) {
             partie.toggleSimulationPhysique();
             majSimulation();
         }
@@ -297,14 +297,14 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public void majSimulation() {
         reinitialiserTemps();
         if (partie.isSimulationPhysique()) {
-            boutonLancer.setText("Pause");
+            boutonDemarrer.setText("Pause");
         } else {
-            boutonLancer.setText("Reprendre");
+            boutonDemarrer.setText("Reprendre");
         }
     }
 
     private Niveau recupererNiveau() {
-        boutonLancer.setText("Lancer");
+        boutonDemarrer.setText("Démarrer");
         String nomNiveau = recupererNomNiveau();
         return Niveau.charger(nomNiveau);
 
@@ -360,24 +360,36 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         reinitialiserTemps();
     }
 
+    public void messageDebutJeu() {
+        String texte = "Bienvenue sur notre jeu de ponts !";
+        texte += "\n\n" + "Tu peux construire ton pont en cliquant sur des liaisons (les cercles).";
+        texte += "\n" + "Choisis bien le materiau en fonction de ses propriétés et son prix.";
+        texte += "\n" + "Quand tu es prêt, lance la simulation en cliquant sur le bouton ";
+        texte += boutonDemarrer.getText() + ".";
+        texte += "\n\n" + "Le niveau sera réussi si tu la voiture arrive de l'autre côté";
+        texte += "\n" + "et si le prix du pont est inférieur au budget";
+        texte += "\n\n" + "Bonne chance !";
+        JOptionPane.showMessageDialog(this, texte, "Tutoriel", JOptionPane.PLAIN_MESSAGE);
+    }
+
     public void messageFinPartie(boolean niveauReussi) {
-        String text = "";
+        String texte = "";
         String titre = "";
         if (niveauReussi) {
             titre = "Niveau terminé";
-            text += "Bravo, tu as réussi le niveau " + recupererNomNiveau() + " !";
-            text += "\n" + "Prix du pont " + Integer.toString(partie.prix()) + " $";
-            text += "\n" + "Tu peux passer au niveau suivant";
-            text += "\n" + "ou essayer de faire un pont moins cher.";
+            texte += "Bravo, tu as réussi le niveau " + recupererNomNiveau() + " !";
+            texte += "\n" + "Prix du pont " + Integer.toString(partie.prix()) + " $";
+            texte += "\n\n" + "Tu peux passer au niveau suivant";
+            texte += "\n" + "ou essayer de faire un pont moins cher.";
         } else {
             titre = "Niveau échoué";
-            text += "Dommage, tu n'as pas réussi le niveau " + recupererNomNiveau();
-            text += "\n" + "Ton pont a couté trop cher :";
-            text += "\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
-            text += "   Budget : " + Integer.toString(partie.budget()) + " $";
-            text += "\n" + "Tu peux réessayer en cliquant sur recommencer.";
+            texte += "Dommage, tu n'as pas réussi le niveau " + recupererNomNiveau() + ".";
+            texte += "\n\n" + "Ton pont a couté trop cher :";
+            texte += "\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
+            texte += "   Budget : " + Integer.toString(partie.budget()) + " $";
+            texte += "\n\n" + "Tu peux réessayer en cliquant sur " + boutonRecommencer.getText() + ".";
         }
-        JOptionPane.showMessageDialog(this, text, titre, JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(this, texte, titre, JOptionPane.PLAIN_MESSAGE);
     }
 
     public void majMeilleurPrix(int prix) {
