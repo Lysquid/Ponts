@@ -22,7 +22,7 @@ public class Roue extends ObjetPhysique {
 
     static final float RAYON = 1f;
     static final float MOTOR_SPEED = 10f; // Vitesse du moteur
-    static final float MOTOR_TORQUE = 80f; // Puissance du moteur
+    float MOTOR_TORQUE = 80f; // Puissance du moteur
     static final float FRICTION = 0.9f; // Coefficient de frottement
 
     Color couleurContour = Color.BLACK;
@@ -85,6 +85,12 @@ public class Roue extends ObjetPhysique {
 
         g.setColor(couleurContour);
         g.drawOval(x - r, y - r, r * 2, r * 2);
+    }
+
+    public void arreter() {
+        joint.setMotorSpeed(0);
+        joint.setMaxMotorTorque(MOTOR_TORQUE * 0.75f);
+
     }
 
 }

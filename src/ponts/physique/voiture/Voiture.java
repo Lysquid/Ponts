@@ -19,7 +19,14 @@ public class Voiture {
     Roue roueArriere;
     Carrosserie carrosserie;
 
+    float xDepart;
+    float xArrivee;
+
     public Voiture(World world, Niveau niveau) {
+
+        xDepart = niveau.calculerDepart();
+        xArrivee = niveau.calculerArrivee();
+
         Vec2 posRoueArriere = niveau.getPosCoins().get(1).add(new Vec2(Roue.RAYON + 2f, Roue.RAYON));
         Vec2 posRoueAvant = posRoueArriere.add(new Vec2(6f, 0f));
         Vec2 posCarrosserie = new Vec2(0.5f * (posRoueArriere.x + posRoueAvant.x), posRoueArriere.y + 1.4f);
@@ -37,5 +44,14 @@ public class Voiture {
         carrosserie.dessiner(g, box2d);
         roueArriere.dessiner(g, box2d);
         roueAvant.dessiner(g, box2d);
+    }
+
+    public boolean testArrivee() {
+        return carrosserie.getX() > xArrivee;
+    }
+
+    public void arreter() {
+        roueArriere.arreter();
+        roueAvant.arreter();
     }
 }

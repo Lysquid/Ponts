@@ -176,4 +176,12 @@ public class Niveau implements Serializable {
         }
     }
 
+    public float calculerDepart() {
+        return (posCoins.get(1).x + posCoins.get(2).x) / 2;
+    }
+
+    public float calculerArrivee() {
+        return (posCoins.get(posCoins.size() - 2).x * 0 + posCoins.get(posCoins.size() - 3).x) *2 / 2;
+    }
+
 }

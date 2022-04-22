@@ -21,6 +21,7 @@ public class Partie {
 
     private boolean simulationPhysique = false;
     private boolean creationPont = true;
+    boolean terminee = false;
     Materiau materiau = Materiau.GOUDRON;
 
     public Partie(Box2D box2d, Niveau niveau) {
@@ -58,8 +59,13 @@ public class Partie {
     public void tickPhysique(Vec2 posSouris, int boutonSouris, boolean clicSouris, float dt) {
 
         if (simulationPhysique) {
-            pont.testCasse(world, dt);
             world.step(dt, 10, 8);
+            pont.testCasse(world, dt);
+            if (!terminee && voiture.testArrivee()) {
+                System.out.println("GG");
+                voiture.arreter();
+                terminee = true;
+            }
 
         } else if (creationPont) {
             pont.gererInput(world, posSouris, boutonSouris, clicSouris, materiau, bord);
