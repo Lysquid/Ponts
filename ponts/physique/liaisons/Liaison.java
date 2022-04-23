@@ -22,7 +22,7 @@ public abstract class Liaison extends ObjetPhysique {
     public static final int MASK = Bord.CATEGORY;
 
     public static final float RAYON = 0.5f;
-    static final float RAYON_CLICK = 1f;
+    static final float RAYON_CLICK = RAYON * 3;
 
     Color couleurRemplissage;
     Color couleurContour;

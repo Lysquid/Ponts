@@ -18,7 +18,7 @@ public class BarreGoudron extends Barre {
         super(world, liaison1, liaison2);
 
         couleurRemplissage = Color.decode("#333333");
-        prixMateriau *= 2;
+        prixMateriau *= 3;
         forceMax *= 1;
     }
 

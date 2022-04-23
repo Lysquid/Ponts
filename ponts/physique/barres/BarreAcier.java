@@ -17,7 +17,7 @@ public class BarreAcier extends Barre {
         super(world, liaison1, liaison2);
 
         couleurRemplissage = Color.decode("#8d92b2");
-        prixMateriau *= 3;
+        prixMateriau *= 2;
         forceMax *= 1.5;
     }
 
