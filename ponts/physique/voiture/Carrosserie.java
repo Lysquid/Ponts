@@ -60,7 +60,7 @@ public class Carrosserie extends ObjetPhysique {
     }
 
     private void chargerImage() {
-        String chemin = CHEMIN.resolve("Remycar.png").toString();
+        String chemin = CHEMIN.resolve("voiture.png").toString();
         try {
             image = ImageIO.read(new File(chemin));
         } catch (IOException e) {
