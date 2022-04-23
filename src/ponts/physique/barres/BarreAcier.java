@@ -18,7 +18,7 @@ public class BarreAcier extends Barre {
 
         couleurRemplissage = Color.decode("#8d92b2");
         prixMateriau *= 3;
-        forceMax *= 2;
+        forceMax *= 1;
     }
 
     public FixtureDef creerFixtureDef(Shape shape) {

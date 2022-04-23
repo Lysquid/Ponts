@@ -18,12 +18,11 @@ public class BarreBois extends Barre {
 
         couleurRemplissage = Color.decode("#ba754a");
         prixMateriau *= 1;
-        forceMax *= 1;
+        forceMax *= 0.1f;
     }
 
     public FixtureDef creerFixtureDef(Shape shape) {
         return creerFixtureDef(FRICTION, ELASTICITE, DENSITE, CATEGORY, MASK);
     }
-
 
 }
