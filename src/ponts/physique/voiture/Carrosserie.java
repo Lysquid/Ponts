@@ -29,6 +29,8 @@ public class Carrosserie extends ObjetPhysique {
     public static final int MASK = Voiture.MASK;
     public static final Path CHEMIN = Paths.get("res", "images");
 
+    static final float ELASTICITE = Roue.ELASTICITE;
+
     Color couleurContour = Color.BLACK;
     Color couleurRemplissage = Color.RED;
 
@@ -57,6 +59,7 @@ public class Carrosserie extends ObjetPhysique {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 1f;
         fixtureDef.shape = shape;
+        fixtureDef.restitution = ELASTICITE;
         fixtureDef.filter.categoryBits = CATEGORY;
         fixtureDef.filter.maskBits = MASK;
         body.createFixture(fixtureDef);

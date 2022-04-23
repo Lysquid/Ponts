@@ -13,13 +13,13 @@ public class Box2D {
         this.fenetre = fenetre;
 
         largeur = 100f;
-        hauteur = fenetre.getHeight() * coeff();
+        hauteur = getHauteurPixels() * coeff();
 
     }
 
     public float coeff() {
         // coefficient du nombre de metre par pixel
-        return largeur / fenetre.getWidth();
+        return largeur / getLargeurPixels();
     }
 
     public float pixelToWorld(int scalaire) {

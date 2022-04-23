@@ -76,14 +76,17 @@ public class Niveau implements Serializable {
     }
 
     public boolean ajouterExtremitees(Box2D box2d) {
-        Vec2 bordGauche = new Vec2(0, posCoins.getFirst().y);
+        float largeur = box2d.getLargeur();
+        float hauteur = box2d.getHauteur();
+
+        Vec2 bordGauche = new Vec2(-largeur, posCoins.getFirst().y);
         posCoins.addFirst(bordGauche);
-        Vec2 bordDroit = new Vec2(box2d.getLargeur(), posCoins.getLast().y);
+        Vec2 bordDroit = new Vec2(2 * largeur, posCoins.getLast().y);
         posCoins.add(bordDroit);
 
-        Vec2 coinGauche = new Vec2(0, 0);
+        Vec2 coinGauche = new Vec2(-largeur, -hauteur);
         posCoins.addFirst(coinGauche);
-        Vec2 coinDroit = new Vec2(box2d.getLargeur(), 0);
+        Vec2 coinDroit = new Vec2(2 * largeur, -hauteur);
         posCoins.add(coinDroit);
         return true;
     }
@@ -190,14 +193,10 @@ public class Niveau implements Serializable {
     }
 
     public float calculerDepart() {
-        return (posCoins.get(1).x + posCoins.get(2).x) / 2;
+        return posCoins.get(2).x;
     }
 
     public float calculerArrivee() {
-        return (posCoins.get(posCoins.size() - 2).x + posCoins.get(posCoins.size() - 3).x) / 2;
-    }
-
-    public float calculerArret() {
         return posCoins.get(posCoins.size() - 3).x;
     }
 
