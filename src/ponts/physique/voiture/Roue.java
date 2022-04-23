@@ -14,7 +14,6 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
-import ponts.physique.liaisons.Liaison;
 
 public class Roue extends ObjetPhysique {
 
@@ -24,8 +23,6 @@ public class Roue extends ObjetPhysique {
     static final float RAYON = 1f;
     static final float MOTOR_SPEED = 10f; // Vitesse du moteur
     static final float MOTOR_TORQUE = 80f; // Puissance du moteur
-    static final float FRICTION = 0.9f; // Coefficient de frottement
-    static final float ELASTICITE = Liaison.ELASTICITE * 2;
 
     Color couleurContour = Color.BLACK;
     Color couleurRemplissage = Color.decode("#555555");
@@ -48,13 +45,8 @@ public class Roue extends ObjetPhysique {
         shape = new CircleShape();
         shape.setRadius(RAYON);
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 1f;
-        fixtureDef.friction = FRICTION;
-        fixtureDef.restitution = ELASTICITE;
+        FixtureDef fixtureDef = creerFixtureDef(FRICTION, ELASTICITE, DENSITE, CATEGORY, MASK);
         fixtureDef.shape = shape;
-        fixtureDef.filter.categoryBits = CATEGORY;
-        fixtureDef.filter.maskBits = MASK;
         body.createFixture(fixtureDef);
     }
 

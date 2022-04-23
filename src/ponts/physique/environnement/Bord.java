@@ -41,10 +41,7 @@ public class Bord extends ObjetPhysique {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.STATIC;
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 1f;
-        fixtureDef.filter.categoryBits = CATEGORY;
-        fixtureDef.filter.maskBits = MASK;
+        FixtureDef fixtureDef = creerFixtureDef(FRICTION, ELASTICITE, DENSITE, CATEGORY, MASK);
 
         Vec2 prevPosCoin = null;
         for (Vec2 posCoin : posCoins) {

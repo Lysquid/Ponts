@@ -2,6 +2,8 @@ package ponts.physique.barres;
 
 import java.awt.Color;
 
+import org.jbox2d.collision.shapes.Shape;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 import ponts.physique.liaisons.Liaison;
@@ -17,13 +19,10 @@ public class BarreAcier extends Barre {
         couleurRemplissage = Color.decode("#8d92b2");
         prixMateriau *= 3;
         forceMax *= 2;
-        elasticite *= 0.5f;
     }
 
-    @Override
-    public void definirFiltre() {
-        fixtureDef.filter.categoryBits = CATEGORY;
-        fixtureDef.filter.maskBits = MASK;
+    public FixtureDef creerFixtureDef(Shape shape) {
+        return creerFixtureDef(FRICTION, ELASTICITE, DENSITE, CATEGORY, MASK);
     }
 
 }

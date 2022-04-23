@@ -437,6 +437,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     }
 
     public void nouvellePartie() {
-        partie = new Partie(this, box2d, recupererNiveau());
+        Niveau niveau = recupererNiveau();
+        if (niveau != null) {
+            partie = new Partie(this, box2d, niveau);
+        }
     }
 }

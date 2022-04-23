@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Rot;
 import org.jbox2d.common.Transform;
 import org.jbox2d.common.Vec2;
@@ -48,7 +49,7 @@ public abstract class Barre extends ObjetPhysique {
     float largeur = 1;
 
     float elasticite = Liaison.ELASTICITE;
-    float forceMax = 1000f;
+    float forceMax = 500f;
     int prixMateriau = 1000;
     private int prix;
 
@@ -81,16 +82,13 @@ public abstract class Barre extends ObjetPhysique {
         shape = new PolygonShape();
 
         // Etape 4 : Définir la "fixture"
-        fixtureDef = new FixtureDef();
-        fixtureDef.density = 1f;
-        fixtureDef.restitution = elasticite;
-        // fixtureDef.friction = 0.3f;
-        definirFiltre();
+        fixtureDef = creerFixtureDef(shape);
+        fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits |= Barre.CATEGORY;
 
     }
 
-    public abstract void definirFiltre();
+    public abstract FixtureDef creerFixtureDef(Shape shape);
 
     public void ajouterLiaison(Liaison liaison) {
         liaisonsLiees.add(liaison);
@@ -140,10 +138,14 @@ public abstract class Barre extends ObjetPhysique {
         Vec2 vectBarre = liaisonsLiees.get(0).getPos().sub(liaisonsLiees.get(1).getPos());
         Vec2 orthogonal = new Vec2(-vectBarre.y, vectBarre.x);
         orthogonal.normalize();
-
         float produitScalaire = Math.abs(Vec2.dot(orthogonal, force));
 
-        return produitScalaire > forceMax;
+        float valeur = produitScalaire / (liaison.getBarresLiees().size() - 1);
+        if (liaison instanceof LiaisonFixe) {
+            valeur /= 20;
+        }
+
+        return valeur > forceMax;
     }
 
     public void supprimerLiaison(World world, int index) {

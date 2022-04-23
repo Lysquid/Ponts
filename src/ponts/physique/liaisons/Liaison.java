@@ -15,16 +15,14 @@ import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
 import ponts.physique.barres.Barre;
 import ponts.physique.environnement.Bord;
-import ponts.physique.voiture.Voiture;
 
 public abstract class Liaison extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0100;
-    public static final int MASK = Bord.CATEGORY | Voiture.CATEGORY;
+    public static final int MASK = Bord.CATEGORY;
 
     public static final float RAYON = 0.5f;
     static final float RAYON_CLICK = 1f;
-    public static final float ELASTICITE = 0.3f;
 
     Color couleurRemplissage;
     Color couleurContour;
@@ -58,13 +56,8 @@ public abstract class Liaison extends ObjetPhysique {
         shape = new CircleShape();
         shape.setRadius(RAYON);
 
-        FixtureDef fixtureDef = new FixtureDef();
+        FixtureDef fixtureDef = creerFixtureDef(FRICTION, ELASTICITE, DENSITE, CATEGORY, MASK);
         fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        fixtureDef.restitution = ELASTICITE;
-        fixtureDef.filter.categoryBits = CATEGORY;
-        fixtureDef.filter.maskBits = MASK;
-
         body.createFixture(fixtureDef);
     }
 
