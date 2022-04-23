@@ -252,67 +252,71 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        if (source == timerPhysique) {
+        if (partie != null) {
+            if (source == timerPhysique) {
 
-            long nouveauTempsPhysique = System.currentTimeMillis();
-            float dt = (nouveauTempsPhysique - tempsPhysique) / 1000f;
-            tempsPhysique = nouveauTempsPhysique;
+                long nouveauTempsPhysique = System.currentTimeMillis();
+                float dt = (nouveauTempsPhysique - tempsPhysique) / 1000f;
+                tempsPhysique = nouveauTempsPhysique;
 
-            partie.tickPhysique(posSouris, boutonSouris, clicSouris, dt);
-            clicSouris = false;
+                partie.tickPhysique(posSouris, boutonSouris, clicSouris, dt);
+                clicSouris = false;
 
-        }
-
-        if (source == timerGraphique) {
-            repaint();
-        }
-
-        if (source == boutonPrecedent) {
-            int numero = comboBoxNiveaux.getSelectedIndex();
-            if (numero > 0) {
-                numero--;
-                comboBoxNiveaux.setSelectedIndex(numero);
             }
-        }
 
-        if (source == boutonSuivant) {
-            int numero = comboBoxNiveaux.getSelectedIndex();
-            if (numero < comboBoxNiveaux.getItemCount() - 1) {
-                numero++;
-                comboBoxNiveaux.setSelectedIndex(numero);
+            if (source == timerGraphique) {
+                repaint();
             }
-        }
 
-        if (source == comboBoxNiveaux) {
-            nouvellePartie();
-        }
+            if (source == boutonPrecedent) {
+                int numero = comboBoxNiveaux.getSelectedIndex();
+                if (numero > 0) {
+                    numero--;
+                    comboBoxNiveaux.setSelectedIndex(numero);
+                }
+            }
 
-        Materiau materiau = null;
-        if (source == boutonMateriauBois) {
-            materiau = Materiau.BOIS;
-        }
-        if (source == boutonMateriauGoudron) {
-            materiau = Materiau.GOUDRON;
-        }
-        if (source == boutonMateriauAcier) {
-            materiau = Materiau.ACIER;
-        }
-        if (materiau != null) {
-            partie.changementMateriau(materiau);
-        }
+            if (source == boutonSuivant) {
+                int numero = comboBoxNiveaux.getSelectedIndex();
+                if (numero < comboBoxNiveaux.getItemCount() - 1) {
+                    numero++;
+                    comboBoxNiveaux.setSelectedIndex(numero);
+                }
+            }
 
-        if (source == boutonDemarrer) {
-            partie.toggleSimulationPhysique();
-            majSimulation();
-        }
+            if (source == comboBoxNiveaux) {
+                nouvellePartie();
+            }
 
-        if (source == boutonRecommencer) {
-            nouvellePartie();
+            Materiau materiau = null;
+            if (source == boutonMateriauBois) {
+                materiau = Materiau.BOIS;
+            }
+            if (source == boutonMateriauGoudron) {
+                materiau = Materiau.GOUDRON;
+            }
+            if (source == boutonMateriauAcier) {
+                materiau = Materiau.ACIER;
+            }
+            if (materiau != null) {
+                partie.changementMateriau(materiau);
+            }
+
+            if (source == boutonDemarrer) {
+                partie.toggleSimulationPhysique();
+                majSimulation();
+            }
+
+            if (source == boutonRecommencer) {
+                nouvellePartie();
+            }
         }
 
         if (source == boutonEditeur) {
-            partie.setSimulationPhsyique(false);
-            majSimulation();
+            if (partie != null) {
+                partie.setSimulationPhsyique(false);
+                majSimulation();
+            }
             fenetre.lancerEditeur();
         }
 
@@ -335,7 +339,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     }
 
     public String recupererNomNiveau() {
-        return (String) comboBoxNiveaux.getSelectedItem();
+        String nomNiveau = (String) comboBoxNiveaux.getSelectedItem();
+        return nomNiveau;
     }
 
     public void majPosSouris(MouseEvent e) {
@@ -440,6 +445,16 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         Niveau niveau = recupererNiveau();
         if (niveau != null) {
             partie = new Partie(this, box2d, niveau);
+        } else {
+            partie = null;
+        }
+    }
+
+    public void verifierExistanceNiveaux() {
+        if (partie == null) {
+            String texte = "Aucun niveau détecté.";
+            texte += "\n" + "Commence par en créer un en cliquant sur le bouton '" + boutonEditeur.getText() + "'";
+            JOptionPane.showMessageDialog(fenetre, texte, "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

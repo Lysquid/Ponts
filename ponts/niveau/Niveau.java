@@ -140,6 +140,9 @@ public class Niveau implements Serializable {
     }
 
     public static Niveau charger(Fenetre fenetre, String nomNiveau) {
+        if (nomNiveau == null) {
+            return null;
+        }
         String chemin = cheminNiveau(nomNiveau);
         String titre = "Charge niveau";
         Niveau niveau = null;
