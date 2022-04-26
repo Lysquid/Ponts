@@ -288,8 +288,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
      * Met à jour les labels concernant le prix en bas de l'écran
      */
     private void majTextLabels() {
-        textePrix.setText(Integer.toString(partie.prix()) + " $");
-        texteBudget.setText(Integer.toString(partie.budget()) + " $");
+        textePrix.setText(Integer.toString(partie.getPrix()) + " $");
+        texteBudget.setText(Integer.toString(partie.getBuget()) + " $");
         int meilleurPrix = recupererMeilleurPrix();
         if (meilleurPrix == -1) {
             texteMeilleur.setText("Ø");
@@ -319,7 +319,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
      */
     private void majSimulation() {
         reinitialiserTemps();
-        if (partie.isSimulationPhysique()) {
+        if (partie.getSimulationPhysique()) {
             boutonDemarrer.setText("Pause");
         } else {
             boutonDemarrer.setText("Reprendre");
@@ -386,7 +386,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         if (niveauReussi) {
             titre = "Niveau terminé";
             texte += "Bravo, tu as réussi le niveau " + recupererNomNiveau() + " !";
-            texte += "\n\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
+            texte += "\n\n" + "Prix : " + Integer.toString(partie.getPrix()) + " $";
             texte += "\n" + "Meilleur : " + Integer.toString(recupererMeilleurPrix()) + " $";
             texte += "\n\n" + "Tu peux passer au niveau suivant";
             texte += "\n" + "ou essayer de faire un pont moins cher.";
@@ -394,8 +394,8 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
             titre = "Niveau échoué";
             texte += "Dommage, tu n'as pas réussi le niveau " + recupererNomNiveau() + ".";
             texte += "\n\n" + "Ton pont a coûté trop cher :";
-            texte += "\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
-            texte += "\n" + "Budget : " + Integer.toString(partie.budget()) + " $";
+            texte += "\n" + "Prix : " + Integer.toString(partie.getPrix()) + " $";
+            texte += "\n" + "Budget : " + Integer.toString(partie.getBuget()) + " $";
             texte += "\n\n" + "Tu peux réessayer en cliquant sur " + boutonRecommencer.getText() + ".";
         }
         JOptionPane.showMessageDialog(fenetre, texte, titre, JOptionPane.PLAIN_MESSAGE);

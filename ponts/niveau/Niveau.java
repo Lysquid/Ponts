@@ -22,15 +22,24 @@ import ponts.ihm.Box2D;
 import ponts.ihm.Fenetre;
 import ponts.physique.liaisons.Liaison;
 
+/**
+ * Classe d'un niveau, stock la positions des points et des liaisons
+ * Elle implémentes l'interface Serializable pour pouvoir être sauvgardée dans
+ * un fichier
+ */
 public class Niveau implements Serializable {
 
     public static final Path CHEMIN = Paths.get("res", "niveaux");
-    static final long serialVersionUID = 5014471600563766405L;
-
-    LinkedList<Vec2> posCoins;
-    LinkedList<Vec2> posLiaisons;
+    private static final long serialVersionUID = 5014471600563766405L; // à fixer, sinon il change à chaque modification
+                                                                       // de la classe et on ne peut plus lire les
+                                                                       // niveaux créés avec une version précédente
+    private LinkedList<Vec2> posCoins;
+    private LinkedList<Vec2> posLiaisons;
     int budget = 0;
 
+    /**
+     * Constructeur d'un niveau
+     */
     public Niveau() {
         posCoins = new LinkedList<Vec2>();
         posLiaisons = new LinkedList<Vec2>();
@@ -40,6 +49,12 @@ public class Niveau implements Serializable {
         return posLiaisons;
     }
 
+    /**
+     * Méthode pour desinner un niveau
+     * 
+     * @param g
+     * @param box2d
+     */
     public void dessiner(Graphics2D g, Box2D box2d) {
         g.setColor(Color.BLACK);
         if (!posCoins.isEmpty()) {
@@ -62,20 +77,40 @@ public class Niveau implements Serializable {
         }
     }
 
+    /**
+     * Ajoute un point à la liste de points
+     * 
+     * @param posSouris
+     */
     public void ajouterPoint(Vec2 posSouris) {
         posCoins.add(posSouris);
     }
 
+    /**
+     * Ajoute une liaison à la liste des liaisons
+     * 
+     * @param posSouris
+     */
     public void ajouterLiaison(Vec2 posSouris) {
         ajouterPoint(posSouris);
         posLiaisons.add(posSouris);
     }
 
-    public boolean valide() {
+    /**
+     * Vérifie que le niveau est valide
+     * 
+     * @return boolean
+     */
+    private boolean valide() {
         return !posCoins.isEmpty();
     }
 
-    public boolean ajouterExtremitees(Box2D box2d) {
+    /**
+     * Ajoute des points aux extréimtés de la fenêtre pour faire un polygone
+     * 
+     * @param box2d
+     */
+    public void ajouterExtremitees(Box2D box2d) {
         float largeur = box2d.getLargeur();
         float hauteur = box2d.getHauteur();
 
@@ -88,7 +123,6 @@ public class Niveau implements Serializable {
         posCoins.addFirst(coinGauche);
         Vec2 coinDroit = new Vec2(2 * largeur, -hauteur);
         posCoins.add(coinDroit);
-        return true;
     }
 
     public void setBudget(int budget) {
@@ -99,6 +133,9 @@ public class Niveau implements Serializable {
         return budget;
     }
 
+    /**
+     * Annule la création du point
+     */
     public void undo() {
         if (!posCoins.isEmpty()) {
             Vec2 dernierePos = posCoins.getLast();
@@ -111,6 +148,14 @@ public class Niveau implements Serializable {
         }
     }
 
+    /**
+     * Sauvegarde le niveau dans un fichier, ou affiche une erreur s'il ce n'est pas
+     * possible
+     * 
+     * @param fenetre
+     * @param nomNiveau
+     * @param texteBudget
+     */
     public void sauvegarder(Fenetre fenetre, String nomNiveau, String texteBudget) {
         String chemin = cheminNiveau(nomNiveau);
         String titre = "Sauvegarde niveau";
@@ -139,6 +184,13 @@ public class Niveau implements Serializable {
         }
     }
 
+    /**
+     * Charge un niveau à partir de son nom
+     * 
+     * @param fenetre
+     * @param nomNiveau
+     * @return niveau
+     */
     public static Niveau charger(Fenetre fenetre, String nomNiveau) {
         if (nomNiveau == null) {
             return null;
@@ -168,10 +220,22 @@ public class Niveau implements Serializable {
         return posCoins;
     }
 
-    public static String cheminNiveau(String nomNiveau) {
+    /**
+     * Renvoie le chemin vers le fichier d'un niveau en fonction de son nom
+     * 
+     * @param nomNiveau
+     * @return chemin
+     */
+    private static String cheminNiveau(String nomNiveau) {
         return CHEMIN.resolve(nomNiveau).toString();
     }
 
+    /**
+     * Supprime le fichier d'un niveau
+     * 
+     * @param fenetre
+     * @param nomNiveau
+     */
     public static void supprimer(Fenetre fenetre, String nomNiveau) {
         File file = new File(cheminNiveau(nomNiveau));
         String titre = "Suppression niveau";
@@ -184,6 +248,11 @@ public class Niveau implements Serializable {
         }
     }
 
+    /**
+     * Centre le niveau par rapport à la fenêtre pour utiliser au mieux l'espace
+     * 
+     * @param box2d
+     */
     public void centrer(Box2D box2d) {
         Vec2 bordGauche = posCoins.getFirst();
         Vec2 bordDroit = posCoins.getLast();
@@ -195,10 +264,20 @@ public class Niveau implements Serializable {
         }
     }
 
+    /**
+     * Calcule la position du départ de la voiture
+     * 
+     * @return x
+     */
     public float calculerDepart() {
         return posCoins.get(2).x;
     }
 
+    /**
+     * Calcul la position de l'arrivée de la voiture
+     * 
+     * @return x
+     */
     public float calculerArrivee() {
         return posCoins.get(posCoins.size() - 3).x;
     }

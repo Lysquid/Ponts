@@ -12,20 +12,30 @@ import ponts.physique.barres.Materiau;
 import ponts.physique.environnement.Bord;
 import ponts.physique.voiture.Voiture;
 
+/**
+ * Classe gérant une partie
+ */
 public class Partie {
 
-    Jeu jeu;
-    World world;
-    Pont pont;
-    Bord bord;
-    Voiture voiture;
-    int budget;
+    private Jeu jeu;
+    private World world;
+    private Pont pont;
+    private Bord bord;
+    private Voiture voiture;
+    private int budget;
 
     private boolean simulationPhysique = false;
     private boolean creationPont = true;
-    boolean terminee = false;
-    Materiau materiau = Materiau.GOUDRON;
+    private boolean terminee = false;
+    private Materiau materiau = Materiau.GOUDRON;
 
+    /**
+     * Constructeur d'une partie
+     * 
+     * @param jeu
+     * @param box2d
+     * @param niveau
+     */
     public Partie(Jeu jeu, Box2D box2d, Niveau niveau) {
         this.jeu = jeu;
 
@@ -42,7 +52,7 @@ public class Partie {
 
     }
 
-    public boolean isSimulationPhysique() {
+    public boolean getSimulationPhysique() {
         return simulationPhysique;
     }
 
@@ -55,15 +65,30 @@ public class Partie {
     }
 
     public void toggleSimulationPhysique() {
-        setSimulationPhsyique(!isSimulationPhysique());
+        setSimulationPhsyique(!getSimulationPhysique());
     }
 
+    /**
+     * Dessine une partie
+     * 
+     * @param g
+     * @param box2d
+     * @param posSouris
+     */
     public void dessiner(Graphics2D g, Box2D box2d, Vec2 posSouris) {
         bord.dessiner(g, box2d);
         pont.dessiner(g, box2d, posSouris, creationPont);
         voiture.dessiner(g, box2d);
     }
 
+    /**
+     * Effectue les calculs de la physique qui s'est écoulée pendant le temps dt
+     * 
+     * @param posSouris
+     * @param boutonSouris
+     * @param clicSouris
+     * @param dt
+     */
     public void tickPhysique(Vec2 posSouris, int boutonSouris, boolean clicSouris, float dt) {
 
         if (simulationPhysique) {
@@ -80,23 +105,31 @@ public class Partie {
 
     }
 
+    /**
+     * Méthode appelée en fin de partie
+     */
     private void finPartie() {
-        boolean niveauReussi = prix() <= budget();
-        jeu.finPartie(niveauReussi, prix());
+        boolean niveauReussi = getPrix() <= getBuget();
+        jeu.finPartie(niveauReussi, getPrix());
         terminee = true;
     }
 
+    /**
+     * Méthode pour changer de matériau sélectionné
+     * 
+     * @param materiau
+     */
     public void changementMateriau(Materiau materiau) {
         this.materiau = materiau;
         pont.arreterCreation(world);
 
     }
 
-    public int prix() {
+    public int getPrix() {
         return pont.prix();
     }
 
-    public int budget() {
+    public int getBuget() {
         return budget;
     }
 

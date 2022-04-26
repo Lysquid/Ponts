@@ -19,14 +19,24 @@ import ponts.physique.liaisons.Liaison;
 import ponts.physique.liaisons.LiaisonFixe;
 import ponts.physique.liaisons.LiaisonMobile;
 
+/**
+ * Classe du pont, coeur du projet. Elle a la structure d'un graphe dont les
+ * noeuds sont des liaisons et les arrêtes des barres
+ */
 public class Pont implements Serializable {
 
-    LinkedList<Barre> barres;
-    LinkedList<Liaison> liaisons;
-    Barre barreEnCreation;
-    Liaison liaisonEnCreation;
-    Liaison liaisonProche;
+    private LinkedList<Barre> barres;
+    private LinkedList<Liaison> liaisons;
+    private Barre barreEnCreation;
+    private Liaison liaisonEnCreation;
+    private Liaison liaisonProche;
 
+    /**
+     * Constructeur d'un pont
+     * 
+     * @param world
+     * @param niveau
+     */
     public Pont(World world, Niveau niveau) {
 
         barres = new LinkedList<Barre>();
@@ -38,6 +48,14 @@ public class Pont implements Serializable {
 
     }
 
+    /**
+     * Dessine le pont
+     * 
+     * @param g
+     * @param box2d
+     * @param posSouris
+     * @param creationPont
+     */
     public void dessiner(Graphics g, Box2D box2d, Vec2 posSouris, boolean creationPont) {
         LinkedList<Barre> barresDesinees = new LinkedList<Barre>();
         for (Liaison liaison : liaisons) {
@@ -67,6 +85,16 @@ public class Pont implements Serializable {
         }
     }
 
+    /**
+     * Méthode principale, gérant les entrées de l'utilisateur
+     * 
+     * @param world
+     * @param posSouris
+     * @param boutonSouris
+     * @param clicSouris
+     * @param materiau
+     * @param bord
+     */
     public void gererInput(World world, Vec2 posSouris, int boutonSouris, boolean clicSouris, Materiau materiau,
             Bord bord) {
 
@@ -128,6 +156,14 @@ public class Pont implements Serializable {
 
     }
 
+    /**
+     * Calcule la position maximale à laquelle devrait être la souris pour que la
+     * taille de la barre soit inférieur à la taille maximale
+     * 
+     * @param barre
+     * @param posSouris
+     * @return
+     */
     private Vec2 posSourisMax(Barre barre, Vec2 posSouris) {
         if (barre == null) {
             return posSouris;
@@ -138,6 +174,14 @@ public class Pont implements Serializable {
         }
     }
 
+    /**
+     * Détermine si une barre est valide
+     * 
+     * @param barre
+     * @param liaisonProche
+     * @param sourisDansBord
+     * @return
+     */
     private boolean barreValide(Barre barre, Liaison liaisonProche, boolean sourisDansBord) {
         // barre n'existe pas
         if (barre == null)
@@ -162,6 +206,13 @@ public class Pont implements Serializable {
         return true;
     }
 
+    /**
+     * Regarde si une barre n'existe pas déjà entre les deux liaisons sélectionnées
+     * 
+     * @param barreATester
+     * @param liaison2
+     * @return
+     */
     private boolean barreExisteDeja(Barre barreATester, Liaison liaison2) {
         if (liaison2 == null) {
             return false;
@@ -175,6 +226,11 @@ public class Pont implements Serializable {
         return false;
     }
 
+    /**
+     * Intérompt la création d'une barre en la supprimant
+     * 
+     * @param world
+     */
     public void arreterCreation(World world) {
         if (barreEnCreation != null) {
             supprimerBarre(world, barreEnCreation);
@@ -183,12 +239,23 @@ public class Pont implements Serializable {
         }
     }
 
+    /**
+     * Supprime une barre
+     * 
+     * @param world
+     * @param barre
+     */
     private void supprimerBarre(World world, Barre barre) {
         LinkedList<LiaisonMobile> liaisonASupprimer = barre.supprimer(world);
         barres.remove(barreEnCreation);
         liaisons.removeAll(liaisonASupprimer);
     }
 
+    /**
+     * Termine la création d'une barre, pour que le curseur la lâche
+     * 
+     * @param world
+     */
     private void lacherBarre(World world) {
         barreEnCreation.activerPhysique();
 
@@ -202,12 +269,24 @@ public class Pont implements Serializable {
 
     }
 
+    /**
+     * Met à jour la preview d'une barre
+     * 
+     * @param posSouris
+     */
     private void majPreview(Vec2 posSouris) {
         liaisonEnCreation.setPos(posSouris);
         barreEnCreation.ajusterPos();
     }
 
-    public Liaison recupLiaisonProche(Vec2 posSouris) {
+    /**
+     * Récupère la liaison la plus proche de la position de la souris, s'il en
+     * existe une dans un rayon donné
+     * 
+     * @param posSouris
+     * @return liaison
+     */
+    private Liaison recupLiaisonProche(Vec2 posSouris) {
         Liaison liaisonPlusProche = null;
         float distanceMin = Float.POSITIVE_INFINITY;
         for (Liaison liaison : liaisons) {
@@ -222,7 +301,15 @@ public class Pont implements Serializable {
         return liaisonPlusProche;
     }
 
-    public void creerBarre(World world, Vec2 posClic, Liaison liaisonCliquee, Materiau materiau) {
+    /**
+     * Créé une barre du matériau donné, ainsi que la liaison associée
+     * 
+     * @param world
+     * @param posClic
+     * @param liaisonCliquee
+     * @param materiau
+     */
+    private void creerBarre(World world, Vec2 posClic, Liaison liaisonCliquee, Materiau materiau) {
 
         liaisonEnCreation = new LiaisonMobile(world, posClic);
         liaisons.add(liaisonEnCreation);
@@ -246,6 +333,12 @@ public class Pont implements Serializable {
 
     }
 
+    /**
+     * Test pour chaque barre si elle doit casser
+     * 
+     * @param world
+     * @param dt
+     */
     public void testCasse(World world, float dt) {
         for (Barre barre : barres) {
             if (barre != barreEnCreation) {
@@ -256,7 +349,13 @@ public class Pont implements Serializable {
 
     }
 
-    public void supprimerBarresCliquees(World world, Vec2 posClic) {
+    /**
+     * Supprime la barre cliquée (clic droit)
+     * 
+     * @param world
+     * @param posClic
+     */
+    private void supprimerBarresCliquees(World world, Vec2 posClic) {
         LinkedList<Barre> barresASupprimer = new LinkedList<Barre>();
         for (Barre barre : barres) {
             if (barre.testBarreCliquee(posClic)) {
@@ -267,6 +366,11 @@ public class Pont implements Serializable {
         barres.removeAll(barresASupprimer);
     }
 
+    /**
+     * Calcule le prix du pont
+     * 
+     * @return
+     */
     public int prix() {
         int prix = 0;
         for (Barre barre : barres) {

@@ -7,6 +7,9 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
+/**
+ * Classe abstraite définissant un objet soumis à la physique
+ */
 public abstract class ObjetPhysique {
 
     protected Body body;
@@ -15,7 +18,13 @@ public abstract class ObjetPhysique {
     public static final float ELASTICITE = 0.3f; // Determine si l'objet rebondi
     public static final float DENSITE = 1f; // Densitée de l'objet
 
-    public abstract void creerObjetPhysique(World world);
+    /**
+     * Méthode à appelée du constructeur, séparant la création de
+     * l'objet physique
+     * 
+     * @param world
+     */
+    protected abstract void creerObjetPhysique(World world);
 
     public Vec2 getPos() {
         return body.getTransform().p;
@@ -41,6 +50,17 @@ public abstract class ObjetPhysique {
         setPos(pos, getAngle());
     }
 
+    public Body getBody() {
+        return body;
+    }
+
+    /**
+     * Modifie la transparence d'une couleur
+     * 
+     * @param color
+     * @param alpha
+     * @return
+     */
     public static Color setColorAlpha(Color color, int alpha) {
         if (color.getAlpha() == alpha) {
             return color;
@@ -49,10 +69,16 @@ public abstract class ObjetPhysique {
         }
     }
 
-    public Body getBody() {
-        return body;
-    }
-
+    /**
+     * Créer un objet fixtureDef et définie ses paramètres
+     * 
+     * @param friction
+     * @param elasticite
+     * @param densite
+     * @param category
+     * @param mask
+     * @return fixtureDef
+     */
     public FixtureDef creerFixtureDef(float friction, float elasticite, float densite, int category,
             int mask) {
         FixtureDef fixtureDef = new FixtureDef();
