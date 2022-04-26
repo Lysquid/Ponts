@@ -27,32 +27,42 @@ import ponts.physique.liaisons.LiaisonFixe;
 import ponts.physique.liaisons.LiaisonMobile;
 import ponts.physique.voiture.Voiture;
 
+/**
+ * Classe abstraite d'une barre
+ */
 public abstract class Barre extends ObjetPhysique {
 
     public static final int CATEGORY = 0b1000;
     public static final int MASK = Voiture.CATEGORY;
 
-    static final float LONGUEUR_MAX = 8;
-    static final float LONGUEUR_MIN = 0;
+    private static final float LONGUEUR_MAX = 8;
+    private static final float LONGUEUR_MIN = 0;
 
-    Color couleurRemplissage;
-    Color couleurContour = Color.BLACK;
-    boolean apercu = true;
+    private ArrayList<Liaison> liaisonsLiees;
+    private ArrayList<RevoluteJoint> joints;
+    private PolygonShape shape;
+    private FixtureDef fixtureDef;
+    private Fixture fixture;
 
-    ArrayList<Liaison> liaisonsLiees;
-    public ArrayList<RevoluteJoint> joints;
-    PolygonShape shape;
-    FixtureDef fixtureDef;
-    Fixture fixture;
+    protected Color couleurRemplissage;
+    private Color couleurContour = Color.BLACK;
+    private boolean apercu = true;
 
-    float longueur;
-    float largeur = 1;
-
-    float elasticite = Liaison.ELASTICITE;
-    float forceMax = 500f;
-    int prixMateriau = 1000;
+    private float longueur;
+    private final float LARGEUR = 1;
     private int prix;
 
+    protected float elasticite = Liaison.ELASTICITE;
+    protected float forceMax = 500f;
+    protected int prixMateriau = 1000;
+
+    /**
+     * Constructeur d'une barre
+     * 
+     * @param world
+     * @param liaison1
+     * @param liaison2
+     */
     protected Barre(World world, Liaison liaison1, Liaison liaison2) {
 
         liaisonsLiees = new ArrayList<Liaison>(2);
@@ -69,7 +79,7 @@ public abstract class Barre extends ObjetPhysique {
     }
 
     @Override
-    public void creerObjetPhysique(World world) {
+    protected void creerObjetPhysique(World world) {
 
         // Etape 1 : Définir le "body"
         BodyDef bodyDef = new BodyDef();
@@ -88,13 +98,31 @@ public abstract class Barre extends ObjetPhysique {
 
     }
 
-    public abstract FixtureDef creerFixtureDef(Shape shape);
+    /**
+     * Méthode abstraite à redéfinir pour chaque matériau, afin d'appliquer leures
+     * propriétés spécifiques
+     * 
+     * @param shape
+     * @return
+     */
+    protected abstract FixtureDef creerFixtureDef(Shape shape);
 
+    /**
+     * Ajoute une liaison d'un côté d'une barre
+     * 
+     * @param liaison
+     */
     public void ajouterLiaison(Liaison liaison) {
         liaisonsLiees.add(liaison);
         liaison.getBarresLiees().add(this);
     }
 
+    /**
+     * Crée une liaison pivot entre la barre et une liaison
+     * 
+     * @param world
+     * @param liaison
+     */
     public void lier(World world, Liaison liaison) {
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.initialize(body, liaison.getBody(), liaison.getPos());
@@ -105,6 +133,14 @@ public abstract class Barre extends ObjetPhysique {
 
     }
 
+    /**
+     * Test pour les deux côtés de la barre si la liaison doit casser, et supprime
+     * le joint le cas échéant
+     * 
+     * @param world
+     * @param dt
+     * @return liste des liaisons à supprimer
+     */
     public LinkedList<Liaison> testCasse(World world, float dt) {
 
         LinkedList<Liaison> nouvellesLiaisons = new LinkedList<>();
@@ -130,6 +166,14 @@ public abstract class Barre extends ObjetPhysique {
         return nouvellesLiaisons;
     }
 
+    /**
+     * Calcule si le joint avec une liaison doit casser
+     * 
+     * @param joint
+     * @param liaison
+     * @param dt
+     * @return boolean
+     */
     public boolean calculCasse(RevoluteJoint joint, Liaison liaison, float dt) {
 
         Vec2 force = new Vec2();
@@ -138,18 +182,27 @@ public abstract class Barre extends ObjetPhysique {
         Vec2 vectBarre = liaisonsLiees.get(0).getPos().sub(liaisonsLiees.get(1).getPos());
         Vec2 orthogonal = new Vec2(-vectBarre.y, vectBarre.x);
         orthogonal.normalize();
-        float produitScalaire = Math.abs(Vec2.dot(orthogonal, force));
+        float projection = Math.abs(Vec2.dot(orthogonal, force));
 
-        float valeur = produitScalaire / (liaison.getBarresLiees().size() - 1);
+        float valeur = projection / (liaison.getBarresLiees().size() - 1); // la projection est divisée par le nombre de
+                                                                           // barres auquelles la liaison est liée pour
+                                                                           // que les ponts compacts soient favorisés
         if (liaison instanceof LiaisonFixe) {
-            valeur /= 20;
+            valeur /= 20; // les barres accrochées aux bord doivent moins casser
         }
 
         return valeur > forceMax;
     }
 
+    /**
+     * Supprime une liaison à l'une des deux extrémités de la barre (spécifiée par
+     * l'index)
+     * 
+     * @param world
+     * @param index
+     */
     public void supprimerLiaison(World world, int index) {
-        // Condition nécessaire car si la physique n'a pas été activé,
+        // if nécessaire car si la physique n'a pas été activé,
         // les joints n'ont pas été crées
         if (!joints.isEmpty()) {
             RevoluteJoint joint = joints.get(index);
@@ -162,9 +215,12 @@ public abstract class Barre extends ObjetPhysique {
         liaisonsLiees.remove(index);
     }
 
+    /**
+     * Ajoute les collisions avec les bords dans des conditions bien précises :
+     * si la barre n'est liée a aucune liaisons fixe (sinon, problemes de collision)
+     */
     public void ajouterCollisionBord() {
-        // On ajoute des collisions avec les bords seulement si la barre n'est liée
-        // a aucune liaisons fixe (sinon, problemes de collision)
+        //
         boolean fixe = false;
         for (Liaison liaison : liaisonsLiees) {
             if (liaison instanceof LiaisonFixe)
@@ -177,6 +233,12 @@ public abstract class Barre extends ObjetPhysique {
         }
     }
 
+    /**
+     * Desinne une barre en faisant des calculs de trigo en fonction de l'angle
+     * 
+     * @param g
+     * @param box2d
+     */
     public void dessiner(Graphics g, Box2D box2d) {
 
         int[] xCoins = new int[4];
@@ -205,11 +267,23 @@ public abstract class Barre extends ObjetPhysique {
 
     }
 
+    /**
+     * Test si la barre à été cliquée
+     * 
+     * @param posClic
+     * @return
+     */
     public boolean testBarreCliquee(Vec2 posClic) {
         Transform transform = new Transform(getPos(), new Rot(getAngle()));
         return shape.testPoint(transform, posClic);
     }
 
+    /**
+     * Supprime la barre
+     * 
+     * @param world
+     * @return liste des liaisons à supprimer du pont
+     */
     public LinkedList<LiaisonMobile> supprimer(World world) {
         LinkedList<LiaisonMobile> liaisonsASupprimer = new LinkedList<>();
         for (Liaison liaison : liaisonsLiees) {
@@ -224,6 +298,10 @@ public abstract class Barre extends ObjetPhysique {
         return liaisonsASupprimer;
     }
 
+    /**
+     * Ajuste la position et la taille d'une barre lorsque qu'elle est en cours de
+     * création (sa taille varie en fonction de la position de la souris)
+     */
     public void ajusterPos() {
 
         Liaison liaison1 = liaisonsLiees.get(0);
@@ -233,7 +311,7 @@ public abstract class Barre extends ObjetPhysique {
         float angle = (float) Math.atan(difference.y / difference.x);
         longueur = difference.length();
 
-        shape.setAsBox(longueur / 2, largeur / 2);
+        shape.setAsBox(longueur / 2, LARGEUR / 2);
         setPos(centre, angle);
 
         if (fixture != null) {
@@ -244,6 +322,9 @@ public abstract class Barre extends ObjetPhysique {
 
     }
 
+    /**
+     * Active la physique pour la barre, une fois que ça création est terminée
+     */
     public void activerPhysique() {
         body.setType(BodyType.DYNAMIC);
         apercu = false;
@@ -252,11 +333,22 @@ public abstract class Barre extends ObjetPhysique {
         ajusterPos();
     }
 
+    /**
+     * Accroche la barre à une liaison déjà existante
+     * 
+     * @param world
+     * @param liaisonCliquee
+     */
     public void accrocher(World world, Liaison liaisonCliquee) {
         supprimerLiaison(world, 1);
         ajouterLiaison(liaisonCliquee);
     }
 
+    /**
+     * Vérifie que la taille de la barre est supérieure à la taille minimale
+     * 
+     * @return boolean
+     */
     public boolean tailleMinimum() {
         return longueur > LONGUEUR_MIN;
     }
@@ -265,12 +357,25 @@ public abstract class Barre extends ObjetPhysique {
         return liaisonsLiees;
     }
 
+    /**
+     * Vérifie que la taille de la barre est supérieure à la taille minimale
+     * 
+     * @param pos
+     * @return
+     */
     public boolean inferieurLongeurMax(Vec2 pos) {
         Liaison liaison1 = liaisonsLiees.get(0);
         float nouvelleLongeur = liaison1.getPos().sub(pos).length();
         return nouvelleLongeur <= LONGUEUR_MAX;
     }
 
+    /**
+     * Calcule la position maximale à laquelle devrait être la souris pour que la
+     * taille de la barre soit inférieure à la taille maximale
+     * 
+     * @param pos
+     * @return
+     */
     public Vec2 posLiaisonMax(Vec2 pos) {
         Liaison liaison1 = liaisonsLiees.get(0);
         Vec2 vecteur = pos.sub(liaison1.getPos());

@@ -158,7 +158,7 @@ public class Pont implements Serializable {
 
     /**
      * Calcule la position maximale à laquelle devrait être la souris pour que la
-     * taille de la barre soit inférieur à la taille maximale
+     * taille de la barre soit inférieure à la taille maximale
      * 
      * @param barre
      * @param posSouris
