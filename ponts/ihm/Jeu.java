@@ -240,6 +240,7 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
     public void majListeNiveaux() {
         String niveauSelectionne = recupererNomNiveau();
         String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
+        Arrays.sort(nomsNiveaux);
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(nomsNiveaux);
         comboBoxNiveaux.setModel(model);
         if (niveauSelectionne != null && Arrays.asList(nomsNiveaux).contains(niveauSelectionne)) {
