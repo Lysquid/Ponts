@@ -20,16 +20,26 @@ import ponts.physique.barres.Barre;
 import ponts.physique.liaisons.Liaison;
 import ponts.physique.voiture.Voiture;
 
+/**
+ * Classe des bords du niveau, c'est à dire la berge sur laquelle il faut
+ * construire le pont
+ */
 public class Bord extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0001;
     public static final int MASK = Voiture.CATEGORY | Barre.CATEGORY | Liaison.CATEGORY;
 
-    Color couleur_remplissage = Color.decode("#49a03f");
-    Color couleur_contour = Color.BLACK;
+    private Color couleurRemplissage = Color.decode("#49a03f");
+    private Color couleurContour = Color.BLACK;
 
-    LinkedList<Vec2> posCoins;
+    private LinkedList<Vec2> posCoins;
 
+    /**
+     * Constructeur d'un objet bord
+     * 
+     * @param world
+     * @param niveau
+     */
     public Bord(World world, Niveau niveau) {
         posCoins = niveau.getPosCoins();
         creerObjetPhysique(world);
@@ -37,7 +47,7 @@ public class Bord extends ObjetPhysique {
     }
 
     @Override
-    public void creerObjetPhysique(World world) {
+    protected void creerObjetPhysique(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.STATIC;
 
@@ -59,6 +69,12 @@ public class Bord extends ObjetPhysique {
         }
     }
 
+    /**
+     * Détermine si un point est dans le polygone défini par le bord
+     * 
+     * @param pos
+     * @return boolean
+     */
     public boolean estDansBord(Vec2 pos) {
         Polygon polygon = new Polygon();
         for (Vec2 posCoin : posCoins) {
@@ -71,6 +87,12 @@ public class Bord extends ObjetPhysique {
         return polygon.contains(x, y);
     }
 
+    /**
+     * Dessine la berge
+     * 
+     * @param g
+     * @param box2d
+     */
     public void dessiner(Graphics2D g, Box2D box2d) {
         Polygon polygon = new Polygon();
         for (Vec2 posCoin : posCoins) {
@@ -78,9 +100,9 @@ public class Bord extends ObjetPhysique {
             int y = box2d.worldToPixelY(posCoin.y);
             polygon.addPoint(x, y);
         }
-        g.setColor(couleur_remplissage);
+        g.setColor(couleurRemplissage);
         g.fillPolygon(polygon);
-        g.setColor(couleur_contour);
+        g.setColor(couleurContour);
         g.drawPolygon(polygon);
 
     }

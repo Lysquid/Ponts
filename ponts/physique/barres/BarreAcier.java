@@ -31,6 +31,7 @@ public class BarreAcier extends Barre {
         forceMax *= 1.5;
     }
 
+    @Override
     protected FixtureDef creerFixtureDef(Shape shape) {
         return creerFixtureDef(FRICTION, ELASTICITE, DENSITE, CATEGORY, MASK);
     }

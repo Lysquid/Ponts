@@ -29,7 +29,7 @@ import ponts.physique.liaisons.Liaison;
  */
 public class Niveau implements Serializable {
 
-    public static final Path CHEMIN = Paths.get("res", "niveaux");
+    public static final Path CHEMIN_NIVEAUX = Paths.get("res", "niveaux");
     private static final long serialVersionUID = 5014471600563766405L; // à fixer, sinon il change à chaque modification
                                                                        // de la classe et on ne peut plus lire les
                                                                        // niveaux créés avec une version précédente
@@ -227,7 +227,7 @@ public class Niveau implements Serializable {
      * @return chemin
      */
     private static String cheminNiveau(String nomNiveau) {
-        return CHEMIN.resolve(nomNiveau).toString();
+        return CHEMIN_NIVEAUX.resolve(nomNiveau).toString();
     }
 
     /**

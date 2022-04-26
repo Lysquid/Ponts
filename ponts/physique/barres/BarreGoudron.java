@@ -32,6 +32,7 @@ public class BarreGoudron extends Barre {
         forceMax *= 1;
     }
 
+    @Override
     protected FixtureDef creerFixtureDef(Shape shape) {
         return creerFixtureDef(FRICTION, ELASTICITE, DENSITE, CATEGORY, MASK);
     }

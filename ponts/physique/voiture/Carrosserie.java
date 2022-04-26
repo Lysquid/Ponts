@@ -23,21 +23,28 @@ import org.jbox2d.dynamics.World;
 import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
 
+/**
+ * Classe de la carrosserie de la voiture
+ */
 public class Carrosserie extends ObjetPhysique {
 
     public static final int CATEGORY = Voiture.CATEGORY;
     public static final int MASK = Voiture.MASK;
-    public static final Path CHEMIN = Paths.get("res", "images");
+    public static final Path CHEMIN_IMAGES = Paths.get("res", "images");
 
-    Color couleurContour = Color.BLACK;
-    Color couleurRemplissage = Color.RED;
+    private BufferedImage image;
+    private Color couleurContour = Color.BLACK;
 
-    BufferedImage image;
+    private PolygonShape shape;
+    private float longueur = 8f;
+    private float largeur = 3f;
 
-    PolygonShape shape;
-    float longueur = 8f;
-    float largeur = 3f;
-
+    /**
+     * Constructeur de la carrosserie
+     * 
+     * @param world
+     * @param pos
+     */
     public Carrosserie(World world, Vec2 pos) {
         creerObjetPhysique(world);
         setPos(pos);
@@ -59,8 +66,11 @@ public class Carrosserie extends ObjetPhysique {
         body.createFixture(fixtureDef);
     }
 
+    /**
+     * Charge l'image de la carrosserie
+     */
     private void chargerImage() {
-        String chemin = CHEMIN.resolve("voiture.png").toString();
+        String chemin = CHEMIN_IMAGES.resolve("voiture.png").toString();
         try {
             image = ImageIO.read(new File(chemin));
         } catch (IOException e) {
@@ -68,12 +78,18 @@ public class Carrosserie extends ObjetPhysique {
         }
     }
 
+    /**
+     * Dessine la carrosserie
+     * 
+     * @param g
+     * @param box2d
+     */
     public void dessiner(Graphics g, Box2D box2d) {
         // Grossissement
         double ratio = 1.2 * box2d.worldToPixel(longueur) / (double) image.getWidth();
-        int w = (int) Math.ceil(image.getWidth() * ratio);
-        int h = (int) Math.ceil(image.getHeight() * ratio);
-        BufferedImage imageTournee = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        int largeur = (int) Math.ceil(image.getWidth() * ratio);
+        int hauteur = (int) Math.ceil(image.getHeight() * ratio);
+        BufferedImage imageTournee = new BufferedImage(largeur, hauteur, BufferedImage.TYPE_INT_ARGB);
         AffineTransform transform = new AffineTransform();
         transform.scale(ratio, ratio);
         AffineTransformOp transformOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
@@ -84,10 +100,10 @@ public class Carrosserie extends ObjetPhysique {
         int y = box2d.worldToPixelY(getPos().y);
         Graphics2D g2d = (Graphics2D) g;
         g2d.rotate(-getAngle(), x, y);
-        g2d.drawImage(imageTournee, null, x - w / 2, y - h / 2);
+        g2d.drawImage(imageTournee, null, x - largeur / 2, y - hauteur / 2);
         g2d.rotate(getAngle(), x, y);
 
-        // Hitbox
+        // Hitbox (si nécessaire)
         int[] xCoins = new int[4];
         int[] yCoins = new int[4];
         for (int i = 0; i < 4; i++) {
@@ -100,7 +116,7 @@ public class Carrosserie extends ObjetPhysique {
             xCoins[i] = box2d.worldToPixelX(x2);
             yCoins[i] = box2d.worldToPixelY(y2);
         }
-        g.setColor(ObjetPhysique.setColorAlpha(couleurContour, 0));
+        g.setColor(ObjetPhysique.setColorAlpha(couleurContour, 0)); // pour debug, changer la valeur du alpha
         g.drawPolygon(xCoins, yCoins, 4);
 
     }

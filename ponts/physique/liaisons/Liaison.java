@@ -16,24 +16,33 @@ import ponts.physique.ObjetPhysique;
 import ponts.physique.barres.Barre;
 import ponts.physique.environnement.Bord;
 
+/**
+ * Classe abstraite d'une liaison
+ */
 public abstract class Liaison extends ObjetPhysique {
 
     public static final int CATEGORY = 0b0100;
     public static final int MASK = Bord.CATEGORY;
 
     public static final float RAYON = 0.5f;
-    static final float RAYON_CLICK = RAYON * 3;
+    private static final float RAYON_CLICK = RAYON * 3;
 
-    Color couleurRemplissage;
-    Color couleurContour;
-    Color couleurSurvolee;
+    protected Color couleurRemplissage;
+    private Color couleurSurvolee;
+    private Color couleurContour;
 
-    LinkedList<Barre> barresLiees;
-    boolean cliquee;
-    transient CircleShape shape;
+    private LinkedList<Barre> barresLiees;
+    protected boolean cliquee;
+    private CircleShape shape;
 
-    boolean apercu;
+    protected boolean apercu;
 
+    /**
+     * Constructeur d'une liaison
+     * 
+     * @param world
+     * @param pos
+     */
     protected Liaison(World world, Vec2 pos) {
 
         couleurContour = Color.BLACK;
@@ -48,7 +57,7 @@ public abstract class Liaison extends ObjetPhysique {
 
     }
 
-    public void creerObjetPhysique(World world, BodyType bodyType) {
+    protected void creerObjetPhysique(World world, BodyType bodyType) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
 
@@ -61,8 +70,19 @@ public abstract class Liaison extends ObjetPhysique {
         body.createFixture(fixtureDef);
     }
 
+    /**
+     * Active la physique de liaison une fois la création de la barre associée
+     * terminée
+     */
     public abstract void activerPhysique();
 
+    /**
+     * Dessine la liaison
+     * 
+     * @param g
+     * @param box2d
+     * @param estSurvolee
+     */
     public void dessiner(Graphics g, Box2D box2d, boolean estSurvolee) {
 
         int x = box2d.worldToPixelX(getX());
@@ -80,11 +100,23 @@ public abstract class Liaison extends ObjetPhysique {
         g.drawOval(x - r, y - r, r * 2, r * 2);
     }
 
+    /**
+     * Calcule la distance de la liaison à un point
+     * 
+     * @param pos
+     * @return
+     */
     public float distancePoint(Vec2 pos) {
         Vec2 centre = getPos();
         return (centre.sub(pos).length());
     }
 
+    /**
+     * Test si la liaison à été cliquée
+     * 
+     * @param pos
+     * @return
+     */
     public boolean testLiaisonCliquee(Vec2 pos) {
         return (distancePoint(pos) <= RAYON_CLICK);
     }

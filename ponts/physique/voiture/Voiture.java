@@ -10,20 +10,29 @@ import ponts.niveau.Niveau;
 import ponts.physique.barres.BarreGoudron;
 import ponts.physique.environnement.Bord;
 
+/**
+ * Classe de la voiture
+ */
 public class Voiture {
 
     public static final int CATEGORY = 0b0010;
     public static final int MASK = Bord.CATEGORY | BarreGoudron.CATEGORY;
 
-    Roue roueAvant;
-    Roue roueArriere;
-    Carrosserie carrosserie;
+    private Roue roueAvant;
+    private Roue roueArriere;
+    private Carrosserie carrosserie;
 
-    boolean arretee = false;
-    boolean arrivee = false;
-    float xDepart;
-    float xArrivee;
+    private boolean arretee = false;
+    private boolean arrivee = false;
+    private float xDepart;
+    private float xArrivee;
 
+    /**
+     * Constructeur d'une voiture
+     * 
+     * @param world
+     * @param niveau
+     */
     public Voiture(World world, Niveau niveau) {
 
         xDepart = niveau.calculerDepart();
@@ -43,16 +52,30 @@ public class Voiture {
 
     }
 
+    /**
+     * Dessine la voiture
+     * 
+     * @param g
+     * @param box2d
+     */
     public void dessiner(Graphics g, Box2D box2d) {
         carrosserie.dessiner(g, box2d);
         roueArriere.dessiner(g, box2d);
         roueAvant.dessiner(g, box2d);
     }
 
+    /**
+     * Test si la voiture est arrivée à la fin du niveau
+     * 
+     * @return
+     */
     public boolean testArrivee() {
         return carrosserie.getBody().getLinearVelocity().x <= 0.001f && arrivee;
     }
 
+    /**
+     * Arrête la voiture si elle arrive à la fin où si elle ne bouge plus
+     */
     public void arreter() {
         if (arretee) {
             return;

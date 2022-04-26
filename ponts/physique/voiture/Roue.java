@@ -15,6 +15,9 @@ import org.jbox2d.dynamics.joints.RevoluteJointDef;
 import ponts.ihm.Box2D;
 import ponts.physique.ObjetPhysique;
 
+/**
+ * Classe d'une roue de la voiture
+ */
 public class Roue extends ObjetPhysique {
 
     public static final int CATEGORY = Voiture.CATEGORY;
@@ -31,6 +34,12 @@ public class Roue extends ObjetPhysique {
     RevoluteJoint joint;
     CircleShape shape;
 
+    /**
+     * Constructeur d'une roue
+     * 
+     * @param world
+     * @param pos
+     */
     public Roue(World world, Vec2 pos) {
         creerObjetPhysique(world);
         setPos(pos);
@@ -50,6 +59,12 @@ public class Roue extends ObjetPhysique {
         body.createFixture(fixtureDef);
     }
 
+    /**
+     * Crée une liaison pivot motorisée avec la carrosserie
+     * 
+     * @param world
+     * @param carosserie
+     */
     public void lierVoiture(World world, Carrosserie carosserie) {
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.initialize(body, carosserie.getBody(), getPos());
@@ -60,6 +75,12 @@ public class Roue extends ObjetPhysique {
         joint = (RevoluteJoint) world.createJoint(jointDef);
     }
 
+    /**
+     * Dessine une roue avec ses rayons
+     * 
+     * @param g
+     * @param box2d
+     */
     public void dessiner(Graphics g, Box2D box2d) {
 
         int x = box2d.worldToPixelX(getX());
@@ -82,10 +103,11 @@ public class Roue extends ObjetPhysique {
         g.drawOval(x - r, y - r, r * 2, r * 2);
     }
 
+    /**
+     * Désactive la motorisation de la roue
+     */
     public void arreter() {
         joint.setMotorSpeed(0);
-        // joint.setMaxMotorTorque(MOTOR_TORQUE * 0.75f);
-
     }
 
 }
