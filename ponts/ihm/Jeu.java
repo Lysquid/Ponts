@@ -2,8 +2,6 @@ package ponts.ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -16,7 +14,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,35 +29,46 @@ import ponts.niveau.Niveau;
 import ponts.physique.Partie;
 import ponts.physique.barres.Materiau;
 
+/**
+ * JPanel ou est dessiné le jeu
+ */
 public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
-    Timer timerGraphique;
-    Timer timerPhysique;
-    static final int TICK_PHYSIQUE = 16;
-    long tempsPhysique;
+    private Fenetre fenetre;
+    private Box2D box2d;
+    private Partie partie;
 
-    JButton boutonPrecedent;
-    JComboBox<String> comboBoxNiveaux;
-    JButton boutonSuivant;
-    JButton boutonMateriauGoudron;
-    JButton boutonMateriauBois;
-    JButton boutonMateriauAcier;
-    JButton boutonDemarrer;
-    JButton boutonRecommencer;
-    JButton boutonEditeur;
-    JLabel textePrix;
-    JLabel texteBudget;
-    JLabel texteMeilleur;
+    private Map<String, Integer> meilleursPrix;
 
-    Fenetre fenetre;
-    Box2D box2d;
-    Partie partie;
+    private int boutonSouris;
+    private boolean clicSouris = false;
+    private Vec2 posSouris = new Vec2();
 
-    int boutonSouris;
-    boolean clicSouris = false;
-    Vec2 posSouris = new Vec2();
-    public Map<String, Integer> meilleursPrix;
+    private static final int TICK_PHYSIQUE = 16;
+    private long tempsPhysique;
+    private Timer timerGraphique;
+    private Timer timerPhysique;
 
+    private JButton boutonPrecedent;
+    private JComboBox<String> comboBoxNiveaux;
+    private JButton boutonSuivant;
+    private JButton boutonMateriauGoudron;
+    private JButton boutonMateriauAcier;
+    private JButton boutonMateriauBois;
+    private JButton boutonDemarrer;
+    private JButton boutonRecommencer;
+    private JButton boutonEditeur;
+    private JLabel textePrix;
+    private JLabel texteBudget;
+    private JLabel texteMeilleur;
+
+    /**
+     * Constructeur de Jeu
+     * 
+     * @param fenetre
+     * @param box2d
+     * @param refreshRate
+     */
     public Jeu(Fenetre fenetre, Box2D box2d, int refreshRate) {
 
         this.fenetre = fenetre;
@@ -81,27 +89,25 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         addMouseMotionListener(this);
     }
 
-    public void ihm() {
+    /**
+     * Methode créant tous les composants de l'IHM
+     * Elle utilise avtangeusement les layout managers pour ne pas avoir positionner
+     * manuellement tous les boutons
+     * cela permet aussi d'adapter l'affichage à l'écran
+     */
+    private void ihm() {
 
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
 
-        JPanel ligneHaut = new JPanel();
-        ligneHaut.setLayout(
-                new FlowLayout(FlowLayout.CENTER, box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 100));
-        ligneHaut.setOpaque(false);
+        JPanel ligneHaut = new Ligne(box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 100);
         this.add(ligneHaut, BorderLayout.PAGE_START);
 
-        JPanel colonneNiveau = new JPanel();
-        colonneNiveau.setLayout(new BoxLayout(colonneNiveau, BoxLayout.Y_AXIS));
-        colonneNiveau.setOpaque(false);
+        JPanel colonneNiveau = new Colonne();
         ligneHaut.add(colonneNiveau);
         JLabel texteNiveau = new JLabel("Niveau");
-        texteNiveau.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneNiveau.add(texteNiveau);
-        JPanel ligneNiveau = new JPanel();
-        ligneNiveau.setOpaque(false);
-        ligneNiveau.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel ligneNiveau = new Ligne();
         colonneNiveau.add(ligneNiveau);
         boutonPrecedent = new JButton("Précédent");
         boutonPrecedent.addActionListener(this);
@@ -113,15 +119,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boutonSuivant.addActionListener(this);
         ligneNiveau.add(boutonSuivant);
 
-        JPanel colonneMateriau = new JPanel();
-        colonneMateriau.setLayout(new BoxLayout(colonneMateriau, BoxLayout.Y_AXIS));
-        colonneMateriau.setOpaque(false);
+        JPanel colonneMateriau = new Colonne();
         ligneHaut.add(colonneMateriau);
         JLabel textMateriau = new JLabel("Materiaux");
-        textMateriau.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneMateriau.add(textMateriau);
-        JPanel ligneMateriau = new JPanel();
-        ligneMateriau.setOpaque(false);
+        JPanel ligneMateriau = new Ligne();
         colonneMateriau.add(ligneMateriau);
         boutonMateriauGoudron = new JButton("Goudron");
         boutonMateriauGoudron.setToolTipText("Le seul materiau sur lequel la voiture peut rouler");
@@ -136,15 +138,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boutonMateriauAcier.addActionListener(this);
         ligneMateriau.add(boutonMateriauAcier);
 
-        JPanel colonneSimulation = new JPanel();
-        colonneSimulation.setLayout(new BoxLayout(colonneSimulation, BoxLayout.Y_AXIS));
-        colonneSimulation.setOpaque(false);
+        JPanel colonneSimulation = new Colonne();
         ligneHaut.add(colonneSimulation);
         JLabel texteControles = new JLabel("Simulation");
-        texteControles.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneSimulation.add(texteControles);
-        JPanel ligneControles = new JPanel();
-        ligneControles.setOpaque(false);
+        JPanel ligneControles = new Ligne();
         colonneSimulation.add(ligneControles);
         boutonDemarrer = new JButton();
         boutonDemarrer.addActionListener(this);
@@ -153,69 +151,53 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         boutonRecommencer.addActionListener(this);
         ligneControles.add(boutonRecommencer);
 
-        JPanel colonneEditeur = new JPanel();
-        colonneEditeur.setLayout(new BoxLayout(colonneEditeur, BoxLayout.Y_AXIS));
-        colonneEditeur.setOpaque(false);
+        JPanel colonneEditeur = new Colonne();
         ligneHaut.add(colonneEditeur);
         JLabel texteEditeur = new JLabel("Editeur");
-        texteEditeur.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneEditeur.add(texteEditeur);
-        JPanel ligneEditeur = new JPanel();
-        ligneEditeur.setOpaque(false);
+        JPanel ligneEditeur = new Ligne();
         colonneEditeur.add(ligneEditeur);
         boutonEditeur = new JButton("Editer un niveau");
         boutonEditeur.addActionListener(this);
         ligneEditeur.add(boutonEditeur);
 
-        JPanel bas = new JPanel();
-        bas.setLayout(new FlowLayout(FlowLayout.CENTER, box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 50));
-        bas.setOpaque(false);
+        JPanel bas = new Ligne(box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 50);
         this.add(bas, BorderLayout.PAGE_END);
 
-        JPanel colonnePrix = new JPanel();
-        colonnePrix.setLayout(new BoxLayout(colonnePrix, BoxLayout.Y_AXIS));
-        colonnePrix.setOpaque(false);
+        JPanel colonnePrix = new Colonne();
         bas.add(colonnePrix);
         JLabel prix = new JLabel("Prix");
-        prix.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonnePrix.add(prix);
         textePrix = new JLabel();
-        textePrix.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonnePrix.add(textePrix);
 
-        JPanel colonneBudget = new JPanel();
-        colonneBudget.setLayout(new BoxLayout(colonneBudget, BoxLayout.Y_AXIS));
-        colonneBudget.setOpaque(false);
+        JPanel colonneBudget = new Colonne();
         bas.add(colonneBudget);
         JLabel budget = new JLabel("Budget");
-        budget.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneBudget.add(budget);
         texteBudget = new JLabel();
-        texteBudget.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneBudget.add(texteBudget);
 
-        JPanel colonneMeilleur = new JPanel();
-        colonneMeilleur.setLayout(new BoxLayout(colonneMeilleur, BoxLayout.Y_AXIS));
-        colonneMeilleur.setOpaque(false);
+        JPanel colonneMeilleur = new Colonne();
         bas.add(colonneMeilleur);
         JLabel meilleur = new JLabel("Meilleur");
-        meilleur.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneMeilleur.add(meilleur);
         texteMeilleur = new JLabel();
-        texteMeilleur.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneMeilleur.add(texteMeilleur);
     }
 
+    /**
+     * Méthode pour dessiner le jeu, héritée de JPanel
+     */
     @Override
     public void paintComponent(Graphics g0) {
 
-        // Activer l'anti-alias
+        // Activer l'anti-aliasing
         Graphics2D g = (Graphics2D) g0;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        // Fonction pour améliorer l'affichage sur Mac/Linux
-        Toolkit.getDefaultToolkit().sync();
+        Toolkit.getDefaultToolkit().sync(); // Fonction pour améliorer l'affichage sur Mac/Linux
 
         g.setColor(Color.decode("#55a3d4"));
         g.fillRect(0, 0, getWidth(), getHeight());
@@ -226,30 +208,9 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
     }
 
-    private void majTextLabels() {
-        textePrix.setText(Integer.toString(partie.prix()) + " $");
-        texteBudget.setText(Integer.toString(partie.budget()) + " $");
-        int meilleurPrix = recupererMeilleurPrix();
-        if (meilleurPrix == -1) {
-            texteMeilleur.setText("Ø");
-        } else {
-            texteMeilleur.setText(Integer.toString(meilleurPrix) + " $");
-        }
-    }
-
-    public void majListeNiveaux() {
-        String niveauSelectionne = recupererNomNiveau();
-        String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
-        Arrays.sort(nomsNiveaux);
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(nomsNiveaux);
-        comboBoxNiveaux.setModel(model);
-        if (niveauSelectionne != null && Arrays.asList(nomsNiveaux).contains(niveauSelectionne)) {
-            comboBoxNiveaux.setSelectedItem(niveauSelectionne);
-        } else {
-            nouvellePartie();
-        }
-    }
-
+    /**
+     * Traite les évenements des timers et des composants de l'IHM
+     */
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
@@ -323,7 +284,40 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
-    public void majSimulation() {
+    /**
+     * Met à jour les labels concernant le prix en bas de l'écran
+     */
+    private void majTextLabels() {
+        textePrix.setText(Integer.toString(partie.prix()) + " $");
+        texteBudget.setText(Integer.toString(partie.budget()) + " $");
+        int meilleurPrix = recupererMeilleurPrix();
+        if (meilleurPrix == -1) {
+            texteMeilleur.setText("Ø");
+        } else {
+            texteMeilleur.setText(Integer.toString(meilleurPrix) + " $");
+        }
+    }
+
+    /**
+     * Met à jour la liste des niveaux
+     */
+    public void majListeNiveaux() {
+        String niveauSelectionne = recupererNomNiveau();
+        String[] nomsNiveaux = new File(Niveau.CHEMIN.toString()).list();
+        Arrays.sort(nomsNiveaux);
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(nomsNiveaux);
+        comboBoxNiveaux.setModel(model);
+        if (niveauSelectionne != null && Arrays.asList(nomsNiveaux).contains(niveauSelectionne)) {
+            comboBoxNiveaux.setSelectedItem(niveauSelectionne);
+        } else {
+            nouvellePartie();
+        }
+    }
+
+    /**
+     * Met à jour le bouton controlant la simulation en fonction de l'état du jeu
+     */
+    private void majSimulation() {
         reinitialiserTemps();
         if (partie.isSimulationPhysique()) {
             boutonDemarrer.setText("Pause");
@@ -332,6 +326,11 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         }
     }
 
+    /**
+     * Reccupére un niveau
+     * 
+     * @return niveau
+     */
     private Niveau recupererNiveau() {
         boutonDemarrer.setText("Démarrer");
         String nomNiveau = recupererNomNiveau();
@@ -339,12 +338,130 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
 
     }
 
-    public String recupererNomNiveau() {
+    /**
+     * Reccupère le nom du niveau sélectionné dans la liste
+     * 
+     * @return
+     */
+    private String recupererNomNiveau() {
         String nomNiveau = (String) comboBoxNiveaux.getSelectedItem();
         return nomNiveau;
     }
 
-    public void majPosSouris(MouseEvent e) {
+    /**
+     * Gestion de la fin de partie
+     * 
+     * @param niveauReussi
+     * @param prix
+     */
+    public void finPartie(boolean niveauReussi, int prix) {
+        majMeilleurPrix(prix);
+        messageFinPartie(niveauReussi);
+        reinitialiserTemps();
+    }
+
+    /**
+     * Affiche le tutoriel
+     */
+    public void messageDebutJeu() {
+        String texte = "Bienvenue sur notre jeu de ponts !";
+        texte += "\n\n" + "Tu peux construire ton pont en cliquant sur des liaisons (les cercles).";
+        texte += "\n" + "Choisis bien le materiau en fonction de ses propriétés et son prix.";
+        texte += "\n" + "Quand tu es prêt, lance la simulation en cliquant sur le bouton ";
+        texte += boutonDemarrer.getText() + ".";
+        texte += "\n\n" + "Le niveau sera réussi si la voiture arrive de l'autre côté";
+        texte += "\n" + "et si le prix du pont est inférieur au budget.";
+        texte += "\n\n" + "Bonne chance !";
+        JOptionPane.showMessageDialog(fenetre, texte, "Tutoriel", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    /**
+     * Affiche le message de fin de partie
+     * 
+     * @param niveauReussi
+     */
+    private void messageFinPartie(boolean niveauReussi) {
+        String texte = "";
+        String titre = "";
+        if (niveauReussi) {
+            titre = "Niveau terminé";
+            texte += "Bravo, tu as réussi le niveau " + recupererNomNiveau() + " !";
+            texte += "\n\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
+            texte += "\n" + "Meilleur : " + Integer.toString(recupererMeilleurPrix()) + " $";
+            texte += "\n\n" + "Tu peux passer au niveau suivant";
+            texte += "\n" + "ou essayer de faire un pont moins cher.";
+        } else {
+            titre = "Niveau échoué";
+            texte += "Dommage, tu n'as pas réussi le niveau " + recupererNomNiveau() + ".";
+            texte += "\n\n" + "Ton pont a coûté trop cher :";
+            texte += "\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
+            texte += "\n" + "Budget : " + Integer.toString(partie.budget()) + " $";
+            texte += "\n\n" + "Tu peux réessayer en cliquant sur " + boutonRecommencer.getText() + ".";
+        }
+        JOptionPane.showMessageDialog(fenetre, texte, titre, JOptionPane.PLAIN_MESSAGE);
+    }
+
+    /**
+     * Met à jour l'affichage du meilleur prix réalisé
+     */
+    private void majMeilleurPrix(int prix) {
+        int meilleurPrix = recupererMeilleurPrix();
+        if (prix <= meilleurPrix || meilleurPrix == -1) {
+            meilleursPrix.put(recupererNomNiveau(), prix);
+        }
+    }
+
+    /**
+     * Reccupère le meilleur prix associé au niveau
+     * 
+     * @return meilleur prix
+     */
+    private int recupererMeilleurPrix() {
+        if (meilleursPrix.containsKey(recupererNomNiveau())) {
+            return meilleursPrix.get(recupererNomNiveau());
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * Reinitilise le temps écoulé depuis la dernière mise à jour de la physique,
+     * typiquement après avoir mis le jeu en pause
+     */
+    private void reinitialiserTemps() {
+        tempsPhysique = System.currentTimeMillis();
+    }
+
+    /**
+     * Creer une nouvelle partie
+     */
+    private void nouvellePartie() {
+        Niveau niveau = recupererNiveau();
+        if (niveau != null) {
+            partie = new Partie(this, box2d, niveau);
+        } else {
+            partie = null;
+        }
+    }
+
+    /**
+     * Verifie si le niveau a bien été chargé et affiche un message d'erreur dans le
+     * cas contraire
+     */
+    public void verifierExistanceNiveaux() {
+        if (partie == null) {
+            String texte = "Aucun niveau détecté.";
+            texte += "\n" + "Commence par en créer un en cliquant sur le bouton '" + boutonEditeur.getText() + "'";
+            JOptionPane.showMessageDialog(fenetre, texte, "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Met à jour la position de la souris dans un vecteur
+     * 
+     * @param e
+     */
+    private void majPosSouris(MouseEvent e) {
         posSouris = box2d.pixelToWorld(e.getX(), e.getY());
     }
 
@@ -384,78 +501,4 @@ public class Jeu extends JPanel implements ActionListener, MouseInputListener {
         majPosSouris(e);
     }
 
-    public void finPartie(boolean niveauReussi, int prix) {
-        majMeilleurPrix(prix);
-        messageFinPartie(niveauReussi);
-        reinitialiserTemps();
-    }
-
-    public void messageDebutJeu() {
-        String texte = "Bienvenue sur notre jeu de ponts !";
-        texte += "\n\n" + "Tu peux construire ton pont en cliquant sur des liaisons (les cercles).";
-        texte += "\n" + "Choisis bien le materiau en fonction de ses propriétés et son prix.";
-        texte += "\n" + "Quand tu es prêt, lance la simulation en cliquant sur le bouton ";
-        texte += boutonDemarrer.getText() + ".";
-        texte += "\n\n" + "Le niveau sera réussi si la voiture arrive de l'autre côté";
-        texte += "\n" + "et si le prix du pont est inférieur au budget.";
-        texte += "\n\n" + "Bonne chance !";
-        JOptionPane.showMessageDialog(fenetre, texte, "Tutoriel", JOptionPane.PLAIN_MESSAGE);
-    }
-
-    public void messageFinPartie(boolean niveauReussi) {
-        String texte = "";
-        String titre = "";
-        if (niveauReussi) {
-            titre = "Niveau terminé";
-            texte += "Bravo, tu as réussi le niveau " + recupererNomNiveau() + " !";
-            texte += "\n\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
-            texte += "\n" + "Meilleur : " + Integer.toString(recupererMeilleurPrix()) + " $";
-            texte += "\n\n" + "Tu peux passer au niveau suivant";
-            texte += "\n" + "ou essayer de faire un pont moins cher.";
-        } else {
-            titre = "Niveau échoué";
-            texte += "Dommage, tu n'as pas réussi le niveau " + recupererNomNiveau() + ".";
-            texte += "\n\n" + "Ton pont a coûté trop cher :";
-            texte += "\n" + "Prix : " + Integer.toString(partie.prix()) + " $";
-            texte += "\n" + "Budget : " + Integer.toString(partie.budget()) + " $";
-            texte += "\n\n" + "Tu peux réessayer en cliquant sur " + boutonRecommencer.getText() + ".";
-        }
-        JOptionPane.showMessageDialog(fenetre, texte, titre, JOptionPane.PLAIN_MESSAGE);
-    }
-
-    public void majMeilleurPrix(int prix) {
-        int meilleurPrix = recupererMeilleurPrix();
-        if (prix <= meilleurPrix || meilleurPrix == -1) {
-            meilleursPrix.put(recupererNomNiveau(), prix);
-        }
-    }
-
-    public int recupererMeilleurPrix() {
-        if (meilleursPrix.containsKey(recupererNomNiveau())) {
-            return meilleursPrix.get(recupererNomNiveau());
-        } else {
-            return -1;
-        }
-    }
-
-    public void reinitialiserTemps() {
-        tempsPhysique = System.currentTimeMillis();
-    }
-
-    public void nouvellePartie() {
-        Niveau niveau = recupererNiveau();
-        if (niveau != null) {
-            partie = new Partie(this, box2d, niveau);
-        } else {
-            partie = null;
-        }
-    }
-
-    public void verifierExistanceNiveaux() {
-        if (partie == null) {
-            String texte = "Aucun niveau détecté.";
-            texte += "\n" + "Commence par en créer un en cliquant sur le bouton '" + boutonEditeur.getText() + "'";
-            JOptionPane.showMessageDialog(fenetre, texte, "Erreur", JOptionPane.ERROR_MESSAGE);
-        }
-    }
 }

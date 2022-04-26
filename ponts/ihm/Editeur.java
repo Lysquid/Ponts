@@ -2,8 +2,6 @@ package ponts.ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -12,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,23 +20,31 @@ import org.jbox2d.common.Vec2;
 
 import ponts.niveau.Niveau;
 
+/**
+ * Classe de l'éditeur de niveaux
+ */
 public class Editeur extends JPanel implements ActionListener, MouseInputListener {
 
-    Fenetre fenetre;
-    Box2D box2d;
-    Niveau niveau;
+    private Fenetre fenetre;
+    private Box2D box2d;
+    private Niveau niveau;
 
-    JLabel texteNomNiveau;
-    JLabel texteBudget;
-    JTextField champNomNiveau;
-    JTextField champBudget;
-    JButton boutonSauvegarder;
-    JButton boutonCharger;
-    JButton boutonAnnuler;
-    JButton boutonEffacer;
-    JButton boutonSupprimer;
-    JButton boutonJeu;
+    private JButton boutonSauvegarder;
+    private JButton boutonCharger;
+    private JButton boutonSupprimer;
+    private JTextField champNomNiveau;
+    private JTextField champBudget;
+    private JButton boutonAnnuler;
+    private JButton boutonEffacer;
+    private JButton boutonJeu;
 
+    /**
+     * Constructeur de l'éditeur
+     * 
+     * @param fenetre
+     * @param box2d
+     * @param refreshRate
+     */
     public Editeur(Fenetre fenetre, Box2D box2d, int refreshRate) {
 
         this.fenetre = fenetre;
@@ -52,27 +57,22 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         addMouseMotionListener(this);
     }
 
-    public void ihm() {
+    /**
+     * Méthode créeant tous les composants de l'IHM
+     */
+    private void ihm() {
 
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
 
-        JPanel ligneHaut = new JPanel();
-        ligneHaut.setLayout(
-                new FlowLayout(FlowLayout.CENTER, box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 100));
-        ligneHaut.setOpaque(false);
+        JPanel ligneHaut = new Ligne(box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 100);
         this.add(ligneHaut, BorderLayout.PAGE_START);
 
-        JPanel colonneFichier = new JPanel();
-        colonneFichier.setLayout(new BoxLayout(colonneFichier, BoxLayout.Y_AXIS));
-        colonneFichier.setOpaque(false);
+        JPanel colonneFichier = new Colonne();
         ligneHaut.add(colonneFichier);
         JLabel texteFichier = new JLabel("Fichier");
-        texteFichier.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneFichier.add(texteFichier);
-        JPanel ligneFichier = new JPanel();
-        ligneFichier.setOpaque(false);
-        ligneFichier.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel ligneFichier = new Ligne();
         colonneFichier.add(ligneFichier);
         boutonSauvegarder = new JButton("Sauvegarder");
         boutonSauvegarder.addActionListener(this);
@@ -84,43 +84,29 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         boutonSupprimer.addActionListener(this);
         ligneFichier.add(boutonSupprimer);
 
-        JPanel colonneNom = new JPanel();
-        colonneNom.setLayout(new BoxLayout(colonneNom, BoxLayout.Y_AXIS));
-        colonneNom.setOpaque(false);
+        JPanel colonneNom = new Colonne();
         ligneHaut.add(colonneNom);
         JLabel texteNom = new JLabel("Nom");
-        texteNom.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneNom.add(texteNom);
-        JPanel ligneNom = new JPanel();
-        ligneNom.setOpaque(false);
-        ligneNom.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel ligneNom = new Ligne();
         colonneNom.add(ligneNom);
         champNomNiveau = new JTextField(6);
         ligneNom.add(champNomNiveau);
 
-        JPanel colonneBudget = new JPanel();
-        colonneBudget.setLayout(new BoxLayout(colonneBudget, BoxLayout.Y_AXIS));
-        colonneBudget.setOpaque(false);
+        JPanel colonneBudget = new Colonne();
         ligneHaut.add(colonneBudget);
-        texteBudget = new JLabel("Budget");
+        JLabel texteBudget = new JLabel("Budget");
         colonneBudget.add(texteBudget);
-        JPanel ligneBudget = new JPanel();
-        ligneBudget.setOpaque(false);
-        ligneBudget.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel ligneBudget = new Ligne();
         colonneBudget.add(ligneBudget);
         champBudget = new JTextField("0", 5);
         ligneBudget.add(champBudget);
 
-        JPanel colonneCreation = new JPanel();
-        colonneCreation.setLayout(new BoxLayout(colonneCreation, BoxLayout.Y_AXIS));
-        colonneCreation.setOpaque(false);
+        JPanel colonneCreation = new Colonne();
         ligneHaut.add(colonneCreation);
         JLabel texteCreation = new JLabel("Creation");
-        texteCreation.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneCreation.add(texteCreation);
-        JPanel ligneCreation = new JPanel();
-        ligneCreation.setOpaque(false);
-        ligneCreation.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel ligneCreation = new Ligne();
         colonneCreation.add(ligneCreation);
         boutonAnnuler = new JButton("Annuler");
         boutonAnnuler.addActionListener(this);
@@ -129,50 +115,37 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         boutonEffacer.addActionListener(this);
         ligneCreation.add(boutonEffacer);
 
-        JPanel colonneJeu = new JPanel();
-        colonneJeu.setLayout(new BoxLayout(colonneJeu, BoxLayout.Y_AXIS));
-        colonneJeu.setOpaque(false);
+        JPanel colonneJeu = new Colonne();
         ligneHaut.add(colonneJeu);
         JLabel texteJeu = new JLabel("Jeu");
-        texteJeu.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneJeu.add(texteJeu);
-        JPanel ligneJeu = new JPanel();
-        ligneJeu.setOpaque(false);
-        ligneJeu.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel ligneJeu = new Ligne();
         colonneJeu.add(ligneJeu);
         boutonJeu = new JButton("Retour au jeu");
-        boutonJeu.setAlignmentX(Component.CENTER_ALIGNMENT);
         boutonJeu.addActionListener(this);
         ligneJeu.add(boutonJeu);
 
-        JPanel bas = new JPanel();
-        bas.setLayout(new FlowLayout(FlowLayout.CENTER, box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 50));
-        bas.setOpaque(false);
+        JPanel bas = new Ligne(box2d.getLargeurPixels() / 20, box2d.getHauteurPixels() / 50);
         this.add(bas, BorderLayout.PAGE_END);
 
-        JPanel colonnePoint = new JPanel();
-        colonnePoint.setLayout(new BoxLayout(colonnePoint, BoxLayout.Y_AXIS));
-        colonnePoint.setOpaque(false);
+        JPanel colonnePoint = new Colonne();
         bas.add(colonnePoint);
         JLabel pointCommande = new JLabel("Clic gauche :");
-        pointCommande.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonnePoint.add(pointCommande);
         JLabel point = new JLabel("ajouter un point");
-        point.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonnePoint.add(point);
 
-        JPanel colonneLiaison = new JPanel();
-        colonneLiaison.setLayout(new BoxLayout(colonneLiaison, BoxLayout.Y_AXIS));
-        colonneLiaison.setOpaque(false);
+        JPanel colonneLiaison = new Colonne();
         bas.add(colonneLiaison);
         JLabel liaisonCommande = new JLabel("Clic droit :");
-        liaisonCommande.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneLiaison.add(liaisonCommande);
         JLabel liaison = new JLabel("ajouter une liaison");
-        liaison.setAlignmentX(Component.CENTER_ALIGNMENT);
         colonneLiaison.add(liaison);
     }
 
+    /**
+     * Méthode paint, pour mettre à jour l'affichage de l'éditeur
+     */
     @Override
     protected void paintComponent(Graphics g0) {
         Graphics2D g = (Graphics2D) g0;
@@ -188,6 +161,9 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
 
     }
 
+    /**
+     * Gère les évenements des boutons
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -217,12 +193,17 @@ public class Editeur extends JPanel implements ActionListener, MouseInputListene
         repaint();
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
+    /**
+     * Renvoie le nom du niveau
+     * 
+     * @return nom du niveau
+     */
+    private String nomNiveau() {
+        return champNomNiveau.getText();
     }
 
-    public String nomNiveau() {
-        return champNomNiveau.getText();
+    @Override
+    public void mouseClicked(MouseEvent e) {
     }
 
     @Override

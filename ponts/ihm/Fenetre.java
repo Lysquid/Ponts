@@ -14,13 +14,19 @@ import javax.swing.plaf.FontUIResource;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+/**
+ * Classe de la fenêtre
+ */
 public class Fenetre extends JFrame {
 
-    Jeu jeu;
-    Editeur editeur;
-    final int LARGEUR_MIN = 960;
-    final int HAUTEUR_MIN = 540;
+    private Jeu jeu;
+    private Editeur editeur;
+    private final int LARGEUR_MIN = 960;
+    private final int HAUTEUR_MIN = 540;
 
+    /**
+     * Constructeur d'une fenêtre
+     */
     public Fenetre() {
 
         setTitle("Ponts");
@@ -38,24 +44,40 @@ public class Fenetre extends JFrame {
         jeu.messageDebutJeu();
     }
 
-    public void lancerEditeur() {
-        changerEcran(jeu, editeur);
-    }
-
+    /**
+     * Lancer le jeu
+     */
     public void lancerJeu() {
         changerEcran(editeur, jeu);
         jeu.majListeNiveaux();
         jeu.verifierExistanceNiveaux();
     }
 
-    public void changerEcran(JPanel actuel, JPanel nouveau) {
+    /**
+     * Lancer l'éditeur
+     */
+    public void lancerEditeur() {
+        changerEcran(jeu, editeur);
+    }
+
+    /**
+     * Changer d'écran en passant du jeu à l'éditeur ou l'inverse
+     * 
+     * @param actuel
+     * @param nouveau
+     */
+    private void changerEcran(JPanel actuel, JPanel nouveau) {
         remove(actuel);
         add(nouveau);
         nouveau.repaint();
         setVisible(true);
     }
 
-    public int getRefreshRate() {
+    /**
+     * Reccupere le taux de rafraichissement de l'écran pour faire des repaint aux
+     * bons moments et avoir le meilleur framerate
+     */
+    private int getRefreshRate() {
         try {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             GraphicsDevice[] gs = ge.getScreenDevices();
@@ -68,14 +90,19 @@ public class Fenetre extends JFrame {
 
     }
 
+    /**
+     * Modifications de l'apparence des composants Swing
+     */
     public static void setLookAndFeel() {
-        FlatLightLaf.setup();
+        FlatLightLaf.setup(); // Initialise la librairie flatlaf
 
+        // Coins arrondis
         int arrondi = 20;
         UIManager.put("Button.arc", arrondi);
         UIManager.put("Component.arc", arrondi);
         UIManager.put("TextComponent.arc", arrondi);
 
+        // Marges
         int marge = 8;
         Insets insets = new Insets(marge, marge, marge, marge);
         UIManager.put("Button.margin", insets);
@@ -83,6 +110,7 @@ public class Fenetre extends JFrame {
         UIManager.put("TextComponent.margin", insets);
         UIManager.put("ComboBox.padding", insets);
 
+        // Taille des polices d'écriture
         Font defaultFont = UIManager.getDefaults().getFont("Label.font");
         Font font = defaultFont.deriveFont(18f);
         Font fontBold = font.deriveFont(Font.BOLD);
