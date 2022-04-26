@@ -2,7 +2,7 @@ Contenu de l'archive
  - ponts : code source du jeu, organisé en plusieurs sous dossiers
  - res : ressources du jeu, comprenant les images et les fichiers des niveaux
  - lib : librairies utilisées pour le jeu, à savoir jbox2d (physique) et flatlaf (pour rendre Swing plus joli)
- - trois scripts bash pour compiler et exécuter le jeu, ainsi que créer la javadoc
+ - trois scripts bash pour compiler et exécuter le jeu, ainsi que générer la javadoc
 
 Instructions de compilation et d'exécution
  - sous Linux, ouvrir un terminal dans le dossier du projet
