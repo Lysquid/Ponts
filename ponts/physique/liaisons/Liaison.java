@@ -112,7 +112,7 @@ public abstract class Liaison extends ObjetPhysique {
     }
 
     /**
-     * Test si la liaison à été cliquée
+     * Teste si la liaison à été cliquée
      * 
      * @param pos
      * @return

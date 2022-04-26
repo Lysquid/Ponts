@@ -23,16 +23,16 @@ public class Roue extends ObjetPhysique {
     public static final int CATEGORY = Voiture.CATEGORY;
     public static final int MASK = Voiture.MASK;
 
-    static final float RAYON = 1f;
-    static final float MOTOR_SPEED = 10f; // Vitesse du moteur
-    static final float MOTOR_TORQUE = 80f; // Puissance du moteur
+    public static final float RAYON = 1f;
+    private static final float MOTOR_SPEED = 10f; // Vitesse du moteur
+    private static final float MOTOR_TORQUE = 80f; // Puissance du moteur
 
-    Color couleurContour = Color.BLACK;
-    Color couleurRemplissage = Color.decode("#555555");
-    Color couleurRayons = Color.decode("#888888");
+    private Color couleurRemplissage = Color.decode("#555555");
+    private Color couleurRayons = Color.decode("#888888");
+    private Color couleurContour = Color.BLACK;
 
-    RevoluteJoint joint;
-    CircleShape shape;
+    private RevoluteJoint joint;
+    private CircleShape shape;
 
     /**
      * Constructeur d'une roue
@@ -46,7 +46,7 @@ public class Roue extends ObjetPhysique {
     }
 
     @Override
-    public void creerObjetPhysique(World world) {
+    protected void creerObjetPhysique(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
         body = world.createBody(bodyDef);

@@ -134,7 +134,7 @@ public abstract class Barre extends ObjetPhysique {
     }
 
     /**
-     * Test pour les deux côtés de la barre si la liaison doit casser, et supprime
+     * Teste pour les deux côtés de la barre si la liaison doit casser, et supprime
      * le joint le cas échéant
      * 
      * @param world
@@ -268,7 +268,7 @@ public abstract class Barre extends ObjetPhysique {
     }
 
     /**
-     * Test si la barre à été cliquée
+     * Teste si la barre à été cliquée
      * 
      * @param posClic
      * @return

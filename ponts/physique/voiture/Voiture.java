@@ -65,7 +65,7 @@ public class Voiture {
     }
 
     /**
-     * Test si la voiture est arrivée à la fin du niveau
+     * Teste si la voiture est arrivée à la fin du niveau
      * 
      * @return
      */

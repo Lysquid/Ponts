@@ -29,7 +29,7 @@ public class LiaisonFixe extends Liaison {
     }
 
     @Override
-    public void creerObjetPhysique(World world) {
+    protected void creerObjetPhysique(World world) {
         creerObjetPhysique(world, BodyType.STATIC);
 
     }

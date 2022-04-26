@@ -122,7 +122,7 @@ public class Pont implements Serializable {
 
                 case 1: // clic gauche
 
-                    // Test si la barre vérifie des conditions
+                    // Teste si la barre vérifie des conditions
                     if (barreValide) {
                         if (liaisonProche != null) {
                             barreEnCreation.accrocher(world, liaisonProche);
@@ -334,7 +334,7 @@ public class Pont implements Serializable {
     }
 
     /**
-     * Test pour chaque barre si elle doit casser
+     * Teste pour chaque barre si elle doit casser
      * 
      * @param world
      * @param dt

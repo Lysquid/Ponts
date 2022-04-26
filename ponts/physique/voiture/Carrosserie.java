@@ -53,7 +53,7 @@ public class Carrosserie extends ObjetPhysique {
     }
 
     @Override
-    public void creerObjetPhysique(World world) {
+    protected void creerObjetPhysique(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
         body = world.createBody(bodyDef);
