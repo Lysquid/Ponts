@@ -1,7 +1,8 @@
 package ponts.ihm;
 
-import javax.swing.JPanel;
 import java.awt.FlowLayout;
+
+import javax.swing.JPanel;
 
 /**
  * Classe définissant une version modifiée du JPanel souvent utilisée dans l'IHM
