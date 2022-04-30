@@ -13,7 +13,7 @@ Instructions de compilation et d'exécution
 
 Instructions alternatives
 Nous avons codé le jeu sur l'IDE Visual Studio Code (VS Code), qui gère automatiquement la compilation et l'execution.
- - Ouvrir le dossier avec VS Code (et éventuellement "trust workspace")
+ - Ouvrir le dossier avec VS Code (et si demandé, cliquer sur "trust workspace")
  - Dans l'arboresence des fichiers, ouvrir Main.java
  - VS Code reconnait alors qu'il s'agit d'un projet java et propose d'installer le pack d'extensions Java : l'installer puis relancer VS Code
  - Cliquer sur le bouton Run Java en haut à droite de l'écran
