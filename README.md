@@ -17,9 +17,15 @@ The game is heavily inspired by [Poly Birdge](http://polybridge.drycactus.com/),
 
 ## Running the game
 
-Requirement : Java (tested on version 11, 17 and 19)
+Requirement : Java 11 or more recent
 
-### Linux
+Download the file named `Ponts.jar` in the Releases section, and run it in the terminal by typing :
+
+```bash
+java -jar Ponts.jar
+```
+
+### Linux only
 
 Give execute permissions to `complile.sh` and `execute.sh` scripts, and run them in this order :
 
@@ -29,11 +35,9 @@ chmod +x complile.sh execute.sh
 ./execute.sh
 ```
 
-### Other platforms
+### Alternative
 
-You can try to run the java commands contained in `complile.sh` and `execute.sh`, which should be OS-agnostic.
-
-Alternatively, you can open the project in VS Code, and open one of the .java files. If you have not already, you will be prompted to install the Java Extension Pack, which you should do. You will then have a button "Run Java" on the top left of the screen to launch the game.
+You can run the project by openening it inside VS Code with the Extension Pack for Java installed.
 
 ## Demo
 
