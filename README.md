@@ -17,7 +17,7 @@ The game is heavily inspired by [Poly Birdge](http://polybridge.drycactus.com/),
 
 ## Running the game
 
-Requirement : Java 11 or more recent
+Requirement : Java 11 or above
 
 Download the file named `Ponts.jar` in the Releases section, and run it in the terminal by typing :
 
